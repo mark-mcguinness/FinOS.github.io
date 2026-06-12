@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#07091a">
 <meta name="description" content="Personal finance dashboard - track income, expenses, investments, loans and portfolio">
 <link rel="manifest" href="manifest.json">
-<title>FinanceOS - Chris Mcguinness</title>
+<title>FinanceOS - Mark Mcguinness</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -1294,9 +1294,9 @@ body.light-mode .backup-stat { background:rgba(0,0,0,0.03); }
 .adv-tab { flex: 1; padding: 7px; font-size: 0.75rem; font-weight: 700; font-family: 'DM Sans', sans-serif; border: none; background: transparent; color: var(--text-muted); cursor: pointer; transition: 0.16s; }
 .adv-tab.active { background: #a78bfa; color: #07091a; }
 /* Rough Board table */
-#rb-table th { background: rgba(56,189,248,0.1); color: #38bdf8; font-size: 0.72rem; padding: 6px 10px; text-align: center; border: 1px solid rgba(255,255,255,0.07); min-width: 90px; position: sticky; top: 0; z-index: 2; user-select: none; cursor: default; }
+#rb-table th { background: rgba(56,189,248,0.1); color: #38bdf8; font-size: 0.72rem; padding: 6px 10px; text-align: center; border: 1px solid rgba(255,255,255,0.07); min-width: 90px; position: sticky; top: 0; z-index: 2; user-select: none; cursor: default; resize: horizontal; overflow: auto; }
 #rb-table th:first-child { min-width: 40px; width: 40px; position: sticky; left: 0; z-index: 3; background: rgba(14,18,40,0.98); }
-#rb-table td { border: 1px solid rgba(255,255,255,0.05); padding: 0; min-width: 90px; max-width: 180px; position: relative; }
+#rb-table td { border: 1px solid rgba(255,255,255,0.05); padding: 0; min-width: 90px; position: relative; }
 #rb-table td:first-child { background: rgba(56,189,248,0.06); color: #38bdf8; font-size: 0.7rem; font-weight: 700; text-align: center; padding: 6px 4px; position: sticky; left: 0; z-index: 1; min-width: 40px; width: 40px; user-select: none; }
 #rb-table td input.rb-cell { width: 100%; box-sizing: border-box; background: transparent; border: none; outline: none; color: var(--text-main); font-family: 'DM Mono', monospace; font-size: 0.8rem; padding: 6px 8px; }
 #rb-table td.rb-selected { background: rgba(56,189,248,0.12) !important; outline: 2px solid #38bdf8; outline-offset: -1px; }
@@ -1444,7 +1444,7 @@ body.light-mode .undo-btn:hover { color: white; }
       <i class="fas fa-cube" style="color:var(--accent);flex-shrink:0"></i>
       <span class="nav-label">Finance<span style="color:var(--accent)">OS</span></span>
     </div>
-    <div class="welcome-msg">Welcome Chris Mcguinness</div>
+    <div class="welcome-msg">Welcome Mark Mcguinness</div>
   </div>
 
   <div class="nav-section-label">Main</div>
@@ -1546,7 +1546,7 @@ body.light-mode .undo-btn:hover { color: white; }
       <i class="fas fa-gem" style="flex-shrink:0"></i>
       <span class="nav-label"> Portfolio<span style="opacity:0.65"> OS</span></span>
     </div>
-    <div class="port-brand-sub">Physical &amp; Digital Assets of Chris Mcguinness</div>
+    <div class="port-brand-sub">Physical &amp; Digital Assets of Mark Mcguinness</div>
   </div>
 
   <div class="nav-section-label" style="color:#7c6eb3">Overview</div>
@@ -1913,7 +1913,7 @@ body.light-mode .undo-btn:hover { color: white; }
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-      <button onclick="rbImportCSV()" style="background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.25);color:#38bdf8;padding:5px 10px;border-radius:8px;font-size:0.78rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer" title="Import CSV file"><i class="fas fa-upload" style="margin-right:4px"></i>Import CSV</button>
+      <button onclick="rbImportCSV()" style="background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.25);color:#38bdf8;padding:5px 10px;border-radius:8px;font-size:0.78rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer" title="Import CSV or Excel file (.csv, .xlsx, .xls, .ods)"><i class="fas fa-upload" style="margin-right:4px"></i>Import File</button>
       <button onclick="rbExportCSV()" style="background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.25);color:#34d399;padding:5px 10px;border-radius:8px;font-size:0.78rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer" title="Download as CSV"><i class="fas fa-download" style="margin-right:4px"></i>Export CSV</button>
       <button onclick="rbShowFormulaHelp()" style="background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.35);color:#c4b5fd;padding:5px 12px;border-radius:8px;font-size:0.85rem;font-weight:800;font-family:'DM Sans',sans-serif;cursor:pointer" title="Help & Formulas Guide">?</button>
     </div>
@@ -1954,7 +1954,7 @@ body.light-mode .undo-btn:hover { color: white; }
       </div>
     </div>
 
-      <div class="glass-panel" style="padding: 0; overflow: auto; height: 60vh;">
+      <div class="glass-panel" style="padding: 0; overflow: auto; height: 60vh; resize: vertical;">
         <table id="rb-table" style="width: 100%; border-collapse: collapse; min-width: 800px;"></table>
       </div>
     </div>
@@ -2241,7 +2241,7 @@ body.light-mode .undo-btn:hover { color: white; }
               <th onclick="sortTable('sub')" id="th-sub">Category <span class="sort-arrow">↕</span></th>
               <th>Tags</th>
               <th onclick="sortTable('date')" id="th-date">Date <span class="sort-arrow">↕</span></th>
-              <th onclick="sortTable('amount')" id="th-amount" style="text-align:right">Amount <span class="sort-arrow">↕</span></th>
+              <th onclick="sortTable('amount')" id="th-amount" style="text-align:right">Amount <span id="th-amount-total" style="font-size:0.65rem; margin-left:6px; opacity:0.9; letter-spacing:0.5px;"></span> <span class="sort-arrow">↕</span></th>
               <th></th>
             </tr>
           </thead>
@@ -4537,6 +4537,20 @@ const allData = getFilteredData();
   const tbody = document.getElementById('table-body');
   tbody.innerHTML = '';
 
+// 👉 NEW: Calculate absolute total for the visible rows
+  let visibleTotal = data.reduce((sum, item) => sum + Number(item.amount), 0);
+  
+  // Inject into the column header
+  const totalSpan = document.getElementById('th-amount-total');
+  if (totalSpan) {
+      if (data.length === 0) {
+          totalSpan.textContent = '';
+      } else {
+          totalSpan.textContent = `(Total: ${fmt(visibleTotal)})`;
+          totalSpan.style.color = 'var(--text-muted)'; // Keeps it a clean, neutral grey
+      }
+  }
+
   /// ── SUMMARY BAR ──
   const allDbData = getFilteredData();
   const totalIncome  = allDbData.filter(i => i.type === 'Income').reduce((s, i) => s + Number(i.amount), 0);
@@ -5883,32 +5897,20 @@ function renderAnalytics() {
   if (scatterCanvas) {
     const ctx = scatterCanvas.getContext('2d');
     const h   = scatterCanvas.clientHeight || 230;
-    const w   = scatterCanvas.clientWidth  || 600;
 
-    // Expense — vertical gradient pink→purple
+    // Expense — vertical gradient pink→purple (OPACITY FIXED TO 0.8)
     const gExp = ctx.createLinearGradient(0, 0, 0, h);
-    gExp.addColorStop(0,   'rgba(236, 72, 153, 0.90)');
-    gExp.addColorStop(0.5, 'rgba(168, 85, 247, 0.60)');
-    gExp.addColorStop(1,   'rgba(236, 72, 153, 0.10)');
+    gExp.addColorStop(0,   'rgba(236, 72, 153, 0.95)');
+    gExp.addColorStop(0.5, 'rgba(168, 85, 247, 0.85)');
+    gExp.addColorStop(1,   'rgba(236, 72, 153, 0.80)'); 
 
-    // Loan — vertical gradient cyan→blue
+    // Loan — vertical gradient cyan→blue (OPACITY FIXED TO 0.8)
     const gLoan = ctx.createLinearGradient(0, 0, 0, h);
-    gLoan.addColorStop(0,   'rgba(56, 189, 248, 0.90)');
-    gLoan.addColorStop(0.5, 'rgba(59, 130, 246, 0.60)');
-    gLoan.addColorStop(1,   'rgba(56, 189, 248, 0.10)');
+    gLoan.addColorStop(0,   'rgba(56, 189, 248, 0.95)');
+    gLoan.addColorStop(0.5, 'rgba(59, 130, 246, 0.85)');
+    gLoan.addColorStop(1,   'rgba(56, 189, 248, 0.80)'); 
 
-    // Glow plugin
-    const barGlowPlugin = {
-      id: 'barGlow',
-      beforeDatasetsDraw: (chart) => {
-        const c = chart.ctx;
-        c.save();
-        c.shadowColor  = 'rgba(236, 72, 153, 0.55)';
-        c.shadowBlur   = 12;
-        c.shadowOffsetY = 2;
-      },
-      afterDatasetsDraw: (chart) => { chart.ctx.restore(); }
-    };
+    // We completely removed the custom barGlowPlugin to ensure 60fps silky-smooth animations
 
     charts['scatter'] = new Chart(ctx, {
       type: 'bar',
@@ -5917,43 +5919,54 @@ function renderAnalytics() {
         datasets: [
           {
             label: 'Expense',
-            data: expByDay,
+            data: expByDay.map(v => v === 0 ? null : v),
             backgroundColor: gExp,
-            borderColor: 'rgba(236,72,153,0.8)',
-            borderWidth: 0,
+            borderColor: '#ec4899',
+            borderWidth: { top: 3, right: 0, bottom: 0, left: 0 },
             borderRadius: { topLeft: 4, topRight: 4 },
-            borderSkipped: 'bottom',
+            borderSkipped: false,
             barPercentage: 0.85,
-          categoryPercentage: 0.95
-        },
-        {
-          label: 'Loan/EMI',
-            data: loanByDay,
+            categoryPercentage: 0.95,
+            minBarLength: 5,
+            hoverBackgroundColor: '#fbcfe8',
+            hoverBorderColor: '#ffffff',
+            // Keep border width identical on hover to prevent layout recalculation stutter
+            hoverBorderWidth: { top: 3, right: 0, bottom: 0, left: 0 } 
+          },
+          {
+            label: 'Loan/EMI',
+            data: loanByDay.map(v => v === 0 ? null : v),
             backgroundColor: gLoan,
-            borderColor: 'rgba(56,189,248,0.8)',
-            borderWidth: 0,
+            borderColor: '#38bdf8',
+            borderWidth: { top: 3, right: 0, bottom: 0, left: 0 },
             borderRadius: { topLeft: 4, topRight: 4 },
-            borderSkipped: 'bottom',
+            borderSkipped: false,
             barPercentage: 0.85,
-          categoryPercentage: 0.95
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      layout: { padding: { bottom: 5, top: 10 } },
+            categoryPercentage: 0.95,
+            minBarLength: 5,
+            hoverBackgroundColor: '#bae6fd',
+            hoverBorderColor: '#ffffff',
+            // Keep border width identical on hover
+            hoverBorderWidth: { top: 3, right: 0, bottom: 0, left: 0 } 
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        // Changed mode to 'nearest' to smoothly handle the null gaps
+        interaction: { mode: 'nearest', intersect: true, axis: 'x' },
+        layout: { padding: { bottom: 5, top: 10 } },
+        // Sped up the animation slightly for a snappier feel
+        animation: { duration: 250 }, 
         scales: {
           y: {
             grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
-            ticks: {
-              display: false
-            },
+            ticks: { display: false },
             grace: '15%',
             beginAtZero: true
           },
-         x: {
+          x: {
             grid: { display: false, drawBorder: false },
             ticks: {
               color: chartTextColor(),
@@ -5994,8 +6007,8 @@ function renderAnalytics() {
             }
           }
         }
-      },
-      plugins: [barGlowPlugin]
+      }
+      // Note: "plugins: [barGlowPlugin]" was removed from down here
     });
   }
 
@@ -10942,25 +10955,326 @@ function rbSaveData() {
 
 function rbEvalFormula(expr, depth) {
   if (depth > 10) return '#REF';
-  expr = expr.replace(/[A-Z]+\d+/g, ref => {
-    const val = RB.data[ref] || '';
-    if (String(val).startsWith('=')) return rbEvalFormula(val.slice(1), depth + 1);
-    return isNaN(Number(val)) ? ('"' + val + '"') : (Number(val) || 0);
+
+  // Clean the expression first — strip currency symbols, commas, spaces around operators
+  expr = expr
+    .replace(/₹/g, '')
+    .replace(/,/g, '')
+    .replace(/−/g, '-')   // em-dash to minus
+    .replace(/–/g, '-')   // en-dash to minus
+    .replace(/×/g, '*')
+    .replace(/÷/g, '/')
+    .trim();
+
+  // Handle SUM(A1:A10) range syntax
+  expr = expr.replace(/SUM\(([A-Z]+)(\d+):([A-Z]+)(\d+)\)/gi, (_, c1, r1, c2, r2) => {
+    let sum = 0;
+    const colStart = c1.toUpperCase().charCodeAt(0) - 65;
+    const colEnd   = c2.toUpperCase().charCodeAt(0) - 65;
+    const rowStart = parseInt(r1) - 1;
+    const rowEnd   = parseInt(r2) - 1;
+    for (let r = rowStart; r <= rowEnd; r++) {
+      for (let c = colStart; c <= colEnd; c++) {
+        const ref = rbCellId(r, c);
+        const raw = RB.data[ref];
+        if (raw === undefined || raw === '') continue;
+        let v = String(raw).startsWith('=') ? rbEvalFormula(String(raw).slice(1), depth + 1) : raw;
+        const n = parseFloat(String(v).replace(/[₹,\s]/g, ''));
+        if (!isNaN(n)) sum += n;
+      }
+    }
+    return sum;
   });
+
+  // Handle AVERAGE(A1:A10)
+  expr = expr.replace(/AVERAGE\(([A-Z]+)(\d+):([A-Z]+)(\d+)\)/gi, (_, c1, r1, c2, r2) => {
+    let sum = 0, count = 0;
+    const colStart = c1.toUpperCase().charCodeAt(0) - 65;
+    const colEnd   = c2.toUpperCase().charCodeAt(0) - 65;
+    const rowStart = parseInt(r1) - 1;
+    const rowEnd   = parseInt(r2) - 1;
+    for (let r = rowStart; r <= rowEnd; r++) {
+      for (let c = colStart; c <= colEnd; c++) {
+        const ref = rbCellId(r, c);
+        const raw = RB.data[ref];
+        if (raw === undefined || raw === '') continue;
+        let v = String(raw).startsWith('=') ? rbEvalFormula(String(raw).slice(1), depth + 1) : raw;
+        const n = parseFloat(String(v).replace(/[₹,\s]/g, ''));
+        if (!isNaN(n)) { sum += n; count++; }
+      }
+    }
+    return count > 0 ? sum / count : 0;
+  });
+
+  // Handle MAX(A1:A10) and MIN(A1:A10)
+  expr = expr.replace(/(MAX|MIN)\(([A-Z]+)(\d+):([A-Z]+)(\d+)\)/gi, (_, fn, c1, r1, c2, r2) => {
+    const vals = [];
+    const colStart = c1.toUpperCase().charCodeAt(0) - 65;
+    const colEnd   = c2.toUpperCase().charCodeAt(0) - 65;
+    const rowStart = parseInt(r1) - 1;
+    const rowEnd   = parseInt(r2) - 1;
+    for (let r = rowStart; r <= rowEnd; r++) {
+      for (let c = colStart; c <= colEnd; c++) {
+        const ref = rbCellId(r, c);
+        const raw = RB.data[ref];
+        if (raw === undefined || raw === '') continue;
+        let v = String(raw).startsWith('=') ? rbEvalFormula(String(raw).slice(1), depth + 1) : raw;
+        const n = parseFloat(String(v).replace(/[₹,\s]/g, ''));
+        if (!isNaN(n)) vals.push(n);
+      }
+    }
+    if (!vals.length) return 0;
+    return fn.toUpperCase() === 'MAX' ? Math.max(...vals) : Math.min(...vals);
+  });
+
+  // Handle COUNT(A1:A10)
+  expr = expr.replace(/COUNT\(([A-Z]+)(\d+):([A-Z]+)(\d+)\)/gi, (_, c1, r1, c2, r2) => {
+    let count = 0;
+    const colStart = c1.toUpperCase().charCodeAt(0) - 65;
+    const colEnd   = c2.toUpperCase().charCodeAt(0) - 65;
+    const rowStart = parseInt(r1) - 1;
+    const rowEnd   = parseInt(r2) - 1;
+    for (let r = rowStart; r <= rowEnd; r++) {
+      for (let c = colStart; c <= colEnd; c++) {
+        const ref = rbCellId(r, c);
+        const raw = RB.data[ref];
+        if (raw !== undefined && raw !== '') {
+          const n = parseFloat(String(raw).replace(/[₹,\s]/g, ''));
+          if (!isNaN(n)) count++;
+        }
+      }
+    }
+    return count;
+  });
+
+  // Handle IF(condition, true_val, false_val)
+  expr = expr.replace(/IF\((.+?),(.+?),(.+?)\)/gi, (_, cond, t, f) => {
+    try {
+      const condResult = Function('"use strict"; return (' + cond + ')')();
+      return condResult ? t.trim() : f.trim();
+    } catch(e) { return 0; }
+  });
+
+  // Replace ALL cell references like A1, B12, AA3 — AFTER range functions are done
+  expr = expr.replace(/([A-Z]{1,2})(\d{1,3})/g, (match, col, row) => {
+    const ref = col.toUpperCase() + row;
+    const raw = RB.data[ref];
+
+    // If cell is empty or missing, return 0
+    if (raw === undefined || raw === null || raw === '') return 0;
+
+    const strVal = String(raw).trim();
+    if (strVal === '') return 0;
+
+    // If cell itself contains a formula, resolve it recursively
+    if (strVal.startsWith('=')) {
+      const resolved = rbEvalFormula(strVal.slice(1), depth + 1);
+      if (resolved === '#ERR' || resolved === '#REF') return 0;
+      const n = parseFloat(String(resolved).replace(/[₹,\s]/g, ''));
+      return isNaN(n) ? 0 : n;
+    }
+
+    // Strip ₹ and commas from the value before parsing
+    const cleaned = strVal.replace(/[₹,\s]/g, '');
+    const n = parseFloat(cleaned);
+    return isNaN(n) ? 0 : n;
+  });
+
+  // Final evaluation
   try {
+    // Clean up any remaining ₹ symbols that might have snuck through
+    expr = expr.replace(/[₹]/g, '').replace(/,/g, '');
     const result = Function('"use strict"; return (' + expr + ')')();
-    return isNaN(result) ? result : parseFloat(result.toFixed(10));
-  } catch(e) { return '#ERR'; }
+    if (result === undefined || result === null) return 0;
+    if (typeof result === 'boolean') return result ? 1 : 0;
+    if (typeof result === 'number' && isNaN(result)) return '#ERR';
+    if (typeof result === 'number' && !isFinite(result)) return '#ERR';
+    return parseFloat(result.toFixed(10));
+  } catch(e) {
+    return '#ERR';
+  }
 }
 
 function rbGetDisplayValue(cellId) {
   const raw = RB.data[cellId];
-  if (!raw && raw !== 0) return '';
-  if (String(raw).startsWith('=')) {
-    const result = rbEvalFormula(String(raw).slice(1), 0);
+  if (raw === undefined || raw === null || raw === '') return '';
+  if (raw === 0) return 0;
+  const strRaw = String(raw).trim();
+  if (strRaw === '') return '';
+  if (strRaw.startsWith('=')) {
+    const result = rbEvalFormula(strRaw.slice(1), 0);
+    if (result === '#ERR' || result === '#REF') return result;
+    if (typeof result === 'number') {
+      return Number.isInteger(result) ? result : parseFloat(result.toFixed(2));
+    }
     return result;
   }
+  // Return raw value as-is for display
   return raw;
+}
+
+
+function rbInitColumnResize() {
+  const table = document.getElementById('rb-table');
+  if (!table) return;
+
+  const headers = table.querySelectorAll('th');
+  headers.forEach((th, index) => {
+    if (index === 0) return; // Skip the row-number column
+
+    // Remove any existing resizer to avoid duplicates
+    const existingResizer = th.querySelector('.rb-col-resizer');
+    if (existingResizer) existingResizer.remove();
+
+    // Create the drag handle
+    const resizer = document.createElement('div');
+    resizer.className = 'rb-col-resizer';
+    resizer.style.cssText = `
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 6px;
+      height: 100%;
+      cursor: col-resize;
+      user-select: none;
+      z-index: 10;
+      background: transparent;
+    `;
+    resizer.title = 'Drag to resize column';
+    th.style.position = 'relative';
+    th.appendChild(resizer);
+
+    // Hover highlight
+    resizer.addEventListener('mouseenter', () => {
+      resizer.style.background = 'rgba(56,189,248,0.6)';
+    });
+    resizer.addEventListener('mouseleave', () => {
+      if (!resizer._dragging) resizer.style.background = 'transparent';
+    });
+
+    // Drag logic
+    resizer.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      resizer._dragging = true;
+      resizer.style.background = 'rgba(56,189,248,0.9)';
+
+      const startX = e.clientX;
+      const startWidth = th.offsetWidth;
+      const colIndex = index; // The th index (includes row-number col)
+
+      // Visual drag line
+      const dragLine = document.createElement('div');
+      dragLine.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: ${e.clientX}px;
+        width: 2px;
+        height: 100vh;
+        background: rgba(56,189,248,0.7);
+        z-index: 9999;
+        pointer-events: none;
+      `;
+      document.body.appendChild(dragLine);
+
+      const onMouseMove = (e) => {
+        const newWidth = Math.max(60, startWidth + (e.clientX - startX));
+        th.style.width = newWidth + 'px';
+        th.style.minWidth = newWidth + 'px';
+
+        // Apply same width to all cells in this column
+        const rows = table.querySelectorAll('tr');
+        rows.forEach(row => {
+          const cells = row.querySelectorAll('td, th');
+          if (cells[colIndex]) {
+            cells[colIndex].style.width = newWidth + 'px';
+            cells[colIndex].style.minWidth = newWidth + 'px';
+          }
+        });
+
+        dragLine.style.left = e.clientX + 'px';
+      };
+
+      const onMouseUp = () => {
+        resizer._dragging = false;
+        resizer.style.background = 'transparent';
+        dragLine.remove();
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      };
+
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+  });
+
+  // Row resize — drag the row-number cell bottom edge
+  const rowHeaders = table.querySelectorAll('td:first-child');
+  rowHeaders.forEach((td, rowIndex) => {
+    const existingResizer = td.querySelector('.rb-row-resizer');
+    if (existingResizer) existingResizer.remove();
+
+    const resizer = document.createElement('div');
+    resizer.className = 'rb-row-resizer';
+    resizer.style.cssText = `
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      cursor: row-resize;
+      user-select: none;
+      z-index: 10;
+      background: transparent;
+    `;
+    td.style.position = 'relative';
+    td.appendChild(resizer);
+
+    resizer.addEventListener('mouseenter', () => {
+      resizer.style.background = 'rgba(56,189,248,0.5)';
+    });
+    resizer.addEventListener('mouseleave', () => {
+      if (!resizer._dragging) resizer.style.background = 'transparent';
+    });
+
+    resizer.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      resizer._dragging = true;
+      const startY = e.clientY;
+      const row = td.closest('tr');
+      const startHeight = row.offsetHeight;
+
+      const onMouseMove = (e) => {
+        const newHeight = Math.max(24, startHeight + (e.clientY - startY));
+        row.style.height = newHeight + 'px';
+        // Make all cells in this row the same height
+        row.querySelectorAll('td').forEach(cell => {
+          cell.style.height = newHeight + 'px';
+        });
+      };
+
+      const onMouseUp = () => {
+        resizer._dragging = false;
+        resizer.style.background = 'transparent';
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      };
+
+      document.body.style.cursor = 'row-resize';
+      document.body.style.userSelect = 'none';
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+  });
 }
 
 function initRoughBoard() {
@@ -10972,7 +11286,7 @@ function initRoughBoard() {
 
   let headerRow = '<tr><th></th>';
   for (let c = 0; c < RB.cols; c++) {
-    headerRow += `<th onclick="rbSelectCol(${c})" ondblclick="rbRenameCol(${c})" title="Click to select column, Double-click to rename" style="cursor:pointer" id="rbh-${c}">${RB.colHeaders?.[c] || rbColLetter(c)}</th>`;
+    headerRow += `<th onclick="rbSelectCol(${c})" ondblclick="rbRenameCol(${c})" title="Click to select column, Double-click to rename | Drag right edge to resize" style="cursor:pointer;resize:horizontal;overflow:auto;min-width:90px;position:relative" id="rbh-${c}">${RB.colHeaders?.[c] || rbColLetter(c)}<span style="position:absolute;right:2px;top:50%;transform:translateY(-50%);font-size:0.55rem;opacity:0.35;cursor:col-resize;user-select:none">⇔</span></th>`;
   }
 
   let bodyHtml = '';
@@ -10992,7 +11306,7 @@ function initRoughBoard() {
       const styleStr = `${bgColor ? 'background:' + bgColor + ';' : ''}${bold}${italic}${textColor ? 'color:' + textColor + ';' : ''}`;
       bodyHtml += `<td id="rbtd-${id}" onclick="rbSelectCell('${id}')" style="${styleStr}">
         <input class="rb-cell" id="rb-${id}" data-cell="${id}"
-          value="${display !== '' ? String(display).replace(/"/g,'&quot;') : ''}"
+          value="${(display !== '' && display !== null && display !== undefined) ? String(display).replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''}"
           style="${styleStr}"
           onfocus="rbFocus('${id}')"
           onblur="rbBlur('${id}',this.value)"
@@ -11005,6 +11319,8 @@ function initRoughBoard() {
 
   table.innerHTML = headerRow + bodyHtml;
   if (RB.selectedCell) rbSelectCell(RB.selectedCell);
+  if (RB.selectedCell) rbSelectCell(RB.selectedCell);
+     setTimeout(rbInitColumnResize, 50);
 }
 
 
@@ -11337,31 +11653,282 @@ function rbAverageCol() {
 
 function rbImportCSV() {
   const input = document.createElement('input');
-  input.type = 'file'; input.accept = '.csv';
+  input.type = 'file';
+  input.accept = '.csv,.xls,.xlsx,.ods';
   input.onchange = e => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const lines = ev.target.result.split('\n');
-      RB.data = {};
-      lines.forEach((line, r) => {
-        if (r >= 50) return;
-        const cells = line.split(',');
-        cells.forEach((cell, c) => {
-          if (c >= 26) return;
-          const val = cell.replace(/^"|"$/g,'').trim();
-          if (val !== '') RB.data[rbCellId(r, c)] = val;
-        });
-      });
-      RB.rows = Math.max(20, lines.length + 2);
-      RB.cols = Math.max(12, Math.max(...lines.map(l => l.split(',').length)) + 2);
-      rbSaveData();
-      initRoughBoard();
-    };
-    reader.readAsText(file);
+    const ext = file.name.split('.').pop().toLowerCase();
+
+    if (ext === 'csv') {
+      // ── CSV PATH ──────────────────────────────────────────────
+      const reader = new FileReader();
+      reader.onload = ev => {
+        rbProcessCSVText(ev.target.result);
+      };
+      reader.readAsText(file);
+
+    } else if (['xls','xlsx','ods'].includes(ext)) {
+      // ── EXCEL / ODS PATH ──────────────────────────────────────
+      if (typeof XLSX === 'undefined') {
+        alert('Excel library not loaded yet. Please wait a moment and try again.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const data = new Uint8Array(ev.target.result);
+        let workbook;
+        try {
+          workbook = XLSX.read(data, { type: 'array', cellDates: true, cellNF: true });
+        } catch(err) {
+          alert('Could not read this file. It may be corrupted or password-protected.');
+          return;
+        }
+
+        const sheetNames = workbook.SheetNames;
+        if (!sheetNames.length) { alert('No sheets found in this file.'); return; }
+
+        if (sheetNames.length === 1) {
+          // Only one sheet — load it immediately
+          rbLoadExcelSheet(workbook, sheetNames[0]);
+        } else {
+          // Multiple sheets — show a picker overlay
+          rbShowSheetPicker(workbook, sheetNames);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+
+    } else {
+      alert('Unsupported file type. Please upload a .csv, .xlsx, .xls, or .ods file.');
+    }
   };
   input.click();
+}
+
+// ── CSV PROCESSOR ──────────────────────────────────────────────────────────
+function rbProcessCSVText(text) {
+  // Handle both Windows (\r\n) and Unix (\n) line endings
+  const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+
+  // Smart CSV parser — handles quoted fields with commas inside them
+  function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') {
+        if (inQuotes && line[i+1] === '"') { current += '"'; i++; } // escaped quote
+        else inQuotes = !inQuotes;
+      } else if (ch === ',' && !inQuotes) {
+        result.push(current.trim());
+        current = '';
+      } else {
+        current += ch;
+      }
+    }
+    result.push(current.trim());
+    return result;
+  }
+
+  // Find the actual data range (skip fully empty leading rows)
+  let firstDataRow = 0;
+  for (let r = 0; r < lines.length; r++) {
+    if (lines[r].trim() !== '') { firstDataRow = r; break; }
+  }
+
+  RB.data = {};
+  let maxCols = 0;
+  let dataRows = 0;
+
+  lines.forEach((line, absRow) => {
+    if (absRow < firstDataRow) return;
+    const r = absRow - firstDataRow;
+    if (r >= 200) return; // Safety cap
+
+    const cells = parseCSVLine(line);
+    maxCols = Math.max(maxCols, cells.length);
+
+    cells.forEach((cell, c) => {
+      if (c >= 52) return; // Max 52 columns (A–AZ)
+      if (cell !== '') {
+        RB.data[rbCellId(r, c)] = rbSmartCast(cell);
+        dataRows = Math.max(dataRows, r + 1);
+      }
+    });
+  });
+
+  RB.rows = Math.max(20, dataRows + 3);
+  RB.cols = Math.max(12, maxCols + 2);
+  rbSaveData();
+  initRoughBoard();
+  rbShowImportSuccess(`CSV imported — ${dataRows} rows × ${maxCols} columns`);
+}
+
+// ── EXCEL SHEET PICKER (for multi-sheet workbooks) ─────────────────────────
+function rbShowSheetPicker(workbook, sheetNames) {
+  // Remove any existing picker
+  const old = document.getElementById('rb-sheet-picker');
+  if (old) old.remove();
+
+  // Build a quick summary for each sheet
+  const summaries = sheetNames.map(name => {
+    const ws = workbook.Sheets[name];
+    const range = ws['!ref'];
+    if (!range) return { name, rows: 0, cols: 0, preview: 'Empty sheet' };
+    const decoded = XLSX.utils.decode_range(range);
+    const rows = decoded.e.r - decoded.s.r + 1;
+    const cols = decoded.e.c - decoded.s.c + 1;
+    // Grab first cell value as a mini preview
+    const firstCell = ws[XLSX.utils.encode_cell({ r: decoded.s.r, c: decoded.s.c })];
+    const preview = firstCell ? String(firstCell.v).substring(0, 30) : '(empty)';
+    return { name, rows, cols, preview };
+  });
+
+  const overlay = document.createElement('div');
+  overlay.id = 'rb-sheet-picker';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;display:flex;justify-content:center;align-items:center;font-family:DM Sans,sans-serif';
+
+  overlay.innerHTML = `
+    <div style="background:#0c1020;border:1px solid rgba(56,189,248,0.4);border-radius:18px;padding:28px 32px;width:520px;max-width:95vw;max-height:80vh;overflow-y:auto;color:white;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div style="font-size:1.05rem;font-weight:700;color:#38bdf8">
+          <i class="fas fa-table-columns" style="margin-right:8px"></i>
+          Select a Sheet to Import
+        </div>
+        <button onclick="document.getElementById('rb-sheet-picker').remove()" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:1.1rem">✕</button>
+      </div>
+      <div style="font-size:0.75rem;color:#64748b;margin-bottom:16px">
+        This workbook has <strong style="color:#94a3b8">${sheetNames.length} sheets</strong>. Click one to load it into the Rough Board.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        ${summaries.map((s, i) => `
+          <div onclick="rbLoadExcelSheet(window._rbTempWorkbook,'${s.name.replace(/'/g,"\\'")}');document.getElementById('rb-sheet-picker').remove()"
+               style="background:rgba(56,189,248,0.07);border:1px solid rgba(56,189,248,0.2);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all 0.18s"
+               onmouseover="this.style.background='rgba(56,189,248,0.18)';this.style.borderColor='rgba(56,189,248,0.6)'"
+               onmouseout="this.style.background='rgba(56,189,248,0.07)';this.style.borderColor='rgba(56,189,248,0.2)'">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:700;color:white;font-size:0.95rem">${s.name}</div>
+                <div style="font-size:0.72rem;color:#64748b;margin-top:3px">First cell: "${s.preview}"</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0;margin-left:12px">
+                <div style="font-family:'DM Mono',monospace;font-size:0.8rem;color:#38bdf8;font-weight:700">${s.rows} × ${s.cols}</div>
+                <div style="font-size:0.65rem;color:#64748b">rows × cols</div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="margin-top:16px;font-size:0.72rem;color:#475569;text-align:center">
+        Only one sheet can be loaded at a time. All current Rough Board data will be replaced.
+      </div>
+    </div>
+  `;
+
+  // Temporarily store workbook on window so the onclick handlers can access it
+  window._rbTempWorkbook = workbook;
+  document.body.appendChild(overlay);
+}
+
+// ── EXCEL SHEET LOADER ─────────────────────────────────────────────────────
+function rbLoadExcelSheet(workbook, sheetName) {
+  const ws = workbook.Sheets[sheetName];
+  if (!ws) { alert('Sheet not found: ' + sheetName); return; }
+
+  const range = ws['!ref'];
+  if (!range) {
+    alert('The sheet "' + sheetName + '" appears to be empty.');
+    return;
+  }
+
+  const decoded = XLSX.utils.decode_range(range);
+  const startRow = decoded.s.r;
+  const startCol = decoded.s.c;
+  const endRow   = decoded.e.r;
+  const endCol   = decoded.e.c;
+
+  RB.data = {};
+  let dataRows = 0, dataCols = 0;
+
+  for (let r = startRow; r <= endRow; r++) {
+    for (let c = startCol; c <= endCol; c++) {
+      const cellAddr = XLSX.utils.encode_cell({ r, c });
+      const cell = ws[cellAddr];
+      if (!cell) continue;
+
+      // Normalize row/col to 0-based offsets from top-left
+      const rbRow = r - startRow;
+      const rbCol = c - startCol;
+      if (rbRow >= 200 || rbCol >= 52) continue;
+
+      const cellId = rbCellId(rbRow, rbCol);
+
+      // Preserve formulas if present, else use formatted text, else raw value
+      let value;
+      if (cell.f) {
+        // Excel formula — convert to our = prefix syntax
+        value = '=' + cell.f;
+      } else if (cell.w !== undefined && cell.w !== '') {
+        // 'w' is the formatted display text (e.g. "1,234.56" or "Jan 2024")
+        value = cell.w;
+      } else {
+        value = cell.v !== undefined ? cell.v : '';
+      }
+
+      // Convert Excel date serial numbers to readable strings
+      if (cell.t === 'd' && cell.v instanceof Date) {
+        value = cell.v.toLocaleDateString('en-IN');
+      }
+
+      const strVal = String(value).trim();
+      if (strVal !== '' && strVal !== 'undefined') {
+        RB.data[cellId] = rbSmartCast(strVal);
+        dataRows = Math.max(dataRows, rbRow + 1);
+        dataCols = Math.max(dataCols, rbCol + 1);
+      }
+    }
+  }
+
+  RB.rows = Math.max(20, dataRows + 3);
+  RB.cols = Math.max(12, dataCols + 2);
+  rbSaveData();
+  initRoughBoard();
+  rbShowImportSuccess(`"${sheetName}" imported — ${dataRows} rows × ${dataCols} columns`);
+
+  // Clean up temp workbook reference
+  delete window._rbTempWorkbook;
+}
+
+// ── SMART TYPE CASTING ─────────────────────────────────────────────────────
+// Tries to store numbers as numbers, keeps text as text
+function rbSmartCast(val) {
+  if (typeof val === 'number') return val;
+  const str = String(val).trim();
+  if (str === '') return '';
+
+  // Remove currency symbols and commas for number detection
+  const stripped = str.replace(/^[₹$€£¥,\s]+/, '').replace(/,/g, '');
+  const num = Number(stripped);
+
+  // Keep as string if it's a date-like pattern, phone number, or starts with 0
+  const looksLikeDate = /^\d{1,4}[\/\-]\d{1,2}[\/\-]\d{2,4}$/.test(str);
+  const looksLikePhone = /^[+]?[\d\s\-]{8,}$/.test(str) && str.startsWith('0');
+  const startsWithZero = /^0\d/.test(stripped);
+
+  if (!isNaN(num) && stripped !== '' && !looksLikeDate && !looksLikePhone && !startsWithZero) {
+    return num;
+  }
+  return str;
+}
+
+// ── IMPORT SUCCESS TOAST ───────────────────────────────────────────────────
+function rbShowImportSuccess(message) {
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.5);color:#34d399;padding:12px 24px;border-radius:12px;font-family:DM Sans,sans-serif;font-size:0.85rem;font-weight:600;z-index:9999;backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,0.4);transition:opacity 0.4s ease';
+  toast.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px"></i>' + message;
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 400); }, 3000);
 }
 
 function rbFindReplace() {
@@ -11926,5 +12493,6 @@ document.addEventListener('keydown', (e) => {
   <button class="undo-btn" onclick="executeUndo()">Undo</button>
   <div id="undo-progress"></div>
 </div>
+
 </body>
 </html>
