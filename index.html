@@ -1067,16 +1067,6 @@ body.light-mode .alert-builder-select, body.light-mode .alert-builder-input { ba
 
 /* responsive handled below in IMPROVED MOBILE section */
 
-/* ── ACCESSIBILITY: REDUCE MOTION ── */
-body.fos-reduce-motion *,
-body.fos-reduce-motion *::before,
-body.fos-reduce-motion *::after {
-  animation-duration: 0.001s !important;
-  animation-delay: 0s !important;
-  transition-duration: 0.001s !important;
-  transition-delay: 0s !important;
-}
-
 /* ── SIDEBAR ANIMATION TOGGLE ── */
 body.fos-no-sidebar-anim .sidebar,
 body.fos-no-sidebar-anim .port-sidebar {
@@ -1850,8 +1840,20 @@ body.light-mode .settings-undo-btn:hover { color: white; }
   background: none; border: none; color: rgba(255,255,255,0.5);
   cursor: pointer; font-size: 0.9rem; padding: 0; line-height: 1;
   transition: color 0.16s;
+  z-index: 2;
 }
 .login-pass-toggle:hover { color: white; }
+
+/* FIX: stop Chrome/Edge autofill from turning the password field white,
+   which was hiding the eye icon against it */
+.login-pass-wrap input:-webkit-autofill,
+.login-pass-wrap input:-webkit-autofill:hover,
+.login-pass-wrap input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #1a1a1d inset !important;
+  box-shadow: 0 0 0px 1000px #1a1a1d inset !important;
+  caret-color: #ffffff;
+}
 .login-input:focus { border-color: rgba(0,117,255,0.6); }
 .login-btn {
   width: 100%; padding: 11px; border: none; border-radius: 10px;
@@ -4441,14 +4443,7 @@ function toggleLoginPass(inputId, btn) {
                 <div class="set-desc">Motion, sidebar, and navigation preferences</div>
               </div>
             </div>
-            <div class="set-row">
-              <div class="set-label-block">
-                <div class="set-lbl readable-white" style="font-size:0.8rem">Reduce motion</div>
-                <div class="set-desc">Disable animations and transitions for accessibility.</div>
-              </div>
-              <label class="toggle-switch"><input type="checkbox" id="tog-reduce-motion" onchange="handleReduceMotionToggle(this)"><span class="toggle-slider"></span></label>
-            </div>
-            <div class="set-row">
+          <div class="set-row">
               <div class="set-label-block">
                 <div class="set-lbl readable-white" style="font-size:0.8rem">Sidebar animation</div>
                 <div class="set-desc">Animate the sidebar when it expands or collapses.</div>
@@ -12115,23 +12110,6 @@ function handleThemeToggle(checkbox) {
   updateChartsForTheme();
 }
 
-function applyReduceMotionState(reduceMotion) {
-  document.body.classList.toggle('fos-reduce-motion', reduceMotion);
-  // Disable Chart.js animations app-wide when reduce motion is on
-  Chart.defaults.animation = reduceMotion ? false : { duration: 400, easing: 'easeOutQuart' };
-  // Re-render visible charts so the new animation setting takes effect immediately
-  Object.values(charts).forEach(c => { if (c && typeof c.update === 'function') c.update('none'); });
-}
-
-function handleReduceMotionToggle(checkbox) {
-  const reduceMotion = checkbox.checked;
-  localStorage.setItem('fos_set_reduce-motion', reduceMotion);
-  applyReduceMotionState(reduceMotion);
-  if (typeof showSettingsToast === 'function') {
-    showSettingsToast(`Updated: Reduce Motion ${reduceMotion ? 'On' : 'Off'}`);
-  }
-}
-
 function applySidebarAnimState(animate) {
   document.body.classList.toggle('fos-no-sidebar-anim', !animate);
 }
@@ -13206,8 +13184,7 @@ function calcScenario() {
 }
 
 window.onload = () => {
-  // Apply saved accessibility/interface preferences before anything renders
-  applyReduceMotionState(localStorage.getItem('fos_set_reduce-motion') === 'true');
+  // Apply saved interface preferences before anything renders
   applySidebarAnimState(localStorage.getItem('fos_set_sidebar-animation') !== 'false');
 
   // 1. Arrange the dashboard layout FIRST (Prevents the visual jump!)
