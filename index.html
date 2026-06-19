@@ -8,11 +8,15 @@
 <link rel="manifest" href="manifest.json">
 <title>FinanceOS</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
+  --scale-base-bg: linear-gradient(to bottom, #334155, #0f172a);
+  --scale-pillar-bg: linear-gradient(to right, #1e293b, #334155, #1e293b);
+  --scale-pivot-bg: #0f172a;
   --glass-border: rgba(255, 255, 255, 0.04);
   --accent: #0075ff; /* Vision UI vibrant blue */
   --accent-soft: rgba(0, 117, 255, 0.15);
@@ -37,7 +41,20 @@
   --port-sidebar-w: 200px;
   --warning: #f59e0b;
   --danger: #ef4444;
+  
+  /* 3D Scale Dark Mode Variables */
+  --scale-base-bg: linear-gradient(to bottom, #334155, #0f172a);
+  --scale-pillar-bg: linear-gradient(to right, #1e293b, #334155, #1e293b);
+  --scale-pivot-bg: #0f172a;
+  --scale-border-top: rgba(255,255,255,0.2);
+  --scale-border-side: rgba(255,255,255,0.4);
+  --scale-shadow-base: 0 10px 20px rgba(0,0,0,0.6);
+  --scale-shadow-pillar: 0 0 15px rgba(0,0,0,0.5);
+  --scale-shadow-pivot: 0 0 10px rgba(0,0,0,0.8);
+  --scale-text-shadow-assets: 0 0 12px rgba(52, 211, 153, 0.5);
+  --scale-text-shadow-debt: 0 0 12px rgba(239, 68, 68, 0.5);
 }
+
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 body { background: radial-gradient(circle at 15% 0%, rgba(0,117,255,0.08), transparent 40%), radial-gradient(circle at 85% 100%, rgba(167,139,250,0.06), transparent 40%), linear-gradient(135deg, #0a0a0c 0%, #000000 100%); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
 /* ── SIDEBAR BASE ── */
@@ -129,7 +146,7 @@ body { background: radial-gradient(circle at 15% 0%, rgba(0,117,255,0.08), trans
 .nav-item {
   padding: 9px 10px; border-radius: 12px; cursor: pointer; color: var(--text-mid);
   font-weight: 500; font-size: 0.84rem; display: flex; align-items: center; gap: 9px;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Premium fluid motion */
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
   position: relative;
   border: 1px solid transparent;
 }
@@ -490,7 +507,7 @@ body { background: radial-gradient(circle at 15% 0%, rgba(0,117,255,0.08), trans
 .view-section.active { display:block; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(7px)} to{opacity:1;transform:translateY(0)} }
 
-.glass-panel { background: linear-gradient(127.09deg, rgba(6, 11, 38, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%); backdrop-filter: blur(120px); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; box-shadow: 0 4px 18px rgba(0, 117, 255, 0.05), inset 0 1px 0 rgba(255,255,255,0.04); padding: 1.2rem 1.4rem; margin-bottom: 1.4rem; transition: border-color .25s, transform .25s; }
+.glass-panel { background: linear-gradient(127.09deg, rgba(6, 11, 38, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; box-shadow: 0 4px 18px rgba(0, 117, 255, 0.05), inset 0 1px 0 rgba(255,255,255,0.04); padding: 1.2rem 1.4rem; margin-bottom: 1.4rem; transition: border-color .25s, transform .25s; }
 .panel-title { font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:2px; margin-bottom:1rem; display:flex; align-items:center; gap:7px; }
 
 .kpi-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:.9rem; margin-bottom:1.4rem; }
@@ -655,6 +672,8 @@ body.light-mode input[type="date"]::-webkit-calendar-picker-indicator {
 body.light-mode input[type="date"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
+body.light-mode #daily-summary-time { color-scheme: light; }
+
 .input-field.port-focus:focus { border-color:#a78bfa; }
 .input-field option { background:#1e293b; }
 .modal-row { display:flex; gap:9px; }
@@ -882,8 +901,9 @@ select.set-input {
 }
 select.set-input option { background: #1e293b; color: #ffffff; }
 
-body.light-mode .set-input { background: #ffffff; color: #0f172a; border-color: #cbd5e1; }
-body.light-mode select.set-input option { background: #ffffff; color: #0f172a; }
+/* FIX: Use background-color instead of background to prevent wiping out the dropdown arrow SVG */
+body.light-mode .set-input { background-color: #ffffff; color: #0f172a; border-color: #cbd5e1; }
+body.light-mode select.set-input option { background-color: #ffffff; color: #0f172a; }
 
 .set-chip-group { display: flex; gap: 5px; background: rgba(255,255,255,0.04); padding: 4px; border-radius: 9px; border: 1px solid var(--glass-border); }
 .set-chip { padding: 6px 12px; font-size: 0.75rem; border-radius: 6px; cursor: pointer; color: var(--text-muted); transition: 0.2s; }
@@ -979,7 +999,7 @@ body.light-mode .readable-white {
 .game-card {
   flex:1; min-width:180px;
   background: linear-gradient(127.09deg, rgba(6, 11, 38, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%);
-  backdrop-filter: blur(120px);
+  backdrop-filter: blur(20px);
   border:1px solid rgba(255,255,255,0.06);
   border-radius:18px;
   padding:1.1rem 1.3rem;
@@ -1047,18 +1067,55 @@ body.light-mode .alert-builder-select, body.light-mode .alert-builder-input { ba
 
 /* responsive handled below in IMPROVED MOBILE section */
 
+/* ── ACCESSIBILITY: REDUCE MOTION ── */
+body.fos-reduce-motion *,
+body.fos-reduce-motion *::before,
+body.fos-reduce-motion *::after {
+  animation-duration: 0.001s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0.001s !important;
+  transition-delay: 0s !important;
+}
+
+/* ── SIDEBAR ANIMATION TOGGLE ── */
+body.fos-no-sidebar-anim .sidebar,
+body.fos-no-sidebar-anim .port-sidebar {
+  transition: none !important;
+}
+
 /* ══════════════════════════════════════════════
    PREMIUM LIGHT MODE (Crisp White + Soft Slate Shadows)
 ══════════════════════════════════════════════ */
 body.light-mode {
-  --glass-border: #e2e8f0; /* Crisp, faint slate border */
-  --glass-bg: #ffffff !important; /* Pure white panels */
-  --text-main: #0f172a; /* Deep slate for maximum readability */
-  --text-muted: #64748b; /* Soft slate for secondary text */
+  --glass-border: #e2e8f0; 
+  --glass-bg: #ffffff !important; 
+  --text-main: #0f172a; 
+  --text-muted: #64748b; 
   --text-mid: #475569;
-  background: #f4f7f9; /* Ultra-clean cool gray background */
+  background: #f4f7f9; 
   color: var(--text-main);
+  
+  /* 3D Scale Light Mode Variables */
+  --scale-base-bg: linear-gradient(to bottom, #e2e8f0, #94a3b8);
+  --scale-pillar-bg: linear-gradient(to right, #cbd5e1, #f1f5f9, #cbd5e1);
+  --scale-pivot-bg: #f1f5f9;
+  --scale-border-top: #ffffff;
+  --scale-border-side: rgba(255,255,255,0.8);
+  --scale-shadow-base: 0 10px 20px rgba(0,0,0,0.1);
+  --scale-shadow-pillar: 0 0 15px rgba(0,0,0,0.05);
+  --scale-shadow-pivot: 0 0 10px rgba(0,0,0,0.1);
+  --scale-text-shadow-assets: none;
+  --scale-text-shadow-debt: none;
 }
+
+/* 3D Scale Hardware-Accelerated Instant Transitions */
+.scale-value-text { 
+  color: var(--text-main); 
+  transition: color 0.15s ease, text-shadow 0.15s ease; 
+}
+body:not(.light-mode) .scale-value-text.text-assets { text-shadow: 0 0 12px rgba(52, 211, 153, 0.5); }
+body:not(.light-mode) .scale-value-text.text-debt { text-shadow: 0 0 12px rgba(239, 68, 68, 0.5); }
+body.light-mode .scale-value-text { text-shadow: none !important; }
 
 /* Sidebars: Pure White */
 body.light-mode .sidebar,
@@ -1204,8 +1261,15 @@ body.light-mode .game-card-value {
 body.light-mode .alert-rule-card { background: #ffffff; border-color: #e2e8f0; box-shadow: none !important; }
 body.light-mode .alert-builder-select, body.light-mode .alert-builder-input { background: #ffffff; border-color: #cbd5e1; color: #0f172a; }
 
+.adv-report-box { background:#0f172a; }
+.adv-report-list { background:#1e293b; }
+.adv-report-row:hover { background:rgba(255,255,255,0.04); }
+
 body.light-mode .market-card { background: #ffffff; border: 1px solid var(--glass-border) !important; box-shadow: none !important; cursor: pointer; }
-body.light-mode .market-card:hover { border-color: var(--accent) !important; box-shadow: none !important; transform: none !important; }
+
+body.light-mode .adv-report-box { background:#ffffff !important; }
+body.light-mode .adv-report-list { background:#f8fafc !important; border-color: rgba(0,0,0,0.06) !important; }
+body.light-mode .adv-report-row:hover { background:rgba(0,0,0,0.03) !important; }
 
 /* ── NEW: Persistent Active State for Dark Mode ── */
 .market-card.active {
@@ -1947,6 +2011,7 @@ body.light-mode .settings-undo-btn:hover { color: white; }
         <div class="onboard-progress-seg" id="ob-prog-3"></div>
         <div class="onboard-progress-seg" id="ob-prog-4"></div>
         <div class="onboard-progress-seg" id="ob-prog-5"></div>
+        <div class="onboard-progress-seg" id="ob-prog-6"></div>
       </div>
 
       <!-- STEP 1: Account details -->
@@ -2051,8 +2116,40 @@ body.light-mode .settings-undo-btn:hover { color: white; }
         </div>
       </div>
 
-      <!-- STEP 4: Theme preference -->
+      <!-- STEP 4: Age Bracket -->
       <div class="onboard-step" id="ob-step-4">
+        <div class="onboard-emoji">⏳</div>
+        <div class="onboard-title">What is your age group?</div>
+        <div class="onboard-sub">This determines your ideal asset allocation</div>
+        <div class="onboard-options">
+          <div class="onboard-option" onclick="obSelectAge('twenties',this)">
+            <div class="onboard-option-icon"><i class="fas fa-rocket"></i></div>
+            <div class="onboard-option-text"><div class="onboard-option-title">Under 30</div><div class="onboard-option-desc">Aggressive Growth</div></div>
+            <div class="onboard-option-check"></div>
+          </div>
+          <div class="onboard-option" onclick="obSelectAge('thirties',this)">
+            <div class="onboard-option-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="onboard-option-text"><div class="onboard-option-title">30 to 45</div><div class="onboard-option-desc">Wealth Accumulation</div></div>
+            <div class="onboard-option-check"></div>
+          </div>
+          <div class="onboard-option" onclick="obSelectAge('forties',this)">
+            <div class="onboard-option-icon"><i class="fas fa-balance-scale"></i></div>
+            <div class="onboard-option-text"><div class="onboard-option-title">46 to 55</div><div class="onboard-option-desc">Balanced Approach</div></div>
+            <div class="onboard-option-check"></div>
+          </div>
+          <div class="onboard-option" onclick="obSelectAge('fifties',this)">
+            <div class="onboard-option-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="onboard-option-text"><div class="onboard-option-title">55 and above</div><div class="onboard-option-desc">Capital Preservation</div></div>
+            <div class="onboard-option-check"></div>
+          </div>
+        </div>
+        <div class="onboard-nav">
+          <button class="onboard-btn-back" onclick="obGoTo(3)"><i class="fas fa-arrow-left"></i></button>
+        </div>
+      </div>
+
+      <!-- STEP 5: Theme preference -->
+      <div class="onboard-step" id="ob-step-5">
         <div class="onboard-emoji">🎨</div>
         <div class="onboard-title">Pick your vibe</div>
         <div class="onboard-sub">You can switch this anytime from the top bar</div>
@@ -2069,12 +2166,12 @@ body.light-mode .settings-undo-btn:hover { color: white; }
           </div>
         </div>
         <div class="onboard-nav">
-          <button class="onboard-btn-back" onclick="obGoTo(3)"><i class="fas fa-arrow-left"></i></button>
+          <button class="onboard-btn-back" onclick="obGoTo(4)"><i class="fas fa-arrow-left"></i></button>
         </div>
       </div>
 
-      <!-- STEP 5: All set -->
-      <div class="onboard-step" id="ob-step-5">
+      <!-- STEP 6: All set -->
+      <div class="onboard-step" id="ob-step-6">
         <div class="onboard-final-icon"><i class="fas fa-check"></i></div>
         <div class="onboard-title">You're all set, <span id="ob-final-name">there</span>!</div>
         <div class="onboard-sub">Here's what we've set up for you</div>
@@ -2150,7 +2247,7 @@ function obGoTo(step) {
   const el = document.getElementById('ob-step-' + step);
   if (el) el.classList.add('active');
   obStep = step;
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 6; i++) {
     const seg = document.getElementById('ob-prog-' + i);
     if (!seg) continue;
     seg.classList.remove('done', 'active');
@@ -2197,11 +2294,18 @@ function obSelectIncome(value, el) {
   setTimeout(() => obGoTo(4), 250);
 }
 
-function obSelectTheme(value, el) {
-  obData.theme = value;
+function obSelectAge(value, el) {
+  obData.age = value;
   document.querySelectorAll('#ob-step-4 .onboard-option').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
-  setTimeout(() => { obBuildSummary(); obGoTo(5); }, 250);
+  setTimeout(() => obGoTo(5), 250);
+}
+
+function obSelectTheme(value, el) {
+  obData.theme = value;
+  document.querySelectorAll('#ob-step-5 .onboard-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  setTimeout(() => { obBuildSummary(); obGoTo(6); }, 250);
 }
 
 function obBuildSummary() {
@@ -2261,22 +2365,86 @@ function applyLoggedInUser(name) {
   if (portfolioEl) portfolioEl.textContent  = name;
   document.title = 'FinanceOS - ' + name;
   
+  // Fetch full user data to populate the rest of the settings
+  const currUser = JSON.parse(localStorage.getItem('fos_current_user') || '{}');
+  const users = JSON.parse(localStorage.getItem('fos_users') || '[]');
+  const userData = users.find(u => u.identifier === currUser.identifier);
+
   // Dynamically update Settings Profile block
   const setDispName = document.getElementById('set-disp-name');
   const setDispHandle = document.getElementById('set-disp-handle');
   const setDispInitial = document.getElementById('set-disp-initial');
   const setInputName = document.getElementById('set-input-name');
+  const setInputEmail = document.getElementById('set-input-email');
+  const setInputAge = document.getElementById('set-input-age');
+  const setInputIncome = document.getElementById('set-input-income');
+  const setInputWorkspace = document.getElementById('set-input-workspace');
   
   if (setDispName) setDispName.textContent = name;
-  
-  // Creates a sleek handle (e.g. "John Doe" -> "@johndoe")
   if (setDispHandle) setDispHandle.textContent = '@' + name.toLowerCase().replace(/\s+/g, '');
-  
-  // Sets the avatar block to their first initial
   if (setDispInitial) setDispInitial.textContent = name.charAt(0).toUpperCase();
-  
-  // Updates the input field
   if (setInputName) setInputName.value = name;
+  if (setInputWorkspace) setInputWorkspace.value = name + "'s Workspace";
+
+  // Pre-fill dropdowns from database
+  if (userData) {
+    if (setInputEmail) setInputEmail.value = userData.email || userData.identifier || '';
+    if (userData.onboarding) {
+      if (setInputAge && userData.onboarding.age) setInputAge.value = userData.onboarding.age;
+      if (setInputIncome && userData.onboarding.income) setInputIncome.value = userData.onboarding.income;
+    }
+    
+    // Restore work type if saved previously
+    if (userData.workType) {
+      document.querySelectorAll('#set-input-worktype .set-chip').forEach(c => {
+        c.classList.remove('active');
+        if (c.dataset.val === userData.workType) c.classList.add('active');
+      });
+    }
+  }
+}
+
+// Function to save the profile from the settings menu and trigger chart updates
+function saveUserProfile(btn) {
+  const newName = document.getElementById('set-input-name').value.trim();
+  const newAge = document.getElementById('set-input-age').value;
+  const newIncome = document.getElementById('set-input-income').value;
+  const activeWorkTypeChip = document.querySelector('#set-input-worktype .set-chip.active');
+  const workType = activeWorkTypeChip ? activeWorkTypeChip.dataset.val : 'Individual';
+
+  const currUser = JSON.parse(localStorage.getItem('fos_current_user') || '{}');
+  let users = JSON.parse(localStorage.getItem('fos_users') || '[]');
+  const userIdx = users.findIndex(u => u.identifier === currUser.identifier);
+
+  if (userIdx > -1) {
+    // Update the user record
+    users[userIdx].name = newName;
+    if (!users[userIdx].onboarding) users[userIdx].onboarding = {};
+    users[userIdx].onboarding.age = newAge;
+    users[userIdx].onboarding.income = newIncome;
+    users[userIdx].workType = workType;
+
+    // Save back to storage
+    localStorage.setItem('fos_users', JSON.stringify(users));
+    
+    // Update active session
+    currUser.name = newName;
+    localStorage.setItem('fos_current_user', JSON.stringify(currUser));
+
+    // Re-apply to UI
+    applyLoggedInUser(newName);
+    
+    // CRITICAL: Re-render the Portfolio Analytics to instantly update the Systemic Exposure chart!
+    if (activeView === 'port-analytics') {
+      renderPortAnalytics();
+    }
+  }
+
+  // Visual Feedback
+  if(typeof showSettingsToast === 'function') showSettingsToast('Updated: Profile & Demographics');
+  const origHtml = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-check-double"></i> Saved!';
+  setTimeout(() => btn.innerHTML = origHtml, 2500);
 }
 
 // Auto-login if session exists
@@ -2453,6 +2621,8 @@ function toggleLoginPass(inputId, btn) {
   <div class="drawer-item" onclick="filterPortAsset('Bonds');closeMobileDrawer()"><i class="fas fa-circle" style="color:var(--c-bonds);font-size:0.55rem;width:16px;text-align:center"></i> Bonds</div>
   <div class="drawer-item" onclick="filterPortAsset('Stocks');closeMobileDrawer()"><i class="fas fa-circle" style="color:var(--c-stocks);font-size:0.55rem;width:16px;text-align:center"></i> Stocks</div>
   <div class="drawer-item" onclick="filterPortAsset('Crypto');closeMobileDrawer()"><i class="fas fa-circle" style="color:var(--c-crypto);font-size:0.55rem;width:16px;text-align:center"></i> Crypto</div>
+  <div class="drawer-item" onclick="filterPortAsset('FixedDeposit');closeMobileDrawer()"><i class="fas fa-circle" style="color:#14b8a6;font-size:0.55rem;width:16px;text-align:center"></i> Fixed Deposit</div>
+  <div class="drawer-item" onclick="filterPortAsset('RecurringDeposit');closeMobileDrawer()"><i class="fas fa-circle" style="color:#0ea5e9;font-size:0.55rem;width:16px;text-align:center"></i> Recurring Deposit</div>
   <div class="drawer-item" onclick="filterPortAsset('all');closeMobileDrawer()"><i class="fas fa-asterisk" style="color:#a78bfa;font-size:0.55rem;width:16px;text-align:center"></i> All Assets</div>
 
   <div style="margin-top:auto;padding-top:1rem;border-top:1px solid var(--glass-border);display:flex;flex-direction:column;gap:8px">
@@ -2623,6 +2793,14 @@ function toggleLoginPass(inputId, btn) {
   <div class="port-nav-item" id="port-nav-crypto" onclick="filterPortAsset('Crypto')">
     <div class="nav-icon"><i class="fab fa-bitcoin" style="color:var(--c-crypto)"></i></div>
     <span class="nav-label">Crypto</span>
+  </div>
+  <div class="port-nav-item" id="port-nav-fd" onclick="filterPortAsset('FixedDeposit')">
+    <div class="nav-icon"><i class="fas fa-piggy-bank" style="color:#14b8a6"></i></div>
+    <span class="nav-label">Fixed Deposit</span>
+  </div>
+  <div class="port-nav-item" id="port-nav-rd" onclick="filterPortAsset('RecurringDeposit')">
+    <div class="nav-icon"><i class="fas fa-sync-alt" style="color:#0ea5e9"></i></div>
+    <span class="nav-label">Recurring Deposit</span>
   </div>
   <div class="port-nav-item" id="port-nav-all" onclick="filterPortAsset('all')">
     <div class="nav-icon"><i class="fas fa-asterisk" style="color:#a78bfa"></i></div>
@@ -4061,6 +4239,9 @@ function toggleLoginPass(inputId, btn) {
       <div class="set-nav-item" onclick="switchSettingsTab('shortcuts', this)">
         <i class="fas fa-keyboard"></i> Shortcuts
       </div>
+<div class="set-nav-item" onclick="switchSettingsTab('tags', this); renderSettingsTags();">
+      <i class="fas fa-hashtag"></i> Tags
+    </div>
       <div class="set-nav-item" onclick="switchSettingsTab('about', this)">
         <i class="fas fa-shield-alt"></i> Privacy & Updates
       </div>
@@ -4112,11 +4293,33 @@ function toggleLoginPass(inputId, btn) {
             <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap: 8px; margin-bottom: 0.3rem;">
               <div>
                 <div class="set-desc readable-white" style="text-transform:uppercase; letter-spacing:1px; margin-bottom:2px; font-weight:600; font-size:0.6rem;">EMAIL</div>
-                <input type="email" class="set-input" style="width:100%; padding: 5px 10px;" value="chrismcguinness.ess@gmail.com">
+                <input type="email" id="set-input-email" class="set-input" style="width:100%; padding: 5px 10px; opacity:0.6;" readonly>
               </div>
               <div>
                 <div class="set-desc readable-white" style="text-transform:uppercase; letter-spacing:1px; margin-bottom:2px; font-weight:600; font-size:0.6rem;">WORKSPACE</div>
-                <input type="text" class="set-input" style="width:100%; padding: 5px 10px;" value="Chris Mcguinness">
+                <input type="text" id="set-input-workspace" class="set-input" style="width:100%; padding: 5px 10px;" value="Chris Mcguinness">
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 0.8rem;">
+              <div>
+                <div class="set-desc readable-white" style="text-transform:uppercase; letter-spacing:1px; margin-bottom:2px; font-weight:600; font-size:0.6rem;">AGE BRACKET (DRIVES EXPOSURE TARGETS)</div>
+                <select id="set-input-age" class="set-input" style="width:100%; padding: 5px 10px; cursor:pointer;">
+                  <option value="twenties">Under 30 (Aggressive)</option>
+                  <option value="thirties">30 to 45 (Growth)</option>
+                  <option value="forties">46 to 55 (Balanced)</option>
+                  <option value="fifties">55 and above (Conservative)</option>
+                </select>
+              </div>
+              <div>
+                <div class="set-desc readable-white" style="text-transform:uppercase; letter-spacing:1px; margin-bottom:2px; font-weight:600; font-size:0.6rem;">MONTHLY INCOME RANGE</div>
+                <select id="set-input-income" class="set-input" style="width:100%; padding: 5px 10px; cursor:pointer;">
+                  <option value="tiny">Under ₹25,000</option>
+                  <option value="small">₹25,000 – ₹50,000</option>
+                  <option value="mid">₹50,000 – ₹1,00,000</option>
+                  <option value="high">₹1,00,000 – ₹2,00,000</option>
+                  <option value="vhigh">₹2,00,000+</option>
+                </select>
               </div>
             </div>
 
@@ -4124,30 +4327,47 @@ function toggleLoginPass(inputId, btn) {
               <div style="display:flex; gap:15px; flex-wrap:wrap;">
                 <div>
                   <div class="set-desc readable-white" style="text-transform:uppercase; letter-spacing:1px; margin-bottom:2px; font-weight:600; font-size:0.6rem;">WORK TYPE</div>
-                  <div class="set-chip-group" style="display:inline-flex; padding: 3px;">
-                    <div class="set-chip active" onclick="this.parentNode.querySelectorAll('.set-chip').forEach(c=>c.classList.remove('active')); this.classList.add('active');" style="padding: 4px 8px;">Individual</div>
-                    <div class="set-chip" onclick="this.parentNode.querySelectorAll('.set-chip').forEach(c=>c.classList.remove('active')); this.classList.add('active');" style="padding: 4px 8px;">Freelancer</div>
-                    <div class="set-chip" onclick="this.parentNode.querySelectorAll('.set-chip').forEach(c=>c.classList.remove('active')); this.classList.add('active');" style="padding: 4px 8px;">Agency</div>
-                    <div class="set-chip" onclick="this.parentNode.querySelectorAll('.set-chip').forEach(c=>c.classList.remove('active')); this.classList.add('active');" style="padding: 4px 8px;">Startup</div>
-                    <div class="set-chip" onclick="this.parentNode.querySelectorAll('.set-chip').forEach(c=>c.classList.remove('active')); this.classList.add('active');" style="padding: 4px 8px;">Enterprise</div>
+                  <div class="set-chip-group" id="set-input-worktype" style="display:inline-flex; padding: 3px;">
+                    <div class="set-chip active" data-val="Individual" onclick="this.parentNode.querySelectorAll('.set-chip').forEach(c=>c.classList.remove('active')); this.classList.add('active');" style="padding: 4px 8px;">Individual</div>
+                    <div class="set-chip" data-val="Freelancer" onclick="this.parentNode.querySelectorAll('.set-chip').forEach(c=>c.classList.remove('active')); this.classList.add('active');" style="padding: 4px 8px;">Freelancer</div>
+                    <div class="set-chip" data-val="Agency" onclick="this.parentNode.querySelectorAll('.set-chip').forEach(c=>c.classList.remove('active')); this.classList.add('active');" style="padding: 4px 8px;">Agency</div>
+                    <div class="set-chip" data-val="Startup" onclick="this.parentNode.querySelectorAll('.set-chip').forEach(c=>c.classList.remove('active')); this.classList.add('active');" style="padding: 4px 8px;">Startup</div>
+                    <div class="set-chip" data-val="Enterprise" onclick="this.parentNode.querySelectorAll('.set-chip').forEach(c=>c.classList.remove('active')); this.classList.add('active');" style="padding: 4px 8px;">Enterprise</div>
                   </div>
                 </div>
               </div>
-              <button class="btn-add" onclick="alert('Profile saved successfully!'); const btn=this; btn.innerHTML='<i class=\'fas fa-check-double\'></i> Saved!'; setTimeout(()=>btn.innerHTML='<i class=\'fas fa-check\'></i> Save Profile', 2500);" style="border-radius: 8px; padding: 6px 14px; transition: 0.3s;"><i class="fas fa-check"></i> Save Profile</button>
+              <button class="btn-add" onclick="saveUserProfile(this)" style="border-radius: 8px; padding: 6px 14px; transition: 0.3s;"><i class="fas fa-check"></i> Save Profile</button>
             </div>
           </div>
         </div>
 
         <div id="gen-sec-appearance" class="gen-section" style="display:none; flex-direction:column; gap:1.2rem;">
-          
-          <div class="set-card">
-            <div style="display:flex; gap:10px; align-items:center; margin-bottom: 0.5rem;">
-              <div style="width:32px; height:32px; border-radius:50%; background:rgba(0,117,255,0.15); color:var(--accent); display:flex; align-items:center; justify-content:center"><i class="fas fa-globe"></i></div>
+            
+            <div class="set-card">
+              <div class="set-row">
+                <div class="set-label-block">
+                  <div class="set-lbl readable-white" style="font-size:0.8rem">Dark Mode</div>
+                  <div class="set-desc">Toggle the dashboard's dark theme.</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <i class="fas fa-sun" style="color:var(--text-muted); font-size:0.9rem;"></i>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="tog-app-theme" onchange="handleThemeToggle(this)">
+                    <span class="toggle-slider"></span>
+                  </label>
+                  <i class="fas fa-moon" style="color:var(--text-muted); font-size:0.9rem;"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="set-card">
+              <div style="display:flex; gap:10px; align-items:center; margin-bottom: 0.5rem;">
+                <div style="width:32px; height:32px; border-radius:50%; background:rgba(0,117,255,0.15); color:var(--accent); display:flex; align-items:center; justify-content:center"><i class="fas fa-globe"></i></div>
               <div class="set-label-block">
                 <div class="set-lbl readable-white">Regional Formatting</div>
                 <div class="set-desc" style="margin-top:0">Currency symbols and number systems</div>
               </div>
-            </div>
+              </div>
             <div class="set-row">
               <div class="set-label-block">
                 <div class="set-lbl readable-white" style="font-size:0.8rem">Default Currency</div>
@@ -4226,35 +4446,50 @@ function toggleLoginPass(inputId, btn) {
                 <div class="set-lbl readable-white" style="font-size:0.8rem">Reduce motion</div>
                 <div class="set-desc">Disable animations and transitions for accessibility.</div>
               </div>
-              <label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label>
+              <label class="toggle-switch"><input type="checkbox" id="tog-reduce-motion" onchange="handleReduceMotionToggle(this)"><span class="toggle-slider"></span></label>
             </div>
             <div class="set-row">
               <div class="set-label-block">
                 <div class="set-lbl readable-white" style="font-size:0.8rem">Sidebar animation</div>
                 <div class="set-desc">Animate the sidebar when it expands or collapses.</div>
               </div>
-              <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+              <label class="toggle-switch"><input type="checkbox" id="tog-sidebar-animation" checked onchange="handleSidebarAnimToggle(this)"><span class="toggle-slider"></span></label>
             </div>
-            <div class="set-row">
-              <div class="set-label-block">
-                <div class="set-lbl readable-white" style="font-size:0.8rem">Sidebar behavior</div>
-                <div class="set-desc">Manual keeps state until you toggle it. Auto collapses when narrow.</div>
-              </div>
-              <div class="set-chip-group">
-                <div class="set-chip active">Manual</div>
-                <div class="set-chip">Auto</div>
-              </div>
-            </div>
-            <div class="set-row">
+          <div class="set-row">
               <div class="set-label-block">
                 <div class="set-lbl readable-white" style="font-size:0.8rem">Remember last page</div>
                 <div class="set-desc">Reopen the last visited page when workspace launches.</div>
               </div>
-              <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+              <label class="toggle-switch"><input type="checkbox" id="tog-remember-page" checked onchange="toggleSetting('remember-page','Remember Last Page',this)"><span class="toggle-slider"></span></label>
             </div>
           </div>
         </div>
 
+      </div>
+
+      <div id="set-tab-tags" class="set-tab-pane">
+        <div class="set-card">
+          <div style="display:flex; gap:10px; align-items:center; margin-bottom: 0.5rem;">
+            <div style="width:32px; height:32px; border-radius:50%; background:rgba(167,139,250,0.15); color:var(--c-net); display:flex; align-items:center; justify-content:center"><i class="fas fa-hashtag"></i></div>
+            <div class="set-label-block">
+              <div class="set-lbl readable-white">Manage Tags</div>
+              <div class="set-desc" style="margin-top:0">Create and remove available transaction tags</div>
+            </div>
+          </div>
+          
+          <div class="set-row" style="gap:10px;">
+            <input type="text" id="set-new-tag-input" class="set-input" style="flex:1;" placeholder="New tag (e.g. vacation, taxes)" onkeydown="if(event.key==='Enter') addNewTagFromSettings()">
+            <button class="btn-add" onclick="addNewTagFromSettings()" style="padding: 5px 12px; font-size: 0.75rem; border-radius: 6px;"><i class="fas fa-plus"></i> Add Tag</button>
+          </div>
+        </div>
+        
+        <div class="set-card">
+          <div class="set-label-block" style="margin-bottom: 0.5rem;">
+            <div class="set-lbl readable-white" style="font-size:0.8rem">Available Tags</div>
+          </div>
+          <div class="tag-chips" id="settings-tags-list" style="margin-top:0; display:flex; gap:8px; flex-wrap:wrap;">
+            </div>
+        </div>
       </div>
 
       <div id="set-tab-notifications" class="set-tab-pane">
@@ -4271,9 +4506,9 @@ function toggleLoginPass(inputId, btn) {
           <div class="set-row">
             <div class="set-label-block">
               <div class="set-lbl readable-white" style="font-size:0.8rem">Desktop notifications</div>
-              <div class="set-desc">Allow FinanceOS to send system-level notifications.</div>
+              <div class="set-desc">Master switch — turn off to silence all FinanceOS notifications.</div>
             </div>
-            <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            <label class="toggle-switch"><input type="checkbox" id="tog-desktop-notif" checked onchange="toggleSetting('desktop-notif','Desktop Notifications',this)"><span class="toggle-slider"></span></label>
           </div>
 
           <div class="set-row">
@@ -4282,7 +4517,7 @@ function toggleLoginPass(inputId, btn) {
               <div class="set-desc">Play a sound when an alert fires.</div>
             </div>
             <div style="display:flex; align-items:center; gap:12px;">
-              <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+              <label class="toggle-switch"><input type="checkbox" id="tog-notification-sound" checked onchange="toggleSetting('notification-sound','Notification Sound',this)"><span class="toggle-slider"></span></label>
               <i class="fas fa-volume-up" style="color:var(--text-muted); font-size:0.9rem;"></i>
             </div>
           </div>
@@ -4303,9 +4538,9 @@ function toggleLoginPass(inputId, btn) {
               <div class="set-desc">Alert me when an expense exceeds a specific amount.</div>
             </div>
             <div style="display:flex; align-items:center; gap:12px;">
-              <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-              <div style="background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); border-radius:6px; padding:5px 10px; font-size:0.75rem; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-                > ₹10,000 <i class="fas fa-edit" style="color:var(--text-muted); cursor:pointer"></i>
+              <label class="toggle-switch"><input type="checkbox" id="tog-large-txn" checked onchange="toggleSetting('large-txn', 'Large Transactions', this)"><span class="toggle-slider"></span></label>
+              <div style="background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); border-radius:6px; padding:2px 10px; font-size:0.75rem; color:var(--text-main); display:flex; align-items:center; gap:5px;">
+                > <input type="number" id="set-large-txn-val" style="background:transparent; border:none; color:inherit; width:60px; font-family:'DM Mono',monospace;" value="10000" onchange="saveLargeTxnLimit(this.value)">
               </div>
             </div>
           </div>
@@ -4315,7 +4550,7 @@ function toggleLoginPass(inputId, btn) {
               <div class="set-lbl readable-white" style="font-size:0.8rem">Unusual Spending Pattern</div>
               <div class="set-desc">Notify if a category spend spikes 50% above historical average.</div>
             </div>
-            <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            <label class="toggle-switch"><input type="checkbox" id="tog-unusual-spend" checked onchange="toggleSetting('unusual-spend','Unusual Spending Pattern',this)"><span class="toggle-slider"></span></label>
           </div>
         </div>
 
@@ -4334,10 +4569,8 @@ function toggleLoginPass(inputId, btn) {
               <div class="set-desc">End-of-day spending and income recap notification.</div>
             </div>
             <div style="display:flex; align-items:center; gap:12px;">
-              <label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label>
-              <div style="background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); border-radius:6px; padding:5px 10px; font-size:0.75rem; color:var(--text-main); display:flex; align-items:center; gap:8px; cursor:pointer; opacity:0.5;">
-                06:00 PM <i class="far fa-clock" style="color:var(--text-muted)"></i>
-              </div>
+              <label class="toggle-switch"><input type="checkbox" id="tog-daily-summary" onchange="toggleSetting('daily-summary','Daily Summary',this)"><span class="toggle-slider"></span></label>
+              <input type="time" id="daily-summary-time" class="set-input" value="18:00" style="font-size:0.75rem;padding:5px 10px;cursor:pointer;color-scheme:dark" onchange="saveDailySummaryTime(this.value)">
             </div>
           </div>
 
@@ -4346,7 +4579,7 @@ function toggleLoginPass(inputId, btn) {
               <div class="set-lbl readable-white" style="font-size:0.8rem">Bill & Loan Reminders</div>
               <div class="set-desc">Notify when a logged credit card or loan payment is approaching.</div>
             </div>
-            <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            <label class="toggle-switch"><input type="checkbox" id="tog-bill-loan" checked onchange="toggleSetting('bill-loan','Bill & Loan Reminders',this)"><span class="toggle-slider"></span></label>
           </div>
 
           <div class="set-row">
@@ -4354,7 +4587,7 @@ function toggleLoginPass(inputId, btn) {
               <div class="set-lbl readable-white" style="font-size:0.8rem">Budget Limits</div>
               <div class="set-desc">Remind you when you are nearing your monthly spending limits.</div>
             </div>
-            <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            <label class="toggle-switch"><input type="checkbox" id="tog-budget-limits" checked onchange="toggleSetting('budget-limits','Budget Limits',this)"><span class="toggle-slider"></span></label>
           </div>
 
           <div class="set-row">
@@ -4362,7 +4595,7 @@ function toggleLoginPass(inputId, btn) {
               <div class="set-lbl readable-white" style="font-size:0.8rem">Portfolio Updates</div>
               <div class="set-desc">Weekly summary of your investment performance and market shifts.</div>
             </div>
-            <label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label>
+            <label class="toggle-switch"><input type="checkbox" id="tog-portfolio-updates" onchange="toggleSetting('portfolio-updates','Portfolio Updates',this)"><span class="toggle-slider"></span></label>
           </div>
         </div>
 
@@ -4380,7 +4613,7 @@ function toggleLoginPass(inputId, btn) {
               <div class="set-lbl readable-white" style="font-size:0.8rem">Goal Achievements</div>
               <div class="set-desc">Celebrate when you unlock a gamification badge or hit a net worth milestone.</div>
             </div>
-            <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            <label class="toggle-switch"><input type="checkbox" id="tog-goal-achievements" checked onchange="toggleSetting('goal-achievements','Goal Achievements',this)"><span class="toggle-slider"></span></label>
           </div>
 
           <div class="set-row">
@@ -4388,7 +4621,7 @@ function toggleLoginPass(inputId, btn) {
               <div class="set-lbl readable-white" style="font-size:0.8rem">Sync & Backup Alerts</div>
               <div class="set-desc">Warn me immediately if Local Drive Auto-Sync fails to save data.</div>
             </div>
-            <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            <label class="toggle-switch"><input type="checkbox" id="tog-sync-backup" checked onchange="toggleSetting('sync-backup','Sync & Backup Alerts',this)"><span class="toggle-slider"></span></label>
           </div>
         </div>
 
@@ -4552,9 +4785,29 @@ function toggleLoginPass(inputId, btn) {
               <div class="set-desc">Local client version.</div>
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
-              <div class="set-desc" style="font-family:'DM Mono',monospace; font-weight:700;">v3.1.0</div>
+              <div class="set-desc" style="font-family:'DM Mono',monospace; font-weight:700;">v6.1.0</div>
               <div class="badge bg-inc">Up to date</div>
             </div>
+          </div>
+        </div>
+
+        <div class="set-card" style="background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.25);">
+          <div style="display:flex; gap:10px; align-items:center; margin-bottom: 0.5rem;">
+            <div style="width:32px; height:32px; border-radius:50%; background:rgba(239,68,68,0.15); color:#ef4444; display:flex; align-items:center; justify-content:center"><i class="fas fa-triangle-exclamation"></i></div>
+            <div class="set-label-block">
+              <div class="set-lbl" style="color:#ef4444;">Danger Zone</div>
+              <div class="set-desc" style="margin-top:0">Irreversible actions — proceed with extreme caution</div>
+            </div>
+          </div>
+
+          <div class="set-row" style="border-top:1px solid rgba(239,68,68,0.15); padding-top:0.8rem; margin-top:0.4rem;">
+            <div class="set-label-block">
+              <div class="set-lbl readable-white" style="font-size:0.8rem">Factory Reset</div>
+              <div class="set-desc">Wipes all data — transactions, assets, loans, credit cards, budgets, tags — and restores every setting and the layout to default.</div>
+            </div>
+            <button onclick="factoryResetApp()" class="btn-secondary" style="border-color:rgba(239,68,68,0.4); color:#ef4444; background:rgba(239,68,68,0.08);">
+              <i class="fas fa-trash"></i> Factory Reset
+            </button>
           </div>
         </div>
 
@@ -4612,6 +4865,10 @@ function toggleLoginPass(inputId, btn) {
     <div style="display:flex;gap:8px;margin-top:1.4rem;flex-direction:column">
       <button onclick="runPDFExport()" class="btn-add" style="justify-content:center;background:linear-gradient(135deg,#ef4444,#dc2626);box-shadow:0 4px 14px rgba(239,68,68,0.3)">
         <i class="fas fa-file-pdf"></i> Export PDF Report
+      </button>
+      
+      <button onclick="openAdvancedExportModal(); document.getElementById('export-modal').style.display='none';" class="btn-add" style="justify-content:center;background:linear-gradient(135deg, #8b5cf6, #7c3aed); box-shadow:0 4px 14px rgba(139,92,246,0.3)">
+        <i class="fas fa-magic"></i> Advanced PDF Report
       </button>
       <button onclick="runExport()" class="btn-add" style="justify-content:center">
         <i class="fas fa-download"></i> Download CSV
@@ -4719,14 +4976,16 @@ const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov
 // Key = normalised asset type string returned by normalizeAssetType()
 // ══════════════════════════════════════════════════════════════════════════════
 const ASSET_COLOR = {
-  'Gold':       '#f59e0b',   // amber
-  'Silver':     '#94a3b8',   // slate-400
-  'RealEstate': '#34d399',   // emerald
-  'MutualFund': '#0075ff',   // indigo
-  'Bonds':      '#f472b6',   // pink
-  'Stocks':     '#38bdf8',   // sky
-  'Crypto':     '#a78bfa',   // violet
-  'Other':      '#64748b',   // slate fallback
+  'Gold':             '#f59e0b',   // amber
+  'Silver':           '#94a3b8',   // slate-400
+  'RealEstate':       '#34d399',   // emerald
+  'MutualFund':       '#0075ff',   // indigo
+  'Bonds':            '#f472b6',   // pink
+  'Stocks':           '#38bdf8',   // sky
+  'Crypto':           '#a78bfa',   // violet
+  'FixedDeposit':     '#14b8a6',   // teal
+  'RecurringDeposit': '#0ea5e9',   // light blue
+  'Other':            '#64748b',   // slate fallback
 };
 // Alpha version for bar/area fills
 function assetColorA(type, alpha = 0.7) {
@@ -4744,7 +5003,7 @@ function assetColor(type) {
 // ─── ASSET TYPE DETECTION ───────────────────────────────────────────────────
 function isQtyBased(assetType) {
   const t = normalizeAssetType(assetType);
-  return t !== 'RealEstate' && t !== 'MutualFund' && t !== 'Bonds' && t !== 'Stocks' && t !== 'Crypto';
+  return t !== 'RealEstate' && t !== 'MutualFund' && t !== 'Bonds' && t !== 'Stocks' && t !== 'Crypto' && t !== 'FixedDeposit' && t !== 'RecurringDeposit';
 }
 
 let db = JSON.parse(localStorage.getItem('fos_db_v3')) || [
@@ -4832,12 +5091,18 @@ function normalizeAssetType(type) {
   if (t.includes('mutual') || t === 'mf' || t.includes('mutual fund')) return 'MutualFund';
   if (t.includes('stock') || t.includes('equity')) return 'Stocks';
   if (t.includes('crypto') || t.includes('bitcoin') || t.includes('btc') || t.includes('eth') || t.includes('ethereum')) return 'Crypto';
+  if (t.includes('fixed deposit') || t === 'fd') return 'FixedDeposit';
+  if (t.includes('recurring deposit') || t === 'rd') return 'RecurringDeposit';
   return String(type).trim();
 }
 
 function assetTypeLabel(type) {
   const k = normalizeAssetType(type);
-  const map = { Gold:'Gold', Silver:'Silver', RealEstate:'Real Estate', MutualFund:'Mutual Funds', Bonds:'Bonds', Stocks:'Stocks', Crypto:'Crypto' };
+  const map = { 
+    Gold:'Gold', Silver:'Silver', RealEstate:'Real Estate', 
+    MutualFund:'Mutual Funds', Bonds:'Bonds', Stocks:'Stocks', Crypto:'Crypto',
+    FixedDeposit:'Fixed Deposit', RecurringDeposit:'Recurring Deposit'
+  };
   return map[k] || (String(type ?? '').trim() || 'Other');
 }
 
@@ -4908,17 +5173,36 @@ async function doAutoSave() {
   localStorage.setItem('fos_port_v3',   JSON.stringify(portDb));
   localStorage.setItem('fos_credit_v1', JSON.stringify(creditDb));
   localStorage.setItem('fos_budgets',   JSON.stringify(budgets));
+  localStorage.setItem('financeOS_ccCards', JSON.stringify(ccCards));
+  localStorage.setItem('fos_notifications', JSON.stringify(notifications));
+  localStorage.setItem('fos_game_stats', JSON.stringify(gameStats));
   
   // 2. If drive is connected, write to local file
   if (localFileHandle) {
     try {
       const payload = {
-        version: "v4-local",
+        version: "v5-local",
         lastUpdated: new Date().toISOString(),
         db: db,
         portDb: portDb,
         creditDb: creditDb,
-        budgets: budgets
+        budgets: budgets,
+        ccCards: ccCards,
+        notifications: notifications,
+        gameStats: gameStats,
+        dashboardLayout: JSON.parse(localStorage.getItem('fos_dashboard_layout_v4') || '{}'),
+        theme: localStorage.getItem('fos_theme') || 'dark',
+        financesSidebarCollapsed: localStorage.getItem('fos_finance_sidebar_collapsed') || 'false',
+        portfolioSidebarCollapsed: localStorage.getItem('fos_portfolio_sidebar_collapsed') || 'false',
+        currency: localStorage.getItem('fos_currency') || '₹',
+        numberSystem: localStorage.getItem('fos_number_system') || 'indian',
+        timeFormat: localStorage.getItem('fos_time') || '12h',
+        dateFormat: localStorage.getItem('fos_date') || 'ddmmyyyy',
+        shortcuts: JSON.parse(localStorage.getItem('fos_shortcuts') || '{}'),
+        customTags: JSON.parse(localStorage.getItem('fos_custom_tags') || '[]'),
+        roughBoard: JSON.parse(localStorage.getItem('financeOS_roughboard_v1') || 'null'),
+        users: JSON.parse(localStorage.getItem('fos_users') || '[]'),
+        currentUser: JSON.parse(localStorage.getItem('fos_current_user') || 'null')
       };
       
       const writable = await localFileHandle.createWritable();
@@ -4931,6 +5215,15 @@ async function doAutoSave() {
       const dot = document.getElementById('autosave-dot');
       if (label) label.textContent = 'Drive Save Failed!';
       if (dot) dot.style.background = '#ef4444';
+      if (isNotifEnabled('sync-backup')) {
+        addNotification(
+          'sync-fail-' + new Date().toISOString().slice(0,16),
+          'fa-triangle-exclamation', '#ef4444',
+          '⚠️ Local Drive Sync Failed',
+          'FinanceOS could not save your latest changes to the linked local drive file. Your data is still safe in browser storage, but the drive backup is out of date until the next successful sync.',
+          'sync-fail'
+        );
+      }
       return; 
     }
   }
@@ -4950,8 +5243,7 @@ async function doAutoSave() {
   }
 }
 
-setInterval(doAutoSave, 5000);
-
+setInterval(() => { if (!document.hidden) doAutoSave(); }, 8000);
 
 // ── PORTFOLIO CALC ─────────────────────────────────────────────────────────
 function portCalc(e) {
@@ -5039,16 +5331,23 @@ function applyPortFilters() {
 
 function filterPortAsset(type) {
   portAssetFilter = type;
-  const idMap = { Gold:'port-nav-gold', Silver:'port-nav-silver', RealEstate:'port-nav-realestate', MutualFund:'port-nav-mf', Bonds:'port-nav-bonds', Stocks:'port-nav-stocks', Crypto:'port-nav-crypto', all:'port-nav-all' };
+  const idMap = { 
+    Gold:'port-nav-gold', Silver:'port-nav-silver', RealEstate:'port-nav-realestate', 
+    MutualFund:'port-nav-mf', Bonds:'port-nav-bonds', Stocks:'port-nav-stocks', 
+    Crypto:'port-nav-crypto', FixedDeposit:'port-nav-fd', RecurringDeposit:'port-nav-rd', all:'port-nav-all' 
+  };
   const navEl = document.getElementById(idMap[type]);
   
-  // FIX: Pass the nav element directly into the global switcher
   switchView('port-table', navEl, 'portfolio');
 }
 
 // ── FINANCE FILTERS ────────────────────────────────────────────────────────
 function buildFilterDropdowns() {
-  const years = [...new Set(db.map(d => d.date.slice(0,4)))].sort().reverse();
+  let years = [...new Set(db.map(d => d.date.slice(0,4)))];
+  const thisYear = new Date().getFullYear().toString();
+  if (!years.includes(thisYear)) years.push(thisYear); // Ensure current year exists
+  years.sort().reverse();
+  
   ['filter-month', 'trend-month'].forEach(id => {
     const sel = document.getElementById(id);
     if (!sel) return;
@@ -5124,6 +5423,13 @@ function applyFilters() {
 // ── NAVIGATION ─────────────────────────────────────────────────────────────
 function switchView(viewName, btn, group) {
   activeView = viewName;
+
+  if (localStorage.getItem('fos_set_remember-page') !== 'false') {
+    localStorage.setItem('fos_last_active_view', JSON.stringify({ view: viewName, group: group || 'finance' }));
+  }
+
+  const scrollArea = document.querySelector('.scroll-area');
+  if (scrollArea) scrollArea.scrollTop = 0;
   
   // FIX: Globally clear the active bubble from BOTH sidebars every time you click
   document.querySelectorAll('.sidebar .nav-item, .port-sidebar .port-nav-item').forEach(el => el.classList.remove('active'));
@@ -5413,6 +5719,7 @@ function renderDashboardImmediate() {
   } else if (hasPortData && charts['dash-port-donut']) {
     charts['dash-port-donut'].data.labels = typeLabels;
     charts['dash-port-donut'].data.datasets[0].data = typeKeys.map(k => byType[k]);
+    charts['dash-port-donut'].options.plugins.legend.labels.color = chartTextColor();
     charts['dash-port-donut'].update('none');
   } else if (!hasPortData && charts['dash-port-donut']) {
     destroyChart('dash-port-donut');
@@ -5625,20 +5932,18 @@ function addCustomAlert() {
 }
 
 function addNotification(id, icon, color, title, message, type) {
-
-  // Prevent duplicate notifications with same id
   if (notifications.find(n => n.id === id)) return;
+  
   notifications.unshift({
-    id,
-    icon,
-    color,
-    title,
-    message,
-    type,
+    id, icon, color, title, message, type,
     time: new Date().toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })
   });
+  
   saveNotifications();
   updateNotifBadge();
+  
+  // NEW: Play sound whenever a new notification is added
+  playNotificationSound();
 }
 
 function removeNotification(id) {
@@ -5706,7 +6011,14 @@ function renderNotifList() {
   `).join('');
 }
 
+function isNotifEnabled(key) {
+  const v = localStorage.getItem('fos_set_' + key);
+  return v === null ? true : v === 'true'; // default ON if never toggled
+}
+
 function checkAlerts() {
+  if (!isNotifEnabled('desktop-notif')) return; // master switch
+
   const today = new Date().toISOString().split('T')[0];
   const data = getFilteredData();
 
@@ -5734,7 +6046,7 @@ function checkAlerts() {
   });
 
   // ── 2. Budget Over-limit Alerts ──────────────────────────────────────
-  Object.entries(budgets).forEach(([cat, limit]) => {
+  if (isNotifEnabled('budget-limits')) Object.entries(budgets).forEach(([cat, limit]) => {
     const spent = data.filter(x => x.sub === cat || x.name === cat).reduce((a,b) => a + b.amount, 0);
     const pct   = limit > 0 ? (spent / limit) * 100 : (spent > 0 ? 100 : 0);
     if (pct >= 100) {
@@ -5758,7 +6070,7 @@ function checkAlerts() {
 
   // ── 3. EMI Due Soon Alerts ────────────────────────────────────────────
   const todayDay = new Date().getDate();
-  creditDb.forEach(loan => {
+  if (isNotifEnabled('bill-loan')) creditDb.forEach(loan => {
     if (loan.status !== 'Active' || !loan.monthlyEmi) return;
     const dueMatch = String(loan.dueDate || '').match(/\d+/);
     if (!dueMatch) return;
@@ -5807,6 +6119,26 @@ function checkAlerts() {
     }
   });
 
+  // ── 5b. Portfolio Updates (weekly performance summary) ────────────────
+  if (isNotifEnabled('portfolio-updates') && portDb.length > 0) {
+    const lastShown = Number(localStorage.getItem('fos_last_portfolio_update') || 0);
+    const weekMs = 7 * 24 * 60 * 60 * 1000;
+    if (Date.now() - lastShown >= weekMs) {
+      const ps = portAggStats(portDb);
+      const gainIcon = ps.totalGain >= 0 ? '📈' : '📉';
+      const gainWord = ps.totalGain >= 0 ? 'up' : 'down';
+      addNotification(
+        'portfolio-weekly-' + new Date().toISOString().slice(0,10),
+        ps.totalGain >= 0 ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down',
+        ps.totalGain >= 0 ? '#34d399' : '#ef4444',
+        `${gainIcon} Weekly Portfolio Update`,
+        `Your portfolio is currently ${gainWord} ₹${Math.abs(Math.round(ps.totalGain)).toLocaleString('en-IN')} overall (${ps.avgRoi.toFixed(1)}% avg ROI) across ${portDb.length} holdings. Current value: ₹${Math.round(ps.totalVal).toLocaleString('en-IN')}.`,
+        'portfolio-update'
+      );
+      localStorage.setItem('fos_last_portfolio_update', String(Date.now()));
+    }
+  }
+
   // ── 6. Portfolio Asset in Loss ────────────────────────────────────────
   const byType = {};
   portDb.forEach(e => {
@@ -5829,6 +6161,43 @@ function checkAlerts() {
       );
     }
   });
+
+  // ── 6b. Unusual Spending Pattern (50%+ spike vs historical average) ───
+  if (isNotifEnabled('unusual-spend')) {
+    const thisMonthKey = new Date().toISOString().slice(0, 7);
+    const expenseTxns = db.filter(r => r.type === 'Expense');
+    const catThisMonth = {};
+    const catHistorical = {}; // { cat: { total, monthsSeen: Set } }
+
+    expenseTxns.forEach(r => {
+      const cat = r.sub || 'General';
+      const monthKey = r.date.slice(0, 7);
+      if (monthKey === thisMonthKey) {
+        catThisMonth[cat] = (catThisMonth[cat] || 0) + Number(r.amount);
+      } else {
+        if (!catHistorical[cat]) catHistorical[cat] = { total: 0, months: new Set() };
+        catHistorical[cat].total += Number(r.amount);
+        catHistorical[cat].months.add(monthKey);
+      }
+    });
+
+    Object.entries(catThisMonth).forEach(([cat, spent]) => {
+      const hist = catHistorical[cat];
+      if (!hist || hist.months.size < 2) return; // need at least 2 prior months for a fair average
+      const avg = hist.total / hist.months.size;
+      if (avg <= 0) return;
+      const spikePct = ((spent - avg) / avg) * 100;
+      if (spikePct >= 50) {
+        addNotification(
+          `unusual-spend-${cat}-${thisMonthKey}`,
+          'fa-bolt', '#f59e0b',
+          `📊 Unusual Spending: ${cat}`,
+          `Your "${cat}" spending this month (₹${Math.round(spent).toLocaleString('en-IN')}) is ${spikePct.toFixed(0)}% above your historical average of ₹${Math.round(avg).toLocaleString('en-IN')}. Worth a quick review.`,
+          'unusual-spend'
+        );
+      }
+    });
+  }
 
   // ── 7. Low Savings Rate Warning ───────────────────────────────────────
   const totalInc  = sumType('Income', data);
@@ -5870,10 +6239,11 @@ function checkAlerts() {
     );
   }
 
-  // ── 9. Large Single Expense (> ₹10,000) ──────────────────────────────
-  const recentBigExp = db
-    .filter(r => r.type === 'Expense' && r.date >= thisMonth && Number(r.amount) > 10000)
-    .sort((a, b) => b.amount - a.amount)
+  // ── 9. Large Single Expense (Dynamic Limit) ──────────────────────────
+  const userLimit = Number(localStorage.getItem('fos_set_large-txn-limit')) || 10000;
+  const recentBigExp = !isNotifEnabled('large-txn') ? [] : db
+    .filter(r => r.type === 'Expense' && r.date >= thisMonth && Number(r.amount) > userLimit)
+    .sort((a,b) => b.amount - a.amount)
     .slice(0, 3);
   recentBigExp.forEach(exp => {
     addNotification(
@@ -5884,6 +6254,25 @@ function checkAlerts() {
       'big-expense'
     );
   });
+
+  // ── 9b. Net Worth Milestone Achieved ──────────────────────────────────
+  if (isNotifEnabled('goal-achievements')) {
+    const nwMilestoneTargets = [500000,1000000,2500000,5000000,10000000];
+    const curNetWorth = sumType('Income', db) - sumType('Expense', db);
+    const lastCelebrated = Number(localStorage.getItem('fos_last_nw_milestone') || 0);
+    const justCrossed = nwMilestoneTargets.filter(t => curNetWorth >= t && t > lastCelebrated);
+    if (justCrossed.length) {
+      const highest = Math.max(...justCrossed);
+      addNotification(
+        'nw-milestone-' + highest,
+        'fa-medal', '#34d399',
+        `🎉 Net Worth Milestone: ₹${highest.toLocaleString('en-IN')}`,
+        `Congratulations! Your net worth has crossed ₹${highest.toLocaleString('en-IN')}. Keep up the consistent saving and investing habits that got you here.`,
+        'goal-achievement'
+      );
+      localStorage.setItem('fos_last_nw_milestone', String(highest));
+    }
+  }
 
   // ── 10. Net Worth Month-over-Month Drop ───────────────────────────────
   const prevMonth = new Date();
@@ -6281,7 +6670,10 @@ const allData = getFilteredData();
     return;
   }
 
-data.sort((a,b) => {
+// Fix: Accumulate HTML in memory first
+  let htmlRows = '';
+
+  data.sort((a,b) => {
     let av = a[sortCol], bv = b[sortCol];
     if (sortCol === 'amount') { av = Number(av); bv = Number(bv); }
     if (typeof av === 'string') { av = av.toLowerCase(); bv = bv.toLowerCase(); }
@@ -6293,7 +6685,9 @@ data.sort((a,b) => {
     const tagsHtml = (item.tags||[]).length
       ? `<span class="inline-tags">${item.tags.map(t=>`<span class="inline-tag">#${t}</span>`).join('')}</span>`
       : '<span style="color:var(--text-muted);font-size:0.7rem">—</span>';
-    tbody.innerHTML += `<tr data-id="${item.id}">
+    
+    // Add to string variable instead of DOM
+    htmlRows += `<tr data-id="${item.id}">
       <td style="width:52px;padding:0 12px;text-align:center;vertical-align:middle;white-space:nowrap"><input type="checkbox" class="txn-checkbox row-chk" data-id="${item.id}" onclick="onRowCheckChange()" style="vertical-align:middle"><span style="color:var(--text-muted);font-size:0.68rem;font-family:'DM Mono',monospace;margin-left:5px;display:inline-block;min-width:16px;text-align:right;vertical-align:middle">${index+1}</span></td>
       <td style="font-weight:500">${item.name} ${item.recurring?'<i class="fas fa-redo recur-icon" title="Recurring"></i>':''} ${item.notes?`<span style="font-size:0.7rem;color:var(--text-muted)">(${item.notes})</span>`:''}</td>
       <td><span class="badge ${bc}">${item.type}</span></td>
@@ -6304,6 +6698,9 @@ data.sort((a,b) => {
       <td style="text-align:right"><i class="fas fa-edit edit-icon" onclick="editFinanceEntry(${item.id})" title="Edit"></i><i class="fas fa-trash" style="cursor:pointer;color:#ef444460;font-size:0.75rem" onclick="deleteItem(${item.id})"></i></td>
     </tr>`;
   });
+
+  // Inject into DOM exactly once
+  tbody.innerHTML = htmlRows;
 }
 
 // ── TABLE SEARCH ──────────────────────────────────────────────────────────
@@ -6419,11 +6816,12 @@ function renderPortTable() {
     return portSortAsc ? (av > bv ? 1 : -1) : (av < bv ? 1 : -1);
   });
 
+  let portHtmlRows = '';
   data.forEach(e => {
     const roiClass = e.roi >= 100 ? 'good' : e.roi >= 50 ? 'ok' : 'bad';
     const gainColor = e.gainLoss >= 0 ? 'var(--c-inc)' : 'var(--danger)';
     const dotColor = assetColor(e.assetType);
-    tbody.innerHTML += `<tr data-id="${e.id}">
+    portHtmlRows += `<tr data-id="${e.id}">
       <td style="font-weight:600">
         <span style="display:inline-flex;align-items:center;gap:6px">
           <span style="width:7px;height:7px;border-radius:50%;background:${dotColor};flex-shrink:0;display:inline-block"></span>
@@ -6444,6 +6842,7 @@ function renderPortTable() {
       <td style="text-align:right"><i class="fas fa-edit edit-icon" onclick="editPortEntry(${e.id})" title="Edit"></i><i class="fas fa-trash" style="cursor:pointer;color:#ef444460;font-size:0.72rem" onclick="deletePortItem(${e.id})"></i></td>
     </tr>`;
   });
+  tbody.innerHTML = portHtmlRows;
 
   renderPortSummary(data);
 }
@@ -6477,7 +6876,7 @@ function renderPortSummary(data) {
       <td style="text-align:right;color:var(--c-inc)">${avgRoi.toFixed(2)}%</td>
       <td style="text-align:right;color:var(--c-inv)">${avgPro.toFixed(2)}%</td>
       <td style="text-align:right;color:${gc}">${fmt(s.gain)}</td>
-      <td style="text-align:right">${s.qty}</td>
+      <td style="text-align:right">${Number(s.qty.toFixed(2)).toLocaleString('en-IN')}</td>
       <td style="text-align:right">${fmt(s.val)}</td>
       <td style="text-align:right">${fmt(avgCurr)}</td>
       <td style="text-align:right">${fmt(s.inv)}</td>
@@ -6497,7 +6896,7 @@ function renderPortSummary(data) {
     <td style="text-align:right;color:var(--c-inc)">${gAvgRoi.toFixed(2)}%</td>
     <td style="text-align:right;color:var(--c-inv)">${gAvgPro.toFixed(2)}%</td>
     <td style="text-align:right;color:${gc}">${fmt(totGain)}</td>
-    <td style="text-align:right">${totQty}</td>
+    <td style="text-align:right">${Number(totQty.toFixed(2)).toLocaleString('en-IN')}</td>
     <td style="text-align:right">${fmt(totVal)}</td>
     <td style="text-align:right">-</td>
     <td style="text-align:right">${fmt(totInv)}</td>
@@ -6533,7 +6932,7 @@ function renderPortOverview() {
   rEl.textContent = s.avgRoi.toFixed(1) + '%';
   rEl.style.color = s.avgRoi >= 0 ? 'var(--c-inc)' : 'var(--danger)';
   document.getElementById('pk-profit').textContent = s.avgProfit.toFixed(1) + '%';
-  document.getElementById('pk-qty').textContent    = s.totalQty;
+  document.getElementById('pk-qty').textContent    = Number(s.totalQty.toFixed(2)).toLocaleString('en-IN');
 
   // Aggregate by normalised key (not display label) to keep colour mapping consistent
   const byTypeVal = {}, byTypeInv = {}, roiMap = {}, cntMap = {}, gainMap = {}, qtyMap = {};
@@ -6561,8 +6960,8 @@ function renderPortOverview() {
 // ── INVENTORY PILL STRIP (Quantity Breakdown) ──
   const invStrip = document.getElementById('port-inventory-strip');
   if (invStrip) {
-    // 1. Force the 7 core assets to ALWAYS exist
-    const coreAssets = ['Gold', 'Silver', 'RealEstate', 'MutualFund', 'Bonds', 'Stocks', 'Crypto'];
+    // 1. Force the 9 core assets to ALWAYS exist
+    const coreAssets = ['Gold', 'Silver', 'RealEstate', 'MutualFund', 'Bonds', 'Stocks', 'Crypto', 'FixedDeposit', 'RecurringDeposit'];
     // 2. If you added a custom "Other" asset, append it so we don't lose it
     typeKeys.forEach(k => { if (!coreAssets.includes(k)) coreAssets.push(k); });
 
@@ -7430,30 +7829,89 @@ function renderPortAnalytics() {
   destroyChart('port-exposure');
   const expCanvas = document.getElementById('chart-port-exposure');
   if (expCanvas && data.length > 0) {
-    const labels = ['Stocks', 'Mutual Funds', 'Gold', 'Silver', 'Crypto', 'Real Estate'];
+    // UPDATED: Added FD and RD to the labels
+    const labels = ['Stocks', 'Mutual Funds', 'Gold', 'Silver', 'Crypto', 'Real Estate', 'Fixed Deposit', 'Recurring Deposit'];
     
     // 1. Calculate Actual % distribution
-    const totals = { Stocks: 0, MutualFund: 0, Gold: 0, Silver: 0, Crypto: 0, RealEstate: 0 };
+    const totals = { Stocks: 0, MutualFund: 0, Gold: 0, Silver: 0, Crypto: 0, RealEstate: 0, FixedDeposit: 0, RecurringDeposit: 0 };
     let grandTotal = 0;
+    
     data.forEach(d => {
+      grandTotal += d.currentValue;
       const t = normalizeAssetType(d.assetType);
       if (totals[t] !== undefined) {
         totals[t] += d.currentValue;
-        grandTotal += d.currentValue;
       }
     });
 
+    // Prevent NaN errors if grandTotal is 0
     const actualData = [
-      (totals.Stocks / grandTotal) * 100,
-      (totals.MutualFund / grandTotal) * 100,
-      (totals.Gold / grandTotal) * 100,
-      (totals.Silver / grandTotal) * 100,
-      (totals.Crypto / grandTotal) * 100,
-      (totals.RealEstate / grandTotal) * 100
+      grandTotal ? (totals.Stocks / grandTotal) * 100 : 0,
+      grandTotal ? (totals.MutualFund / grandTotal) * 100 : 0,
+      grandTotal ? (totals.Gold / grandTotal) * 100 : 0,
+      grandTotal ? (totals.Silver / grandTotal) * 100 : 0,
+      grandTotal ? (totals.Crypto / grandTotal) * 100 : 0,
+      grandTotal ? (totals.RealEstate / grandTotal) * 100 : 0,
+      grandTotal ? (totals.FixedDeposit / grandTotal) * 100 : 0,
+      grandTotal ? (totals.RecurringDeposit / grandTotal) * 100 : 0
     ];
 
-    // 2. Define Ideal Targets
-    const idealData = [25, 30, 15, 5, 10, 15]; 
+    // 2. Dynamically Define Ideal Targets based on User's Age AND Income
+    let ageTier = 'thirties';
+    let incomeTier = 'mid'; // Default fallback
+    try {
+      const currUser = JSON.parse(localStorage.getItem('fos_current_user') || '{}');
+      const users = JSON.parse(localStorage.getItem('fos_users') || '[]');
+      const userData = users.find(u => u.identifier === currUser.identifier);
+      
+      if (userData && userData.onboarding) {
+        if (userData.onboarding.age) ageTier = userData.onboarding.age;
+        if (userData.onboarding.income) incomeTier = userData.onboarding.income;
+      }
+    } catch(e) { }
+
+    // Labels Order: ['Stocks', 'Mutual Funds', 'Gold', 'Silver', 'Crypto', 'Real Estate', 'FD', 'RD']
+    let baseData;
+    
+    // STEP A: Set Base Allocation by AGE (Risk Horizon)
+    switch (ageTier) {
+      case 'twenties':  baseData = [25, 30, 5, 5, 5, 10, 15, 5]; break; // Aggressive (Now with 10% Real Estate)
+      case 'thirties':  baseData = [25, 25, 10, 5, 5, 10, 15, 5]; break; // Growth
+      case 'forties':   baseData = [15, 15, 10, 5, 0, 10, 35, 10]; break; // Balanced
+      case 'fifties':   baseData = [10, 10, 10, 5, 0, 0, 50, 15]; break; // Conservative
+      default:          baseData = [25, 25, 10, 5, 5, 10, 15, 5]; break;
+    }
+
+    // STEP B: Adjust Allocation by INCOME (Liquidity/Risk Capacity)
+    let idealData = [...baseData];
+    
+    if (incomeTier === 'tiny') {
+        // Under 25k: Shift 10% from Stocks/MF to FD for emergency safety
+        idealData[0] = Math.max(0, idealData[0] - 5);
+        idealData[1] = Math.max(0, idealData[1] - 5);
+        idealData[6] += 10; 
+    } else if (incomeTier === 'small') {
+        // 25k-50k: Shift 5% from Stocks/MF to FD
+        idealData[0] = Math.max(0, idealData[0] - 2.5);
+        idealData[1] = Math.max(0, idealData[1] - 2.5);
+        idealData[6] += 5;
+    } else if (incomeTier === 'high') {
+        // 1L-2L: Can take more risk. Shift 5% from FD to Stocks/Crypto
+        if (idealData[6] >= 5) {
+            idealData[6] -= 5;
+            idealData[0] += 2.5; // Stocks bump
+            idealData[4] += 2.5; // Crypto bump
+        }
+    } else if (incomeTier === 'vhigh') {
+        // 2L+: High risk tolerance. Shift 10% from Safe Assets to Real Estate/Stocks
+        if (idealData[6] >= 5) idealData[6] -= 5;
+        if (idealData[7] >= 2.5) idealData[7] -= 2.5;
+        if (idealData[2] >= 2.5) idealData[2] -= 2.5;
+        idealData[5] += 5; // Real Estate bump
+        idealData[0] += 5; // Stocks bump
+    }
+    // 'mid' (50k-1L) stays exactly at the base age target.
+
 
     // Custom Plugin for the Target Lines (|)
     // Locate the bulletTargetPlugin definition
@@ -8282,36 +8740,29 @@ if (debtVal > 0 || assetsVal > 0) {
   const assetsColor = '#34d399'; 
   const debtColor = '#ef4444';   
   
-  const isLight = document.body.classList.contains('light-mode');
-  const statusText = assetsVal > debtVal*2 ? "Strong Position" : assetsVal > debtVal ? "Healthy Balance" : "High Debt Pressure";
+const statusText = assetsVal > debtVal*2 ? "Strong Position" : assetsVal > debtVal ? "Healthy Balance" : "High Debt Pressure";
   const statusColor = assetsVal > debtVal*2 ? '#34d399' : assetsVal > debtVal ? '#fbbf24' : '#ef4444';
-  
-  const scaleBaseBg = isLight ? 'linear-gradient(to bottom, #e2e8f0, #94a3b8)' : 'linear-gradient(to bottom, #334155, #0f172a)';
-  const scalePillarBg = isLight ? 'linear-gradient(to right, #cbd5e1, #f1f5f9, #cbd5e1)' : 'linear-gradient(to right, #1e293b, #334155, #1e293b)';
-  const scalePivotBg = isLight ? '#f1f5f9' : '#0f172a';
-  const textColor = isLight ? '#0f172a' : 'white';
-  const valShadow = isLight ? 'none' : `text-shadow:0 0 12px `;
 
-const scaleHtml = `
+  const scaleHtml = `
     <div id="scale-container" style="width: 100%; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 10px 0 5px 0; min-height: 260px; cursor: crosshair;" title="Ratio: ${(assetsVal / (debtVal||1)).toFixed(2)}x Assets to Debt">
       
       <div style="width: 100%; display: flex; justify-content: space-between; padding: 0 10px; position: relative; z-index: 20;">
         <div style="text-align: left;">
            <div style="font-size:0.65rem; font-weight:700; color:${assetsColor}; letter-spacing:1px;">TOTAL ASSETS</div>
-           <div style="font-family:'DM Mono', monospace; font-size:1.15rem; font-weight:700; color:${textColor}; ${isLight?'':valShadow+assetsColor+'80'}">₹${assetsVal.toLocaleString('en-IN')}</div>
+           <div style="font-family:'DM Mono', monospace; font-size:1.15rem; font-weight:700; color:var(--text-main); text-shadow:var(--scale-text-shadow-assets); transition:color 0.2s, text-shadow 0.2s;">₹${assetsVal.toLocaleString('en-IN')}</div>
         </div>
         <div style="text-align: right;">
            <div style="font-size:0.65rem; font-weight:700; color:${debtColor}; letter-spacing:1px;">TOTAL DEBT</div>
-           <div style="font-family:'DM Mono', monospace; font-size:1.15rem; font-weight:700; color:${textColor}; ${isLight?'':valShadow+debtColor+'80'}">₹${debtVal.toLocaleString('en-IN')}</div>
+           <div style="font-family:'DM Mono', monospace; font-size:1.15rem; font-weight:700; color:var(--text-main); text-shadow:var(--scale-text-shadow-debt); transition:color 0.2s, text-shadow 0.2s;">₹${debtVal.toLocaleString('en-IN')}</div>
         </div>
       </div>
 
       <div style="width: 240px; height: 130px; position: relative; margin: 25px 0 5px 0; transform: scale(1.22); transform-origin: center bottom;">
-        <div style="width: 100px; height: 16px; background: ${scaleBaseBg}; border-radius: 50% 50% 10px 10px; border-top: 1px solid ${isLight ? '#ffffff' : 'rgba(255,255,255,0.2)'}; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); box-shadow: 0 10px 20px rgba(0,0,0,${isLight ? '0.1' : '0.6'}); z-index: 4;"></div>
+        <div style="width: 100px; height: 16px; background: var(--scale-base-bg); border-radius: 50% 50% 10px 10px; border-top: 1px solid var(--scale-border-top); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); box-shadow: var(--scale-shadow-base); z-index: 4; transition:all 0.2s;"></div>
         
-        <div style="width: 20px; height: 100px; background: ${scalePillarBg}; border-radius: 10px 10px 0 0; border-left: 1px solid rgba(255,255,255,0.4); border-right: 1px solid rgba(0,0,0,0.1); position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 5; box-shadow: 0 0 15px rgba(0,0,0,${isLight ? '0.05' : '0.5'});"></div>
+        <div style="width: 20px; height: 100px; background: var(--scale-pillar-bg); border-radius: 10px 10px 0 0; border-left: 1px solid var(--scale-border-side); border-right: 1px solid rgba(0,0,0,0.1); position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 5; box-shadow: var(--scale-shadow-pillar); transition:all 0.2s;"></div>
 
-        <div style="width: 24px; height: 24px; border-radius: 50%; background: ${scalePivotBg}; border: 3px solid #64748b; position: absolute; bottom: 95px; left: 50%; transform: translateX(-50%); z-index: 10; box-shadow: 0 0 10px rgba(0,0,0,${isLight ? '0.1' : '0.8'});"></div>
+        <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--scale-pivot-bg); border: 3px solid #64748b; position: absolute; bottom: 95px; left: 50%; transform: translateX(-50%); z-index: 10; box-shadow: var(--scale-shadow-pivot); transition:all 0.2s;"></div>
         <div style="width: 6px; height: 6px; border-radius: 50%; background: #38bdf8; position: absolute; bottom: 104px; left: 50%; transform: translateX(-50%); z-index: 11; box-shadow: 0 0 10px #38bdf8;"></div>
 
         <div style="width: 94%; height: 6px; background: linear-gradient(90deg, ${assetsColor}, ${debtColor}); position: absolute; bottom: 104px; left: 3%; border-radius: 6px; box-shadow: 0 0 15px rgba(255,255,255,0.2); transform-origin: center; transform: rotate(${tiltAngle}deg); transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 8;">
@@ -8338,7 +8789,7 @@ const scaleHtml = `
         </div>
       </div>
 
-      <div style="padding:4px 14px; background:rgba(0,0,0,0.4); border:1px solid ${statusColor}40; border-radius:20px; font-size:0.7rem; color:${statusColor}; font-weight:700; box-shadow:0 0 12px ${statusColor}30; z-index:20;">
+      <div style="padding:4px 14px; background:var(--glass-bg); border:1px solid ${statusColor}40; border-radius:20px; font-size:0.7rem; color:${statusColor}; font-weight:700; box-shadow:0 0 12px ${statusColor}30; z-index:20; transition:all 0.2s;">
         ${statusText}
       </div>
     </div>
@@ -9584,13 +10035,19 @@ function fmt(n, decimals = 0) {
 // ── Chart panel neon glow ─────────────────────────────────────────────────
 const style3D = document.createElement('style');
 style3D.textContent = `
-  canvas {
-    filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.6)) drop-shadow(0px 4px 24px rgba(0, 117, 255, 0.25));
+  body:not(.light-mode) canvas {
+    filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.35));
   }
-  /* Completely strip the canvas drop-shadow in Light Mode */
   body.light-mode canvas {
-    filter: none !important;
+    filter: none;
   }
+  body.light-mode canvas {
+    filter: none;
+  }
+  /* PDF export: punch up contrast/saturation so charts read clearly when printed on white */
+body.pdf-export-mode canvas {
+  filter: saturate(1.35) contrast(1.12) !important;
+}
 `;
 document.head.appendChild(style3D);
 
@@ -9614,6 +10071,26 @@ Chart.defaults.elements.line.tension = 0.45; // Smooth bezier curves
 Chart.defaults.elements.line.borderWidth = 3; // Thicker, premium lines
 Chart.defaults.elements.point.radius = 0; // Hide points by default
 Chart.defaults.elements.point.hoverRadius = 6; // Show points on hover
+
+// ── PDF EXPORT QUALITY BOOST ──
+let _pdfChartDefaultsBackup = null;
+function applyPdfChartQuality() {
+  _pdfChartDefaultsBackup = {
+    barBorderWidth: Chart.defaults.elements.bar.borderWidth,
+    lineBorderWidth: Chart.defaults.elements.line.borderWidth,
+    fontSize: Chart.defaults.font.size,
+  };
+  Chart.defaults.elements.bar.borderWidth = 1.5;
+  Chart.defaults.elements.line.borderWidth = 4.5;
+  Chart.defaults.font.size = 13;
+}
+function restorePdfChartQuality() {
+  if (!_pdfChartDefaultsBackup) return;
+  Chart.defaults.elements.bar.borderWidth = _pdfChartDefaultsBackup.barBorderWidth;
+  Chart.defaults.elements.line.borderWidth = _pdfChartDefaultsBackup.lineBorderWidth;
+  Chart.defaults.font.size = _pdfChartDefaultsBackup.fontSize;
+  _pdfChartDefaultsBackup = null;
+}
 
 function destroyChart(key) { 
   try {
@@ -9828,32 +10305,60 @@ let pendingUndo = null;
 let undoTimeout = null;
 
 function showUndoToast(msg, type, items) {
-  const toast = document.getElementById('undo-toast');
-  const prog = document.getElementById('undo-progress');
-  document.getElementById('undo-text').textContent = msg;
-
-  // Store the deleted data so we can push it back if they click Undo
   pendingUndo = { type, items };
+  const toast = document.getElementById('undo-toast');
 
-  // Reset the progress bar animation
+  // 1. Force the container to be perfectly clean and stop CSS conflicts
+  toast.style.padding = '0';
+  toast.style.overflow = 'hidden';
+  toast.style.background = '#1e293b'; 
+  toast.style.display = 'flex';
+  toast.style.flexDirection = 'column';
+
+  // Clear any existing timer if you click multiple things fast
+  if (typeof undoTimeout !== 'undefined') clearTimeout(undoTimeout);
+
+  // 2. Setup the theme variables (Purple for Settings, Red for Deletes)
+  const isSetting = (type === 'setting');
+  const accentColor = isSetting ? '#a78bfa' : '#ef4444';
+  const bgIconColor = isSetting ? 'rgba(167,139,250,0.15)' : 'rgba(239,68,68,0.15)';
+  const iconType = isSetting ? 'fas fa-sliders-h' : 'fas fa-trash-alt';
+  const titleHtml = isSetting ? `<div style="font-weight:600; font-size:0.85rem; color:#ffffff; margin-bottom:2px;">Setting Updated</div>` : '';
+  const textColor = isSetting ? 'var(--text-muted)' : '#ffffff';
+  const textSize = isSetting ? '0.75rem' : '0.85rem';
+
+  // 3. Inject the clean HTML structure
+  toast.innerHTML = `
+    <div style="display:flex; align-items:center; gap:12px; padding:12px 16px; border-left:4px solid ${accentColor}; width:100%; box-sizing:border-box;">
+      <div style="width:32px; height:32px; border-radius:50%; background:${bgIconColor}; color:${accentColor}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+        <i class="${iconType}"></i>
+      </div>
+      <div style="flex:1; line-height:1.2; text-align:left;">
+        ${titleHtml}
+        <div style="font-size:${textSize}; color:${textColor};">${msg}</div>
+      </div>
+      <button onclick="executeUndo()" style="background:rgba(255,255,255,0.1); border:none; color:#ffffff; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:0.8rem; font-weight:600; transition:0.2s;">Undo</button>
+    </div>
+    <div id="undo-progress" style="height:3px; background:${accentColor}; width:100%; transform-origin:left; transform:scaleX(1);"></div>
+  `;
+
+  const prog = document.getElementById('undo-progress');
+
+  // 4. Reset and trigger the 10-second animation
   toast.classList.remove('show');
   prog.style.transition = 'none';
   prog.style.transform = 'scaleX(1)';
 
-  // Small delay to allow the CSS to reset, then trigger the toast & 10s countdown
   setTimeout(() => {
     toast.classList.add('show');
     prog.style.transition = 'transform 10s linear';
     prog.style.transform = 'scaleX(0)';
   }, 50);
 
-  // Clear any existing timeouts (if they delete two things quickly)
-  if (undoTimeout) clearTimeout(undoTimeout);
-
-  // Hide the toast after 10 seconds and permanently clear the memory
+  // 5. Hide the toast permanently after 10 seconds
   undoTimeout = setTimeout(() => {
     toast.classList.remove('show');
-    pendingUndo = null; // Data is now permanently gone
+    pendingUndo = null;
   }, 10000);
 }
 
@@ -10736,11 +11241,17 @@ function resetShortcuts() {
   initShortcutUI();
 }
 
-function resetShortcuts() {
-  if(!confirm("Reset all shortcuts to default?")) return;
-  localStorage.removeItem('fos_shortcuts');
-  activeShortcuts = { ...DEFAULT_SHORTCUTS };
-  initShortcutUI();
+function factoryResetApp() {
+  const confirmText = "FACTORY RESET";
+  const typed = prompt(
+    "This will permanently delete ALL data — transactions, assets, loans, credit cards, budgets, tags, and every setting — and restore the app to its default state.\n\nThis cannot be undone.\n\nType " + confirmText + " to confirm:"
+  );
+  if (typed !== confirmText) {
+    if (typed !== null) alert("Factory reset cancelled — text did not match.");
+    return;
+  }
+  localStorage.clear();
+  location.reload();
 }
 
 function switchGenSection(secId, el) {
@@ -10835,21 +11346,39 @@ function initRegionalSettingsUI() {
 document.addEventListener('DOMContentLoaded', initRegionalSettingsUI);
 
 function setCurrency(symbol, el) {
-  const prev = userCurrency;
-  pushSettingsUndo('currency', () => {
-    userCurrency = prev;
-    localStorage.setItem('fos_currency', prev);
-    document.querySelectorAll('#set-currency-group .set-chip').forEach(c => {
-      c.classList.toggle('active', c.textContent.includes(prev));
-    });
-  showSettingsToast('budget');
-    if (activeView === 'dashboard') renderDashboard();
-  });
   userCurrency = symbol;
   localStorage.setItem('fos_currency', symbol);
   el.parentNode.querySelectorAll('.set-chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  showSettingsToast('currency', `Currency set to ${symbol}`);
+  
+  // Trigger the settings toast
+  if (typeof showSettingsToast === 'function') {
+      showSettingsToast(`Currency updated to ${symbol}`);
+  }
+  
+  // Force a full re-render of the current view
+  if (activeView === 'dashboard') renderDashboard();
+  else if (activeView === 'analytics') renderAnalytics();
+  else if (activeView === 'networth') renderNetWorth();
+  else if (activeView === 'port-overview') renderPortOverview();
+  else if (activeView === 'port-table') renderPortTable();
+  else if (activeView === 'credit') renderCreditTracker();
+  else if (activeView === 'transactions' || activeView === 'loans' || activeView === 'investments') renderTable();
+}
+
+function setNumberSystem(system, el) {
+  userNumberSystem = system;
+  localStorage.setItem('fos_number_system', system);
+  el.parentNode.querySelectorAll('.set-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  
+  // Trigger the settings toast
+  if (typeof showSettingsToast === 'function') {
+      const formatLabel = system === 'indian' ? 'Indian (1,00,000)' : 'Global (100,000)';
+      showSettingsToast(`Number format set to ${formatLabel}`);
+  }
+  
+  // Force a full re-render of the current view
   if (activeView === 'dashboard') renderDashboard();
   else if (activeView === 'analytics') renderAnalytics();
   else if (activeView === 'networth') renderNetWorth();
@@ -10950,11 +11479,12 @@ function switchSettingsTab(tabId, el) {
 
   // Update headers dynamically
   const titles = {
-    'general': { title: 'General', desc: 'Appearance, window, date & time' },
-    'notifications': { title: 'Notifications', desc: 'Alerts, reminders, sounds' },
-    'shortcuts': { title: 'Shortcuts', desc: 'Global hotkeys and automation' },
-    'about': { title: 'Privacy & Updates', desc: 'Local-first architecture and version info' }
-  };
+'general': { title: 'General', desc: 'Appearance, window, date & time' },
+'notifications': { title: 'Notifications', desc: 'Alerts, reminders, sounds' },
+'shortcuts': { title: 'Shortcuts', desc: 'Global hotkeys and automation' },
+'about': { title: 'Privacy & Updates', desc: 'Local-first architecture and version info' },
+'tags': { title: 'Transaction Tags', desc: 'Manage custom tags for tracking' }
+};
   
   document.getElementById('set-tab-title').textContent = titles[tabId].title;
   document.getElementById('set-tab-desc').textContent = titles[tabId].desc;
@@ -11498,71 +12028,120 @@ function mobNav(view, group) {
 }
 
 // ── LIGHT MODE ─────────────────────────────────────────────────────────────
-function executeThemeSwap() {
+// 1. The Heavy Chart Updater (Fixes the Lag)
+function updateChartsForTheme() {
+  // requestAnimationFrame defers the heavy chart math so the CSS colors change instantly (0ms latency)
+  requestAnimationFrame(() => {
+    const newTextColor = chartTextColor();
+    const newGridColor = chartGridColor();
+    
+    Object.keys(charts).forEach(key => {
+      const chart = charts[key];
+      if (!chart) return;
+      
+      // Prevents double-rendering charts that the dashboard already rebuilds on its own
+      const activeDashboardCharts = ['dash', 'dash-port-donut', 'dash-roi-bar', 'dash-top3-chart', 'spark-Income', 'spark-Expense', 'spark-Loan', 'spark-Investment', 'credit-bar', 'credit-type-d', 'dash-credit-donut', 'dash-credit-emi'];
+      if (activeView === 'dashboard' && activeDashboardCharts.includes(key)) return;
+      
+      if (chart.options && chart.options.scales) {
+        ['x','y'].forEach(axis => {
+          if (chart.options.scales[axis]) {
+            if (chart.options.scales[axis].ticks) chart.options.scales[axis].ticks.color = newTextColor;
+            if (chart.options.scales[axis].grid)  chart.options.scales[axis].grid.color  = newGridColor;
+          }
+        });
+        if (chart.options.scales.r) {
+          if (chart.options.scales.r.ticks)       chart.options.scales.r.ticks.color       = newTextColor;
+          if (chart.options.scales.r.grid)        chart.options.scales.r.grid.color        = newGridColor;
+          if (chart.options.scales.r.angleLines)  chart.options.scales.r.angleLines.color  = newGridColor;
+          if (chart.options.scales.r.pointLabels) chart.options.scales.r.pointLabels.color = newTextColor;
+        }
+      }
+      if (chart.options?.plugins?.legend?.labels) chart.options.plugins.legend.labels.color = newTextColor;
+      chart.update('none'); 
+    });
+
+    if (typeof renderTradingViewChart === 'function') renderTradingViewChart();
+    if      (activeView === 'dashboard')      renderDashboard();
+    else if (activeView === 'analytics')      renderAnalytics();
+    else if (activeView === 'networth')       renderNetWorth();
+    else if (activeView === 'port-overview')  renderPortOverview();
+    else if (activeView === 'port-analytics') renderPortAnalytics();
+  });
+}
+
+// 2. Topbar Button (SILENT - No Popup)
+function toggleTheme() {
   const isLight = document.body.classList.toggle('light-mode');
   localStorage.setItem('fos_theme', isLight ? 'light' : 'dark');
+  
   const icon = document.getElementById('theme-icon');
   const label = document.getElementById('theme-label');
   if (isLight) { icon.className = 'fas fa-moon'; label.textContent = 'Dark'; }
   else { icon.className = 'fas fa-sun'; label.textContent = 'Light'; }
 
-  const newTextColor = chartTextColor();
-  const newGridColor = chartGridColor();
-  Object.values(charts).forEach(chart => {
-    if (!chart) return;
-    if (chart.options && chart.options.scales) {
-      ['x','y'].forEach(axis => {
-        if (chart.options.scales[axis]) {
-          if (chart.options.scales[axis].ticks) chart.options.scales[axis].ticks.color = newTextColor;
-          if (chart.options.scales[axis].grid)  chart.options.scales[axis].grid.color  = newGridColor;
-        }
-      });
-      if (chart.options.scales.r) {
-        if (chart.options.scales.r.ticks)       chart.options.scales.r.ticks.color       = newTextColor;
-        if (chart.options.scales.r.grid)        chart.options.scales.r.grid.color        = newGridColor;
-        if (chart.options.scales.r.angleLines)  chart.options.scales.r.angleLines.color  = newGridColor;
-        if (chart.options.scales.r.pointLabels) chart.options.scales.r.pointLabels.color = newTextColor;
-      }
-    }
-    if (chart.options?.plugins?.legend?.labels) chart.options.plugins.legend.labels.color = newTextColor;
-    chart.update();
-  });
+  // Sync the settings toggle switch silently
+  const themeTog = document.getElementById('tog-app-theme');
+  if (themeTog) themeTog.checked = !isLight;
+  localStorage.setItem('fos_set_app-theme', !isLight);
 
-  if (typeof renderTradingViewChart === 'function') renderTradingViewChart();
-  if      (activeView === 'dashboard')      renderDashboard();
-  else if (activeView === 'analytics')      renderAnalytics();
-  else if (activeView === 'networth')       renderNetWorth();
-  else if (activeView === 'port-overview')  renderPortOverview();
-  else if (activeView === 'port-analytics') renderPortAnalytics();
+  updateChartsForTheme();
 }
 
-function toggleTheme() {
-  const wasLight = document.body.classList.contains('light-mode');
-  pushSettingsUndo('theme', () => {
-    document.body.classList.toggle('light-mode', wasLight);
-    localStorage.setItem('fos_theme', wasLight ? 'light' : 'dark');
-    const icon = document.getElementById('theme-icon');
-    const label = document.getElementById('theme-label');
-    if (wasLight) { icon.className = 'fas fa-moon'; label.textContent = 'Dark'; }
-    else { icon.className = 'fas fa-sun'; label.textContent = 'Light'; }
-    if (activeView === 'dashboard') renderDashboard();
-  });
-  showSettingsToast('theme', wasLight ? 'Switched to Dark Mode' : 'Switched to Light Mode');
-  if (document.startViewTransition) {
-    document.startViewTransition(() => executeThemeSwap());
+// 3. Settings Menu Toggle (SHOWS POPUP)
+function handleThemeToggle(checkbox) {
+  const isDark = checkbox.checked;
+  
+  if (isDark) {
+    document.body.classList.remove('light-mode');
+    localStorage.setItem('fos_theme', 'dark'); 
   } else {
-    executeThemeSwap();
+    document.body.classList.add('light-mode');
+    localStorage.setItem('fos_theme', 'light'); 
+  }
+  
+  const topbarIcon = document.getElementById('theme-icon');
+  const topbarLabel = document.getElementById('theme-label');
+  if (topbarIcon) topbarIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+  if (topbarLabel) topbarLabel.textContent = isDark ? 'Dark' : 'Light';
+
+  localStorage.setItem('fos_set_app-theme', isDark);
+  
+  // Show the popup ONLY when using the settings menu
+  if (typeof showSettingsToast === 'function') {
+      showSettingsToast(`Theme switched to ${isDark ? 'Dark' : 'Light'} Mode`);
+  }
+
+  updateChartsForTheme();
+}
+
+function applyReduceMotionState(reduceMotion) {
+  document.body.classList.toggle('fos-reduce-motion', reduceMotion);
+  // Disable Chart.js animations app-wide when reduce motion is on
+  Chart.defaults.animation = reduceMotion ? false : { duration: 400, easing: 'easeOutQuart' };
+  // Re-render visible charts so the new animation setting takes effect immediately
+  Object.values(charts).forEach(c => { if (c && typeof c.update === 'function') c.update('none'); });
+}
+
+function handleReduceMotionToggle(checkbox) {
+  const reduceMotion = checkbox.checked;
+  localStorage.setItem('fos_set_reduce-motion', reduceMotion);
+  applyReduceMotionState(reduceMotion);
+  if (typeof showSettingsToast === 'function') {
+    showSettingsToast(`Updated: Reduce Motion ${reduceMotion ? 'On' : 'Off'}`);
   }
 }
 
-  function applyStoredTheme() {
-  const stored = localStorage.getItem('fos_theme');
-  if (stored === 'light') {
-    document.body.classList.add('light-mode');
-    const icon  = document.getElementById('theme-icon');
-    const label = document.getElementById('theme-label');
-    if (icon)  icon.className = 'fas fa-moon';
-    if (label) label.textContent = 'Dark';
+function applySidebarAnimState(animate) {
+  document.body.classList.toggle('fos-no-sidebar-anim', !animate);
+}
+
+function handleSidebarAnimToggle(checkbox) {
+  const animate = checkbox.checked;
+  localStorage.setItem('fos_set_sidebar-animation', animate);
+  applySidebarAnimState(animate);
+  if (typeof showSettingsToast === 'function') {
+    showSettingsToast(`Updated: Sidebar Animation ${animate ? 'On' : 'Off'}`);
   }
 }
 
@@ -11915,15 +12494,58 @@ function renderBadgeCollection() {
 }
 
 function showBadgeUnlock(badge) {
-  // Badge unlocked silently - no confetti
+  if (!isNotifEnabled('goal-achievements')) return;
+  addNotification(
+    'badge-' + badge.id,
+    'fa-trophy', '#a78bfa',
+    `🏆 Achievement Unlocked: ${badge.name}`,
+    `${badge.emoji} ${badge.desc} — nice work! Check the Achievements card on your dashboard to see your full badge collection.`,
+    'goal-achievement'
+  );
 }
-
 
 // ── TAGS ───────────────────────────────────────────────────────────────────
 let currentTagFilter = null;
 let pendingRestoreData = null;
 
-const TAG_SUGGESTIONS_LIST = ['essential','emi','festival','travel','medical','online','cash','recurring','one-time','family','work','gift','urgent','planned'];
+let customTagsList = JSON.parse(localStorage.getItem('fos_custom_tags') || '[]');
+let TAG_SUGGESTIONS_LIST = [...new Set(['essential','emi','festival','travel','medical','online','cash','recurring','one-time','family','work','gift','urgent','planned', ...customTagsList])];
+
+function renderSettingsTags() {
+  const listEl = document.getElementById('settings-tags-list');
+  if(!listEl) return;
+  listEl.innerHTML = TAG_SUGGESTIONS_LIST.map(t => `
+    <span class="tag-chip" style="font-size:0.8rem; padding:6px 12px; margin-bottom:5px;">
+      #${t} <span class="tag-remove" onclick="removeTagFromSettings('${t}')" style="margin-left:8px; color:#ef4444; font-weight:bold; cursor:pointer;">✕</span>
+    </span>
+  `).join('');
+}
+
+function addNewTagFromSettings() {
+  const val = document.getElementById('set-new-tag-input').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
+  if(!val) return;
+  if(!TAG_SUGGESTIONS_LIST.includes(val)) {
+    TAG_SUGGESTIONS_LIST.push(val);
+    customTagsList.push(val);
+    localStorage.setItem('fos_custom_tags', JSON.stringify(customTagsList));
+    renderSettingsTags();
+    document.getElementById('set-new-tag-input').value = '';
+    if (typeof showSettingsToast === 'function') showSettingsToast('toggle', `Tag #${val} added successfully`);
+  }
+}
+
+function removeTagFromSettings(tag) {
+  if(!confirm(`Remove tag "#${tag}" from available suggestions?`)) return;
+  TAG_SUGGESTIONS_LIST = TAG_SUGGESTIONS_LIST.filter(t => t !== tag);
+  customTagsList = customTagsList.filter(t => t !== tag);
+  localStorage.setItem('fos_custom_tags', JSON.stringify(customTagsList));
+  renderSettingsTags();
+  if (typeof showSettingsToast === 'function') showSettingsToast('toggle', `Tag #${tag} removed`);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderSettingsTags();
+});
 
 function getAllTags() {
   const set = new Set();
@@ -12016,7 +12638,7 @@ function openBackupModal() {
 
 function downloadBackup() {
   const payload = {
-    version: 2,
+    version: 3,
     exportedAt: new Date().toISOString(),
     db, portDb, creditDb, budgets,
     ccCards,
@@ -12025,7 +12647,16 @@ function downloadBackup() {
     dashboardLayout: JSON.parse(localStorage.getItem('fos_dashboard_layout_v4') || '{}'),
     theme: localStorage.getItem('fos_theme') || 'dark',
     financesSidebarCollapsed: localStorage.getItem('fos_finance_sidebar_collapsed') || 'false',
-    portfolioSidebarCollapsed: localStorage.getItem('fos_portfolio_sidebar_collapsed') || 'false'
+    portfolioSidebarCollapsed: localStorage.getItem('fos_portfolio_sidebar_collapsed') || 'false',
+    currency: localStorage.getItem('fos_currency') || '₹',
+    numberSystem: localStorage.getItem('fos_number_system') || 'indian',
+    timeFormat: localStorage.getItem('fos_time') || '12h',
+    dateFormat: localStorage.getItem('fos_date') || 'ddmmyyyy',
+    shortcuts: JSON.parse(localStorage.getItem('fos_shortcuts') || '{}'),
+    customTags: JSON.parse(localStorage.getItem('fos_custom_tags') || '[]'),
+    roughBoard: JSON.parse(localStorage.getItem('financeOS_roughboard_v1') || 'null'),
+    users: JSON.parse(localStorage.getItem('fos_users') || '[]'),
+    currentUser: JSON.parse(localStorage.getItem('fos_current_user') || 'null')
   };
 
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -12122,7 +12753,43 @@ function confirmRestore() {
     localStorage.setItem('fos_portfolio_sidebar_collapsed', pendingRestoreData.portfolioSidebarCollapsed);
   }
 
+  // Regional / format preferences
+  if (pendingRestoreData.currency) {
+    localStorage.setItem('fos_currency', pendingRestoreData.currency);
+  }
+  if (pendingRestoreData.numberSystem) {
+    localStorage.setItem('fos_number_system', pendingRestoreData.numberSystem);
+  }
+  if (pendingRestoreData.timeFormat) {
+    localStorage.setItem('fos_time', pendingRestoreData.timeFormat);
+  }
+  if (pendingRestoreData.dateFormat) {
+    localStorage.setItem('fos_date', pendingRestoreData.dateFormat);
+  }
+
+  // Shortcuts & tags
+  if (pendingRestoreData.shortcuts) {
+    localStorage.setItem('fos_shortcuts', JSON.stringify(pendingRestoreData.shortcuts));
+  }
+  if (pendingRestoreData.customTags) {
+    localStorage.setItem('fos_custom_tags', JSON.stringify(pendingRestoreData.customTags));
+  }
+
+  // Rough Board spreadsheet
+  if (pendingRestoreData.roughBoard) {
+    localStorage.setItem('financeOS_roughboard_v1', JSON.stringify(pendingRestoreData.roughBoard));
+  }
+
+  // Login accounts / session
+  if (pendingRestoreData.users) {
+    localStorage.setItem('fos_users', JSON.stringify(pendingRestoreData.users));
+  }
+  if (pendingRestoreData.currentUser) {
+    localStorage.setItem('fos_current_user', JSON.stringify(pendingRestoreData.currentUser));
+  }
+
   pendingRestoreData = null;
+
   document.getElementById('backup-modal').style.display = 'none';
   alert('✅ Backup restored successfully! All data including CC cards, notifications and layout have been restored.');
   window.location.reload();
@@ -12248,8 +12915,8 @@ const MarketEngine = {
     });
 
     // Start Loops
-    setInterval(() => this.fetchUpdates(true), 5000); 
-    setInterval(() => this.fetchUpdates(false), 15000);
+    setInterval(() => { if (!document.hidden) this.fetchUpdates(true); }, 8000); 
+    setInterval(() => { if (!document.hidden) this.fetchUpdates(false); }, 20000);
   },
 
   animateValue(element, start, end, prefix) {
@@ -12539,6 +13206,10 @@ function calcScenario() {
 }
 
 window.onload = () => {
+  // Apply saved accessibility/interface preferences before anything renders
+  applyReduceMotionState(localStorage.getItem('fos_set_reduce-motion') === 'true');
+  applySidebarAnimState(localStorage.getItem('fos_set_sidebar-animation') !== 'false');
+
   // 1. Arrange the dashboard layout FIRST (Prevents the visual jump!)
   initDragAndDrop();
 
@@ -12548,9 +13219,61 @@ window.onload = () => {
   // Draw the TradingView chart on load
   renderTradingViewChart();
 
-  portFilterMode = 'only';
+  // Build the dropdown HTML options FIRST
   buildFilterDropdowns();
   buildPortDropdowns();
+
+  // 3. MAIN DASHBOARD: Set to Current Month & Year
+  const today = new Date();
+  const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
+  const currentYear = today.getFullYear().toString();
+
+  const fMonth = document.getElementById('filter-month');
+  const fYear = document.getElementById('filter-year');
+  
+  if (fMonth) fMonth.value = currentMonth; 
+  if (fYear) fYear.value = currentYear; 
+
+  // Restore last visited page if "Remember last page" is enabled (default: on)
+  if (localStorage.getItem('fos_set_remember-page') !== 'false') {
+    try {
+      const lastView = JSON.parse(localStorage.getItem('fos_last_active_view') || 'null');
+      if (lastView && lastView.view && lastView.view !== 'dashboard') {
+        const idMap = lastView.group === 'portfolio'
+          ? { 'port-overview':'port-nav-overview', 'port-table':'port-nav-table', 'port-analytics':'port-nav-analytics' }
+          : { 'dashboard':'fin-nav-dashboard', 'transactions':'fin-nav-transactions', 'loans':'fin-nav-loans',
+              'investments':'fin-nav-investments', 'credit':'fin-nav-credit', 'ccutil':'fin-nav-ccutil',
+              'scenario':'fin-nav-scenario', 'roughboard':'fin-nav-roughboard', 'calculator':'fin-nav-calculator',
+              'analytics':'fin-nav-analytics', 'networth':'fin-nav-networth' };
+        const navId = idMap[lastView.view];
+        const navEl = navId ? document.getElementById(navId) : null;
+        if (navEl) {
+          switchView(lastView.view, navEl, lastView.group);
+        }
+      }
+    } catch(e) { /* corrupt value, ignore and stay on dashboard */ }
+  }
+
+  // 4. ANALYTICS & NET WORTH: Force "All Time"
+  const tMonth = document.getElementById('trend-month');
+  const tYear = document.getElementById('trend-year');
+  if (tMonth) tMonth.value = 'all';
+  if (tYear) tYear.value = 'all';
+
+  // 5. PORTFOLIO: Force "All Time" visually and logically
+  portFilterMode = 'all';
+  const pMonth = document.getElementById('port-month');
+  const pYear = document.getElementById('port-year');
+  if (pMonth) pMonth.value = 'all';
+  if (pYear) pYear.value = 'all';
+  
+  // Set the Portfolio filter toggle button to "All"
+  const portModeAllBtn = document.getElementById('port-mode-all');
+  if (portModeAllBtn) {
+    document.querySelectorAll('.port-mode-btn').forEach(b => b.classList.remove('active'));
+    portModeAllBtn.classList.add('active');
+  }
+
   renderDashboard();
   applyStoredTheme();
   updateNotifBadge();
@@ -14917,6 +15640,779 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// ── AUTO-WIRE ALL SETTINGS TOGGLES ──
+function initSettingsToggles() {
+  document.querySelectorAll('.settings-modal-box .toggle-switch input[type="checkbox"]').forEach(cb => {
+    if (cb.id === 'tog-app-theme') return;
+
+    // 2. Find the exact name of the setting dynamically
+    const row = cb.closest('.set-row');
+    let settingName = "Setting";
+    if (row) {
+        const lblEl = row.querySelector('.set-lbl');
+        if (lblEl) settingName = lblEl.textContent.trim();
+    }
+    
+    // 3. Auto-assign a unique ID if it doesn't have one
+    if (!cb.id) {
+        cb.id = 'tog-' + settingName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    }
+    const settingId = cb.id.replace('tog-', '');
+    
+    // 4. Load the saved state from memory
+    const saved = localStorage.getItem('fos_set_' + settingId);
+    if (saved !== null) {
+      cb.checked = saved === 'true';
+    }
+
+    // 5. Skip auto-wiring if this toggle already has its own inline onchange
+    //    (prevents double-firing / duplicate toasts on Notifications tab toggles)
+    if (cb.hasAttribute('onchange')) return;
+
+    // 6. Auto-wire the switch so it saves and triggers the popup instantly
+    cb.addEventListener('change', function() {
+        localStorage.setItem('fos_set_' + settingId, this.checked);
+        if (settingId === 'notification-sound' && this.checked) {
+            playNotificationSound();
+        }
+        if (typeof showSettingsToast === 'function') {
+            showSettingsToast(`Updated: ${settingName}`);
+        }
+    });
+  });
+  
+  // Sync the Theme Toggle visually
+  const themeTog = document.getElementById('tog-app-theme');
+  if (themeTog) {
+    themeTog.checked = !document.body.classList.contains('light-mode');
+  }
+}
+document.addEventListener('DOMContentLoaded', initSettingsToggles);
+
+function handleThemeToggle(checkbox) {
+  const isDark = checkbox.checked;
+  
+  // 1. Physically switch the theme colors on the entire dashboard
+  if (isDark) {
+    document.body.classList.remove('light-mode');
+    localStorage.setItem('fos_theme', 'dark'); // Save global theme state
+  } else {
+    document.body.classList.add('light-mode');
+    localStorage.setItem('fos_theme', 'light'); // Save global theme state
+  }
+  
+  // 2. Synchronize the button on the top navigation bar so they match
+  const topbarIcon = document.getElementById('theme-icon');
+  const topbarLabel = document.getElementById('theme-label');
+  if (topbarIcon) topbarIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+  if (topbarLabel) topbarLabel.textContent = isDark ? 'Dark' : 'Light';
+
+  // 3. Save the specific setting preference
+  localStorage.setItem('fos_set_app-theme', isDark);
+  
+  // 4. Trigger the new Settings right-side popup
+  if (typeof showSettingsToast === 'function') {
+      showSettingsToast(`Theme switched to ${isDark ? 'Dark' : 'Light'} Mode`);
+  }
+}
+
+// ── NEW: SETTINGS TOAST ENGINE ──
+let settingsToastTimeout;
+function showSettingsToast(msg) {
+  const toast = document.getElementById('settings-right-toast');
+  if (!toast) return;
+  
+  document.getElementById('settings-right-msg').textContent = msg;
+  toast.style.transform = 'translateX(0)'; // Slide it in
+
+  if (settingsToastTimeout) clearTimeout(settingsToastTimeout);
+  
+  // Hide it automatically after 3 seconds
+  settingsToastTimeout = setTimeout(() => {
+    toast.style.transform = 'translateX(150%)'; // Slide it out
+  }, 3000); 
+}
+
+// ── NEW: SETTINGS TOGGLE LOGIC ──
+function toggleSetting(settingId, settingName, checkbox) {
+    const newState = checkbox.checked;
+    
+    // Save new state
+    localStorage.setItem('fos_set_' + settingId, newState);
+    
+    // Trigger the new Right-Side Settings Toast
+    showSettingsToast(`Updated: ${settingName}`);
+}
+
+// ── UPDATED: THEME TOGGLE LOGIC (Now uses the new toast) ──
+function handleThemeToggle(checkbox) {
+  const isDark = checkbox.checked;
+  
+  // Physically switch the theme colors on the entire dashboard
+  if (isDark) {
+    document.body.classList.remove('light-mode');
+    localStorage.setItem('fos_theme', 'dark'); 
+  } else {
+    document.body.classList.add('light-mode');
+    localStorage.setItem('fos_theme', 'light'); 
+  }
+  
+  // Synchronize the button on the top navigation bar so they match
+  const topbarIcon = document.getElementById('theme-icon');
+  const topbarLabel = document.getElementById('theme-label');
+  if (topbarIcon) topbarIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+  if (topbarLabel) topbarLabel.textContent = isDark ? 'Dark' : 'Light';
+
+  // Save the specific setting preference
+  localStorage.setItem('fos_set_app-theme', isDark);
+  
+  // Trigger the new Settings right-side popup
+  if (typeof showSettingsToast === 'function') {
+      showSettingsToast(`Theme switched to ${isDark ? 'Dark' : 'Light'} Mode`);
+  }
+}
+
+// ── SETTINGS GLOBAL SEARCH ENGINE ──
+function initSettingsSearch() {
+  const searchInput = document.querySelector('input[placeholder="Search settings..."]');
+  if (!searchInput) return;
+
+  searchInput.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const allCards = document.querySelectorAll('.set-tab-pane .set-card');
+    const allPanes = document.querySelectorAll('.set-tab-pane');
+    const allSections = document.querySelectorAll('.gen-section'); 
+    
+    // Select titles and sub-menus to hide them during search for a clean look
+    const tabHeaders = document.querySelectorAll('.set-tab-pane > div:not(.set-card):not(.gen-section)');
+
+    if (query === '') {
+      // ── RESET MODE ──
+      allCards.forEach(card => card.style.display = '');
+      allSections.forEach(sec => sec.style.display = '');
+      allPanes.forEach(pane => pane.style.display = '');
+      tabHeaders.forEach(header => header.style.display = '');
+      
+      const activeNav = document.querySelector('.set-nav-item.active');
+      if (activeNav) activeNav.click();
+      return;
+    }
+
+    // ── SEARCH MODE ──
+    // 1. Hide titles and sub-menus so the results look clean
+    tabHeaders.forEach(header => header.style.display = 'none');
+
+    // 2. Hide all sections and panes initially
+    allPanes.forEach(pane => {
+        pane.style.display = 'none'; 
+        pane.style.flexDirection = 'column';
+        pane.style.gap = '1.2rem';
+    });
+    allSections.forEach(sec => {
+        sec.style.display = 'none'; 
+        sec.style.flexDirection = 'column';
+        sec.style.gap = '1.2rem';
+    });
+
+    // 3. Reveal ONLY the cards that match, and turn on their specific containers
+    allCards.forEach(card => {
+      const text = card.textContent.toLowerCase();
+      if (text.includes(query)) {
+        card.style.display = ''; // Show card
+        
+        // Show its parent section (if it has one)
+        const parentSec = card.closest('.gen-section');
+        if (parentSec) parentSec.style.display = 'flex';
+        
+        // Show its parent tab pane
+        const parentPane = card.closest('.set-tab-pane');
+        if (parentPane) parentPane.style.display = 'flex';
+      } else {
+        card.style.display = 'none'; // Hide card
+      }
+    });
+  });
+}
+document.addEventListener('DOMContentLoaded', initSettingsSearch);
+
+
+// ── ADVANCED PDF REPORT ENGINE ──
+function openAdvancedExportModal() {
+  document.getElementById('advanced-export-modal').style.display = 'flex';
+}
+
+async function generateAdvancedPDF(btnElement) {
+  const wantsAnalytics = document.getElementById('rep-analytics').checked;
+  const wantsNetWorth  = document.getElementById('rep-networth').checked;
+  const wantsPortfolio = document.getElementById('rep-portfolio').checked;
+  const wantsAI        = document.getElementById('rep-ai').checked;
+
+  if (!wantsAnalytics && !wantsNetWorth && !wantsPortfolio && !wantsAI) {
+    alert("Please select at least one module to export.");
+    return;
+  }
+
+  const originalHtml = btnElement.innerHTML;
+  btnElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+  btnElement.disabled = true;
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF('p', 'mm', 'a4');
+  const pageW = doc.internal.pageSize.width;
+  const pageH = doc.internal.pageSize.height;
+  const margin = 14;
+  let y = 0;
+
+  // ── Rupee symbol fix ──
+  const cleanText = (t) => String(t || '').replace(/₹/g, 'Rs.');
+
+  function checkPage(need) {
+    if (y + need > pageH - 15) { doc.addPage(); y = 15; }
+  }
+
+  function sectionTitle(title, r, g, b) {
+    checkPage(16);
+    doc.setFillColor(r, g, b);
+    doc.rect(margin, y, pageW - margin * 2, 9, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text(cleanText(title), margin + 3, y + 6.2);
+    doc.setTextColor(0, 0, 0);
+    y += 13;
+  }
+
+  function kpiRow(items) {
+    // items = [{label, value, color}]
+    checkPage(20);
+    const colW = (pageW - margin * 2) / items.length;
+    items.forEach((item, i) => {
+      const x = margin + i * colW;
+      doc.setFillColor(248, 250, 252);
+      doc.setDrawColor(226, 232, 240);
+      doc.roundedRect(x, y, colW - 2, 16, 2, 2, 'FD');
+      doc.setFontSize(7);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 116, 139);
+      doc.text(cleanText(item.label).toUpperCase(), x + 3, y + 5);
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      const col = item.color || [15, 23, 42];
+      doc.setTextColor(col[0], col[1], col[2]);
+      doc.text(cleanText(item.value), x + 3, y + 12.5);
+    });
+    y += 20;
+  }
+
+  function tableSection(head, rows, colStyles) {
+    if (!rows || !rows.length) return;
+    checkPage(20);
+    doc.autoTable({
+      startY: y,
+      head: [head.map(h => cleanText(h))],
+      body: rows.map(r => r.map(c => cleanText(c))),
+      theme: 'grid',
+      headStyles: { fillColor: [99, 102, 241], textColor: 255, fontSize: 8, fontStyle: 'bold', cellPadding: 3 },
+      bodyStyles: { fontSize: 7.5, cellPadding: 3, textColor: [30, 41, 59] },
+      alternateRowStyles: { fillColor: [248, 250, 252] },
+      columnStyles: colStyles || {},
+      margin: { left: margin, right: margin },
+      didParseCell: (data) => {
+        if (data.cell && Array.isArray(data.cell.text)) {
+          data.cell.text = data.cell.text.map(t => cleanText(t));
+        }
+      }
+    });
+    y = doc.lastAutoTable.finalY + 8;
+  }
+
+  function captureChart(canvasId) {
+  try {
+    // Try Chart.js instance first (highest quality, uses devicePixelRatio)
+    const chartInstance = charts[canvasId] || Object.values(charts).find(c => c?.canvas?.id === canvasId);
+    if (chartInstance) {
+      // Force a high-res render before capture
+      chartInstance.resize();
+      chartInstance.update('none');
+      return chartInstance.toBase64Image('image/png', 1.0);
+    }
+    // Fallback: raw canvas with 3x upscale for sharpness
+    const canvas = document.getElementById(canvasId);
+    if (!canvas || canvas.width === 0) return null;
+    const scale = 3;
+    const offscreen = document.createElement('canvas');
+    offscreen.width  = canvas.width  * scale;
+    offscreen.height = canvas.height * scale;
+    const ctx = offscreen.getContext('2d');
+    ctx.scale(scale, scale);
+    ctx.drawImage(canvas, 0, 0);
+    return offscreen.toDataURL('image/png', 1.0);
+  } catch(e) { return null; }
+}
+
+  function addChartImage(canvasId, label, heightMm) {
+    const imgH = heightMm || 75; // default 75mm — large and readable
+    const img = captureChart(canvasId);
+    checkPage(imgH + 12);
+    // Chart label header
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(100, 116, 139);
+    doc.text(cleanText(label.toUpperCase()), margin, y + 4);
+    y += 7;
+    if (img) {
+      try {
+        const imgW = pageW - margin * 2;
+        doc.addImage(img, 'PNG', margin, y, imgW, imgH, undefined, 'FAST');
+        // Thin border around chart
+        doc.setDrawColor(226, 232, 240);
+        doc.setLineWidth(0.3);
+        doc.rect(margin, y, imgW, imgH);
+        y += imgH + 8;
+      } catch(e) {
+        doc.setFontSize(8);
+        doc.setTextColor(148, 163, 184);
+        doc.text('[Chart render failed: ' + label + ']', margin, y + 5);
+        y += 14;
+      }
+    } else {
+      doc.setFillColor(248, 250, 252);
+      doc.setDrawColor(226, 232, 240);
+      doc.rect(margin, y, pageW - margin*2, imgH, 'FD');
+      doc.setFontSize(9);
+      doc.setTextColor(148, 163, 184);
+      doc.text('Navigate to the ' + label + ' view first, then re-export', margin + (pageW-margin*2)/2, y + imgH/2, { align: 'center' });
+      y += imgH + 8;
+    }
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'normal');
+  }
+
+  // ══════════════════════════════════════════
+  // COVER PAGE
+  // ══════════════════════════════════════════
+  doc.setFillColor(0, 117, 255);
+  doc.rect(0, 0, pageW, 55, 'F');
+  doc.setFillColor(167, 139, 250);
+  doc.rect(0, 50, pageW, 4, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(26);
+  doc.setFont('helvetica', 'bold');
+  doc.text('FinanceOS', margin, 22);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Advanced Financial Report', margin, 32);
+  doc.setFontSize(9);
+  doc.setTextColor(200, 220, 255);
+  const now = new Date();
+  doc.text('Generated: ' + now.toLocaleDateString('en-IN', { day:'2-digit', month:'long', year:'numeric' }) + '  |  ' + now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' }), margin, 43);
+  doc.setTextColor(0, 0, 0);
+  y = 68;
+
+  // Executive Summary box
+  const data = getFilteredData();
+  const totalInc  = sumType('Income', db);
+  const totalExp  = sumType('Expense', db);
+  const totalInv  = sumType('Investment', db);
+  const totalLoan = sumType('Loan', db);
+  const netBal    = totalInc - totalExp;
+  const savRate   = totalInc > 0 ? ((netBal / totalInc) * 100).toFixed(1) : '0';
+
+  doc.setFillColor(240, 249, 255);
+  doc.setDrawColor(0, 117, 255);
+  doc.roundedRect(margin, y, pageW - margin*2, 28, 3, 3, 'FD');
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(0, 117, 255);
+  doc.text('EXECUTIVE SUMMARY', margin + 4, y + 6);
+  doc.setTextColor(15, 23, 42);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8.5);
+  const summaryLine1 = `Income: Rs.${Math.round(totalInc).toLocaleString('en-IN')}   Expenses: Rs.${Math.round(totalExp).toLocaleString('en-IN')}   Net Balance: Rs.${Math.round(netBal).toLocaleString('en-IN')}   Savings Rate: ${savRate}%`;
+  const summaryLine2 = `Investments: Rs.${Math.round(totalInv).toLocaleString('en-IN')}   Loan Outflow: Rs.${Math.round(totalLoan).toLocaleString('en-IN')}   Total Transactions: ${db.length}   Active Credits: ${creditDb.filter(c=>c.status==='Active').length}`;
+  doc.text(summaryLine1, margin + 4, y + 14);
+  doc.text(summaryLine2, margin + 4, y + 21);
+  y += 35;
+
+  // ══════════════════════════════════════════
+  // NET WORTH SECTION
+  // ══════════════════════════════════════════
+  if (wantsNetWorth) {
+    doc.addPage(); y = 15;
+    sectionTitle('NET WORTH TRACKER', 52, 211, 153);
+
+    const assets = Math.max(0, totalInc - totalExp - totalInv + totalLoan) + totalInv;
+    kpiRow([
+      { label: 'Total Assets',     value: 'Rs.' + Math.round(assets).toLocaleString('en-IN'),   color: [16,185,129] },
+      { label: 'Total Liabilities',value: 'Rs.' + Math.round(totalLoan).toLocaleString('en-IN'), color: [239,68,68] },
+      { label: 'Net Worth',        value: 'Rs.' + Math.round(totalInc - totalExp).toLocaleString('en-IN'), color: (totalInc-totalExp)>=0?[16,185,129]:[239,68,68] },
+      { label: 'Portfolio Value',  value: 'Rs.' + Math.round(portAggStats(getPortFiltered()).totalVal).toLocaleString('en-IN'), color: [167,139,250] }
+    ]);
+
+    // ── CHART PAGE 1 ──
+    addChartImage('chart-networth',   'Net Worth Trajectory Over Time', 80);
+    addChartImage('chart-nw-delta',   'Monthly Net Worth Change (Rhythm)', 72);
+
+    // ── CHART PAGE 2 ──
+    doc.addPage(); y = 15;
+    sectionTitle('NET WORTH — ENERGY & LEVERAGE', 52, 211, 153);
+    addChartImage('chart-nw-breakdown', 'Financial Energy Meter (Assets vs Liabilities)', 80);
+    addChartImage('chart-retention',    'Capital Retention Rate (Savings %)', 72);
+    addChartImage('chart-leverage',     'System Leverage — Debt to Asset Ratio', 68);
+  }
+
+  // ══════════════════════════════════════════
+  // ANALYTICS SECTION
+
+  // ══════════════════════════════════════════
+  // PRE-RENDER ALL REQUIRED CHARTS OFFSCREEN
+  // ══════════════════════════════════════════
+  const originalView = activeView;
+
+  // Force light mode + boost chart quality so charts render bold and crisp on white PDF
+  const wasLightMode = document.body.classList.contains('light-mode');
+  if (!wasLightMode) document.body.classList.add('light-mode');
+  applyPdfChartQuality();
+
+  if (wantsAnalytics) {
+    // Temporarily activate analytics view to build charts
+    document.getElementById('view-analytics').classList.add('active');
+    buildFilterDropdowns();
+    renderAnalytics();
+    await new Promise(r => setTimeout(r, 800));
+    document.getElementById('view-analytics').classList.remove('active');
+  }
+  if (wantsNetWorth) {
+    document.getElementById('view-networth').classList.add('active');
+    renderNetWorth();
+    await new Promise(r => setTimeout(r, 800));
+    document.getElementById('view-networth').classList.remove('active');
+  }
+  if (wantsPortfolio) {
+    document.getElementById('view-port-overview').classList.add('active');
+    buildPortDropdowns();
+    renderPortOverview();
+    await new Promise(r => setTimeout(r, 800));
+    document.getElementById('view-port-overview').classList.remove('active');
+    document.getElementById('view-port-analytics').classList.add('active');
+    renderPortAnalytics();
+    await new Promise(r => setTimeout(r, 800));
+    document.getElementById('view-port-analytics').classList.remove('active');
+  }
+
+// Restore original view
+  document.getElementById('view-' + originalView)?.classList.add('active');
+
+  // Restore original theme now that all charts have been captured in light mode
+  restorePdfChartQuality();
+  if (!wasLightMode) document.body.classList.remove('light-mode');
+  
+if (wantsAnalytics) {
+    doc.addPage(); y = 15;
+    sectionTitle('ANALYTICS & SPENDING INTELLIGENCE', 99, 102, 241);
+
+    const filteredData = getFilteredData();
+    const fInc  = sumType('Income', filteredData);
+    const fExp  = sumType('Expense', filteredData);
+    const fLoan = sumType('Loan', filteredData);
+    const fInv  = sumType('Investment', filteredData);
+    const fSav  = fInc > 0 ? ((fInc - fExp) / fInc * 100).toFixed(1) : '0';
+
+    kpiRow([
+      { label: 'Total Income',   value: 'Rs.' + Math.round(fInc).toLocaleString('en-IN'),  color:[16,185,129] },
+      { label: 'Total Expenses', value: 'Rs.' + Math.round(fExp).toLocaleString('en-IN'),  color:[244,114,182] },
+      { label: 'Savings Rate',   value: fSav + '%', color:parseFloat(fSav)>=20?[16,185,129]:[239,68,68] },
+      { label: 'Investments',    value: 'Rs.' + Math.round(fInv).toLocaleString('en-IN'),  color:[251,191,36] }
+    ]);
+
+    // ── CHART PAGE 1: Trend + Daily ──
+    addChartImage('chart-trend',   'Income vs Outflow Trend (Last 6 Months)', 80);
+    addChartImage('chart-scatter', 'Daily Spending Pattern by Day of Month',  72);
+
+    // ── CHART PAGE 2: Weekday + Expense composition ──
+    doc.addPage(); y = 15;
+    sectionTitle('ANALYTICS — SPENDING PATTERNS', 99, 102, 241);
+    addChartImage('chart-weekday', 'Spending Rhythm by Day of Week', 75);
+    addChartImage('chart-exp-bif', 'Financial Health Vector (5-Dimension Radar)', 80);
+
+    // ── Expense category summary — compact, top 8 only ──
+    const expByCat = groupData('Expense', filteredData);
+    const expRows = Object.entries(expByCat)
+      .sort((a,b) => b[1]-a[1])
+      .slice(0, 8)
+      .map(([cat, amt]) => [
+        cat,
+        'Rs.' + Math.round(amt).toLocaleString('en-IN'),
+        fExp > 0 ? (amt/fExp*100).toFixed(1)+'%' : '0%'
+      ]);
+    if (expRows.length) {
+      checkPage(15);
+      doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(99,102,241);
+      doc.text('Top Expense Categories', margin, y); y += 5;
+      tableSection(['Category','Amount','% of Total'], expRows,
+        { 1:{halign:'right'}, 2:{halign:'right',fontStyle:'bold'} });
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // PORTFOLIO SECTION
+  // ══════════════════════════════════════════
+  if (wantsPortfolio) {
+    doc.addPage(); y = 15;
+    sectionTitle('PORTFOLIO ANALYSIS', 167, 139, 250);
+
+    const pd = getPortFiltered();
+    const ps = portAggStats(pd);
+    kpiRow([
+      { label: 'Total Invested',  value: 'Rs.' + Math.round(ps.totalInv).toLocaleString('en-IN'),  color:[167,139,250] },
+      { label: 'Current Value',   value: 'Rs.' + Math.round(ps.totalVal).toLocaleString('en-IN'),  color:[16,185,129] },
+      { label: 'Total Gain/Loss', value: 'Rs.' + Math.round(ps.totalGain).toLocaleString('en-IN'), color:ps.totalGain>=0?[16,185,129]:[239,68,68] },
+      { label: 'Avg ROI',         value: ps.avgRoi.toFixed(1)+'%', color:ps.avgRoi>=0?[16,185,129]:[239,68,68] }
+    ]);
+
+    // ── CHART PAGE 1 ──
+    addChartImage('port-value-bar',   'Asset Value Breakdown (Polar Area)', 80);
+    addChartImage('port-composition', 'Portfolio Health Radar — 5 Dimensions', 75);
+
+    // ── CHART PAGE 2 ──
+    doc.addPage(); y = 15;
+    sectionTitle('PORTFOLIO — ROI & GAINS', 167, 139, 250);
+    addChartImage('port-roi-chart',  'ROI % by Asset Type (Horizontal Bar)', 72);
+    addChartImage('port-gain-chart', 'Invested vs Current Value by Asset',    72);
+
+    // ── CHART PAGE 3 ──
+    doc.addPage(); y = 15;
+    sectionTitle('PORTFOLIO — ADVANCED DIAGNOSTICS', 167, 139, 250);
+    addChartImage('chart-port-roi',      'Sector ROI Velocity (Polar)',          72);
+    addChartImage('chart-port-gains',    'Capital Gains Engine (Stacked Bar)',   72);
+    addChartImage('chart-port-exposure', 'Systemic Exposure — Actual vs Ideal',  68);
+
+    // ── Holdings table — compact, top 15 by value ──
+    const holdRows = pd
+      .map(e => { const c = portCalc(e); return { ...e, ...c }; })
+      .sort((a,b) => b.currentValue - a.currentValue)
+      .slice(0, 15)
+      .map(e => [
+        assetTypeLabel(e.assetType),
+        e.subType||'—',
+        'Rs.' + Math.round(e.totalInvestment).toLocaleString('en-IN'),
+        'Rs.' + Math.round(e.currentValue).toLocaleString('en-IN'),
+        e.roi.toFixed(1)+'%',
+        (e.gainLoss>=0?'+':'') + 'Rs.' + Math.round(e.gainLoss).toLocaleString('en-IN')
+      ]);
+    if (holdRows.length) {
+      checkPage(15);
+      doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(167,139,250);
+      doc.text('Top Holdings by Value (max 15)', margin, y); y += 5;
+      tableSection(['Asset','Sub-Type','Invested','Curr. Value','ROI%','Gain/Loss'], holdRows,
+        { 2:{halign:'right'}, 3:{halign:'right'}, 4:{halign:'right'}, 5:{halign:'right',fontStyle:'bold'} });
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // CREDIT TRACKER SECTION (always included)
+  // ══════════════════════════════════════════
+  if (creditDb.length) {
+    doc.addPage(); y = 15;
+    sectionTitle('CREDIT TRACKER', 249, 115, 22);
+
+    const totalPrincipal   = creditDb.reduce((s,c)=>s+Number(c.principalAmount),0);
+    const totalOutstanding = creditDb.reduce((s,c)=>s+Number(c.outstandingBalance),0);
+    const totalEmi         = creditDb.filter(c=>c.status==='Active').reduce((s,c)=>s+Number(c.monthlyEmi),0);
+    const avgRate          = creditDb.length ? (creditDb.reduce((s,c)=>s+Number(c.interestRate),0)/creditDb.length) : 0;
+
+    kpiRow([
+      { label: 'Total Principal',    value: 'Rs.' + Math.round(totalPrincipal).toLocaleString('en-IN'),   color:[249,115,22] },
+      { label: 'Outstanding Balance',value: 'Rs.' + Math.round(totalOutstanding).toLocaleString('en-IN'), color:[239,68,68] },
+      { label: 'Monthly EMI Total',  value: 'Rs.' + Math.round(totalEmi).toLocaleString('en-IN'),         color:[251,191,36] },
+      { label: 'Avg Interest Rate',  value: avgRate.toFixed(1)+'%',                                         color:[167,139,250] }
+    ]);
+
+    const creditRows = creditDb.map(c => [
+      c.lenderName, c.type,
+      'Rs.' + Math.round(c.principalAmount).toLocaleString('en-IN'),
+      'Rs.' + Math.round(c.outstandingBalance).toLocaleString('en-IN'),
+      c.interestRate+'%',
+      'Rs.' + Math.round(c.monthlyEmi).toLocaleString('en-IN'),
+      c.dueDate||'—', c.status
+    ]);
+    tableSection(['Lender','Type','Principal','Outstanding','Rate','EMI','Due','Status'], creditRows,
+      { 2:{halign:'right'}, 3:{halign:'right'}, 4:{halign:'right'}, 5:{halign:'right'} });
+  }
+
+  // ══════════════════════════════════════════
+  // AI INSIGHTS SECTION
+  // ══════════════════════════════════════════
+  if (wantsAI) {
+    doc.addPage(); y = 15;
+    sectionTitle('AI FINANCIAL INSIGHTS & RECOMMENDATIONS', 16, 185, 129);
+
+    const fData = getFilteredData();
+    const fI = sumType('Income', fData), fE = sumType('Expense', fData);
+    const fL = sumType('Loan', fData),   fV = sumType('Investment', fData);
+    const sRate = fI > 0 ? ((fI-fE)/fI*100).toFixed(1) : '0';
+    const dRate = fI > 0 ? (fL/fI*100).toFixed(1) : '0';
+    const iRate = fI > 0 ? (fV/fI*100).toFixed(1) : '0';
+    const ps2   = portAggStats(getPortFiltered());
+
+    // Health score
+    const score = Math.round(
+      (parseFloat(sRate)>=20?25:parseFloat(sRate)>=10?15:parseFloat(sRate)>=0?5:0) +
+      (parseFloat(dRate)<=30?25:parseFloat(dRate)<=50?15:parseFloat(dRate)<=70?8:0) +
+      (parseFloat(iRate)>=15?25:parseFloat(iRate)>=10?18:parseFloat(iRate)>=5?10:0) +
+      (ps2.avgRoi>0?15:5) + 10
+    );
+    const scoreLabel = score>=75?'Excellent':score>=60?'Good':score>=40?'Fair':'Needs Work';
+
+    // Score bar
+    checkPage(25);
+    doc.setFillColor(240,249,255);
+    doc.setDrawColor(16,185,129);
+    doc.roundedRect(margin, y, pageW-margin*2, 20, 3, 3, 'FD');
+    doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(16,185,129);
+    doc.text('Financial Health Score', margin+4, y+7);
+    doc.setFontSize(16); doc.setTextColor(15,23,42);
+    doc.text(score+'/100 — '+scoreLabel, margin+4, y+16);
+    y += 26;
+
+    // Key metrics table
+    const metricsRows = [
+      ['Savings Rate', sRate+'%', parseFloat(sRate)>=20?'Excellent':parseFloat(sRate)>=10?'Good':parseFloat(sRate)>=0?'Fair':'Critical'],
+      ['Debt-to-Income', dRate+'%', parseFloat(dRate)<=30?'Healthy':parseFloat(dRate)<=50?'Moderate':parseFloat(dRate)<=80?'High':'Critical'],
+      ['Investment Rate', iRate+'%', parseFloat(iRate)>=15?'Excellent':parseFloat(iRate)>=10?'Good':parseFloat(iRate)>=5?'Fair':'Low'],
+      ['Portfolio ROI', ps2.avgRoi.toFixed(1)+'%', ps2.avgRoi>=20?'Excellent':ps2.avgRoi>=10?'Good':ps2.avgRoi>=0?'Fair':'Loss'],
+      ['Total Transactions', db.length+'', db.length>=50?'Active':'Building'],
+      ['Active Loans', creditDb.filter(c=>c.status==='Active').length+'', 'Track EMIs carefully'],
+    ];
+    tableSection(['Metric','Your Value','Status'], metricsRows, {});
+
+    // Insights from DOM
+    checkPage(15);
+    doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(16,185,129);
+    doc.text('AI-Generated Recommendations', margin, y); y += 6;
+
+    // Generate insights directly from data instead of reading DOM
+    const insightData = [];
+    const fData2 = getFilteredData();
+    const fI2 = sumType('Income', fData2), fE2 = sumType('Expense', fData2);
+    const fL2 = sumType('Loan', fData2), fV2 = sumType('Investment', fData2);
+    const sRate2 = fI2 > 0 ? ((fI2-fE2)/fI2*100) : 0;
+    const dRate2 = fI2 > 0 ? (fL2/fI2*100) : 0;
+    const iRate2 = fI2 > 0 ? (fV2/fI2*100) : 0;
+    const totalCreditEmi2 = creditDb.filter(c=>c.status==='Active').reduce((s,c)=>s+Number(c.monthlyEmi),0);
+    const creditToInc2 = fI2 > 0 ? (totalCreditEmi2/fI2*100) : 0;
+    const highInterest2 = creditDb.filter(c=>c.status==='Active'&&Number(c.interestRate)>=24);
+
+    if (sRate2 < 0) insightData.push({ icon:'🚨', title:'Critical Cash Burn', desc:`Spending exceeds income by Rs.${Math.abs(Math.round(fI2-fE2)).toLocaleString('en-IN')}. Cut discretionary expenses immediately.` });
+    else if (sRate2 < 10) insightData.push({ icon:'⚡', title:`Low Savings Rate (${sRate2.toFixed(1)}%)`, desc:'Target at least 20% savings. Automate a small SIP immediately to build the habit.' });
+    else if (sRate2 >= 20) insightData.push({ icon:'💰', title:`Strong ${sRate2.toFixed(1)}% Savings Rate`, desc:`You are saving Rs.${Math.round((fI2-fE2)*12).toLocaleString('en-IN')} annually. Optimise with ELSS and NPS for tax benefits.` });
+
+    if (dRate2 > 50) insightData.push({ icon:'🎯', title:`High EMI Burden (${dRate2.toFixed(1)}% of Income)`, desc:'Keep total EMIs under 40% of income. Pre-close smaller loans to free up cash flow.' });
+    if (creditToInc2 > 40) insightData.push({ icon:'💳', title:`Credit EMIs = ${creditToInc2.toFixed(1)}% of Income`, desc:'Approaching credit limit. Avoid new credit products until one active loan is closed.' });
+    if (highInterest2.length > 0) insightData.push({ icon:'🔥', title:`High-Interest Debt Alert`, desc:`${highInterest2.map(c=>c.lenderName).join(', ')} carry rates ≥24%. Avalanche method: pay highest-rate loan first.` });
+    if (iRate2 < 5 && sRate2 >= 10) insightData.push({ icon:'📈', title:`Under-Investing (${iRate2.toFixed(1)}%)`, desc:`Only ${iRate2.toFixed(1)}% invested. Idle savings lose 6% to inflation annually. Start a Nifty 50 SIP today.` });
+    
+    const portDiv2 = new Set(portDb.map(p=>normalizeAssetType(p.assetType))).size;
+    if (portDiv2 < 3 && portDb.length > 0) insightData.push({ icon:'🎲', title:`Low Diversification (${portDiv2} Asset Classes)`, desc:'Add 4-6 uncorrelated assets to reduce risk by 40% without sacrificing returns.' });
+    if (ps2.avgRoi > 20) insightData.push({ icon:'🏆', title:`Excellent Portfolio ROI: ${ps2.avgRoi.toFixed(1)}%`, desc:'Rebalance annually. Winners >40% of portfolio create concentration risk — book partial profits.' });
+
+    const expByCat2 = groupData('Expense', fData2);
+    const topCat2 = Object.entries(expByCat2).sort((a,b)=>b[1]-a[1])[0];
+    if (topCat2 && fE2 > 0 && (topCat2[1]/fE2*100) > 40) insightData.push({ icon:'🔍', title:`"${topCat2[0]}" = ${(topCat2[1]/fE2*100).toFixed(0)}% of Spend`, desc:'High concentration in one category. Set a hard monthly cap to redistribute spending.' });
+
+    if (insightData.length) {
+      insightData.slice(0,6).forEach(ins => {
+        checkPage(22);
+        doc.setFillColor(248,250,252);
+        doc.setDrawColor(16,185,129);
+        doc.roundedRect(margin, y, pageW-margin*2, 18, 2, 2, 'FD');
+        doc.setFontSize(8.5); doc.setFont('helvetica','bold'); doc.setTextColor(15,23,42);
+        doc.text(cleanText(ins.icon + ' ' + ins.title), margin+3, y+6);
+        doc.setFontSize(7.5); doc.setFont('helvetica','normal'); doc.setTextColor(71,85,105);
+        const wrapped = doc.splitTextToSize(cleanText(ins.desc), pageW-margin*2-6);
+        doc.text(wrapped.slice(0,2), margin+3, y+12);
+        y += 22;
+      });
+    } else {
+      doc.setFontSize(8); doc.setTextColor(100,116,139);
+      doc.text('Add transactions and portfolio data to generate AI insights.', margin, y); y += 10;
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // FOOTER ON ALL PAGES
+  // ══════════════════════════════════════════
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFillColor(248, 250, 252);
+    doc.rect(0, pageH - 10, pageW, 10, 'F');
+    doc.setFontSize(7); doc.setTextColor(148, 163, 184);
+    doc.setFont('helvetica','normal');
+    doc.text('FinanceOS — Private & Confidential', margin, pageH - 3);
+    doc.text('Page ' + i + ' of ' + totalPages, pageW - margin, pageH - 3, { align:'right' });
+  }
+
+  // Save
+  const dateStr = new Date().toISOString().split('T')[0];
+  doc.save('FinanceOS_Advanced_Report_' + dateStr + '.pdf');
+
+  btnElement.innerHTML = originalHtml;
+  btnElement.disabled = false;
+  document.getElementById('advanced-export-modal').style.display = 'none';
+}
+
+function playNotificationSound() {
+    // Check if the user has enabled sounds in settings
+    const soundEnabled = localStorage.getItem('fos_set_notification-sound') !== 'false';
+    if (!soundEnabled) return;
+
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(600, audioCtx.currentTime); // 600Hz frequency
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.1); // Short 100ms beep
+    } catch (e) {
+        console.log("Audio API not supported or blocked by browser.");
+    }
+}
+
+function saveLargeTxnLimit(val) {
+    localStorage.setItem('fos_set_large-txn-limit', val);
+    if (typeof showSettingsToast === 'function') {
+        showSettingsToast('Updated: Large Transaction Limit to ₹' + val);
+    }
+}
+
+function saveDailySummaryTime(val) {
+    localStorage.setItem('fos_set_daily-summary-time', val);
+    if (typeof showSettingsToast === 'function') {
+        showSettingsToast('Updated: Daily Summary Time to ' + val);
+    }
+}
+
+// Load the saved limit on startup
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLimit = localStorage.getItem('fos_set_large-txn-limit');
+    if (savedLimit) {
+        document.getElementById('set-large-txn-val').value = savedLimit;
+    }
+    const savedTime = localStorage.getItem('fos_set_daily-summary-time');
+    const timeInput = document.getElementById('daily-summary-time');
+    if (savedTime && timeInput) {
+        timeInput.value = savedTime;
+    }
+});
+
 </script>
 
 <!-- MODAL: Edit CC Card -->
@@ -15015,20 +16511,71 @@ document.addEventListener('keydown', (e) => {
   </div>
 </div>
 
-<div id="undo-toast">
-<div id="settings-toast">
-  <i id="settings-toast-icon" class="fas fa-check-circle" style="color:#a78bfa; font-size:1.2rem; flex-shrink:0;"></i>
-  <div style="flex:1; min-width:0;">
-    <div id="settings-toast-title" style="font-size:0.85rem; font-weight:700; margin-bottom:2px;">Setting Applied</div>
-    <div id="settings-toast-desc" style="font-size:0.72rem; color:var(--text-muted);">Change saved to your preferences</div>
+<div id="undo-toast"></div>
+
+<div id="settings-right-toast" class="set-card" style="position:fixed; bottom:20px; right:20px; margin:0; border-left:4px solid #a78bfa; padding:12px 16px; display:flex; align-items:center; gap:12px; transform:translateX(150%); transition:transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index:9999; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
+  <div style="width:28px; height:28px; border-radius:50%; background:rgba(167,139,250,0.15); color:#a78bfa; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+    <i class="fas fa-check"></i>
   </div>
-  <button class="settings-undo-btn" onclick="executeSettingsUndo()">Undo</button>
-  <div id="settings-toast-progress"></div>
+  <div class="readable-white" style="font-size:0.85rem; font-weight:600;" id="settings-right-msg">Setting Updated</div>
 </div>
-  <i class="fas fa-trash-restore" style="color:var(--text-muted); font-size: 1.2rem;"></i>
-  <span id="undo-text" style="font-size:0.9rem; font-weight: 500;">Item deleted</span>
-  <button class="undo-btn" onclick="executeUndo()">Undo</button>
-  <div id="undo-progress"></div>
+
+<!-- ADVANCED EXPORT MODAL -->
+<div id="advanced-export-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(5px); z-index:9999; justify-content:center; align-items:center;">
+  <!-- Swapped to modal-box and added height: auto to snap-fit the content perfectly -->
+  <div class="modal-box adv-report-box" style="width:460px; height:auto !important; max-height:90vh; border-radius:16px; border:1px solid rgba(167, 139, 250, 0.3); padding:24px; display:flex; flex-direction:column; gap:18px; box-shadow: 0 20px 50px rgba(0,0,0,0.6);">
+    
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2 class="readable-white" style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:10px;">
+        <i class="fas fa-file-pdf" style="color:#a78bfa;"></i> Advanced Report
+      </h2>
+      <button onclick="document.getElementById('advanced-export-modal').style.display='none'" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1.2rem;"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <div style="color:var(--text-muted); font-size:0.85rem; line-height:1.4;">
+      Select the modules to include in your comprehensive PDF. Charts and AI insights will be automatically integrated.
+    </div>
+    
+    <div class="adv-report-list" style="display:flex; flex-direction:column; gap:4px; padding:6px; border-radius:12px; border:1px solid rgba(255,255,255,0.05);">
+      
+      <label class="readable-white adv-report-row" style="display:flex; align-items:center; gap:12px; font-size:0.9rem; cursor:pointer; padding:10px 12px; border-radius:8px; transition:background 0.15s;">
+        <input type="checkbox" id="rep-analytics" checked style="width:16px; height:16px; cursor:pointer;"> 
+        <div>
+          <div style="font-weight:600;">Analytics & Spending Mix</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">Income vs Expenses, category breakdowns</div>
+        </div>
+      </label>
+
+      <label class="readable-white adv-report-row" style="display:flex; align-items:center; gap:12px; font-size:0.9rem; cursor:pointer; padding:10px 12px; border-radius:8px; transition:background 0.15s;">
+        <input type="checkbox" id="rep-networth" checked style="width:16px; height:16px; cursor:pointer;"> 
+        <div>
+          <div style="font-weight:600;">Net Worth Journey</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">Historical tracking and milestone progress</div>
+        </div>
+      </label>
+
+      <label class="readable-white adv-report-row" style="display:flex; align-items:center; gap:12px; font-size:0.9rem; cursor:pointer; padding:10px 12px; border-radius:8px; transition:background 0.15s;">
+        <input type="checkbox" id="rep-portfolio" checked style="width:16px; height:16px; cursor:pointer;"> 
+        <div>
+          <div style="font-weight:600;">Portfolio Analysis</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">Asset allocation, ROI, and holdings table</div>
+        </div>
+      </label>
+
+      <label class="readable-white adv-report-row" style="display:flex; align-items:center; gap:12px; font-size:0.9rem; cursor:pointer; padding:10px 12px; border-radius:8px; transition:background 0.15s;">
+        <input type="checkbox" id="rep-ai" checked style="width:16px; height:16px; cursor:pointer;"> 
+        <div>
+          <div style="font-weight:600;">AI Insights & Forecasts</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">Automated financial summary and risk warnings</div>
+        </div>
+      </label>
+
+    </div>
+    
+    <button onclick="generateAdvancedPDF(this)" style="background:var(--accent); color:#ffffff; border:none; padding:13px; border-radius:10px; font-weight:600; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:8px; transition:0.2s; box-shadow:0 4px 14px rgba(0,117,255,0.35);">
+      <i class="fas fa-magic"></i> Generate & Download
+    </button>
+  </div>
 </div>
 
 </body>
