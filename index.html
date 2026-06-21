@@ -21,8 +21,8 @@
   --accent: #0075ff; /* Vision UI vibrant blue */
   --accent-soft: rgba(0, 117, 255, 0.15);
   --text-main: #ffffff;
-  --text-muted: #64748b;
-  --text-mid: #94a3b8;
+--text-muted: #8493ab;
+--text-mid: #94a3b8;
   --c-loan: #60a5fa;
   --c-inv: #fbbf24;
   --c-exp: #f472b6;
@@ -232,6 +232,81 @@ body { background: radial-gradient(circle at 15% 0%, rgba(0,117,255,0.08), trans
 #backup-banner .backup-dismiss:hover { color: #fbbf24; }
 .autosave-dot.saving { background:var(--warning); animation:none; }
 /* ── CC UTILIZATION VIEW ── */
+.ins-toolbar { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1.1rem; flex-wrap:wrap; }
+.ins-filter-tabs { display:flex; gap:8px; background:rgba(255,255,255,0.04); padding:5px; border-radius:12px; }
+.ins-tab { background:transparent; border:none; color:var(--text-muted); padding:7px 16px; border-radius:8px; font-size:0.82rem; font-weight:600; cursor:pointer; transition:0.15s; }
+.ins-tab:hover { color:var(--text-main); }
+.ins-tab.active { background:rgba(52,211,153,0.18); color:#34d399; }
+body.light-mode .ins-tab.active { background:#d1fae5; color:#047857; }
+.ins-summary-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:.8rem; margin-bottom:1.2rem; }
+.ins-summary-card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:14px 16px; }
+body.light-mode .ins-summary-card { background:#fff; border-color:#e2e8f0; }
+.ins-summary-label { font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px; }
+.ins-summary-val { font-size:1.25rem; font-weight:800; }
+.ins-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1rem; }
+.ins-card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:1.1rem 1.2rem; cursor:pointer; transition:0.18s; position:relative; }
+.ins-card:hover { border-color:rgba(52,211,153,0.4); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.25); }
+body.light-mode .ins-card { background:#fff; border-color:#e2e8f0; }
+.ins-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+.ins-card-provider { font-weight:700; font-size:0.98rem; line-height:1.25; }
+.ins-card-type { font-size:0.76rem; color:var(--text-muted); margin-top:2px; }
+.ins-badge { font-size:0.68rem; font-weight:700; padding:3px 9px; border-radius:20px; text-transform:uppercase; letter-spacing:0.03em; white-space:nowrap; }
+.ins-badge.Personal { background:rgba(96,165,250,0.18); color:#60a5fa; }
+.ins-badge.Corporate { background:rgba(167,139,250,0.18); color:#a78bfa; }
+.ins-badge.status-Active { background:rgba(52,211,153,0.18); color:#34d399; }
+.ins-badge.status-Expired { background:rgba(239,68,68,0.18); color:#f87171; }
+.ins-badge.status-Lapsed { background:rgba(245,158,11,0.18); color:#f59e0b; }
+.ins-card-row { display:flex; justify-content:space-between; font-size:0.8rem; padding:5px 0; border-top:1px dashed rgba(255,255,255,0.07); }
+body.light-mode .ins-card-row { border-color:#e2e8f0; }
+.ins-card-row span:first-child { color:var(--text-muted); }
+.ins-card-row span:last-child { font-weight:600; }
+.ins-card-footer { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.ins-empty { text-align:center; padding:3rem 1rem; color:var(--text-muted); font-size:0.88rem; }
+
+.notes-wrap { display:flex; gap:1.2rem; height:100%; min-height:560px; }
+.notes-list-pane { width:300px; flex-shrink:0; display:flex; flex-direction:column; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:14px; }
+body.light-mode .notes-list-pane { background:#fff; border-color:#e2e8f0; }
+.notes-list-header { display:flex; flex-direction:column; gap:10px; margin-bottom:12px; }
+.notes-search-box { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:8px 12px; font-size:0.82rem; color:var(--text-muted); }
+body.light-mode .notes-search-box { background:#f8fafc; border-color:#e2e8f0; }
+.notes-search-box input { flex:1; background:transparent; border:none; outline:none; color:var(--text-main); font-size:0.82rem; }
+.notes-list { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px; }
+.note-card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:11px 13px; cursor:pointer; transition:0.15s; position:relative; overflow:hidden; }
+.note-card:hover { border-color:rgba(251,191,36,0.4); }
+.note-card.active { border-color:#fbbf24; background:rgba(251,191,36,0.08); }
+body.light-mode .note-card { background:#f8fafc; border-color:#e2e8f0; }
+.note-card-title { font-weight:700; font-size:0.88rem; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.note-card-snippet { font-size:0.76rem; color:var(--text-muted); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; line-height:1.35; }
+.note-card-date { font-size:0.68rem; color:var(--text-muted); margin-top:6px; opacity:0.7; }
+.note-card-locked { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:18px 10px; min-height:74px; background:repeating-linear-gradient(45deg, rgba(148,163,184,0.18), rgba(148,163,184,0.18) 6px, rgba(148,163,184,0.06) 6px, rgba(148,163,184,0.06) 12px); filter:grayscale(1); }
+.note-card-locked:hover { filter:grayscale(0.4); }
+.note-card-locked .eye-circle { width:34px; height:34px; border-radius:50%; background:rgba(15,23,42,0.55); display:flex; align-items:center; justify-content:center; color:#e2e8f0; font-size:0.95rem; margin-bottom:6px; }
+body.light-mode .note-card-locked .eye-circle { background:rgba(255,255,255,0.85); color:#475569; }
+.note-card-locked-label { font-size:0.74rem; font-weight:700; color:#94a3b8; }
+.notes-editor-pane { flex:1; display:flex; flex-direction:column; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:1.2rem 1.4rem; min-width:0; }
+body.light-mode .notes-editor-pane { background:#fff; border-color:#e2e8f0; }
+.notes-empty-state { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:var(--text-muted); font-size:0.88rem; }
+.notes-editor-body { display:flex; flex-direction:column; height:100%; min-height:0; }
+.notes-title-input { background:transparent; border:none; outline:none; font-size:1.3rem; font-weight:800; color:var(--text-main); margin-bottom:6px; }
+.notes-meta-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.notes-meta-row #note-meta-updated { font-size:0.74rem; color:var(--text-muted); }
+.notes-meta-actions { display:flex; gap:6px; }
+.notes-icon-btn { width:30px; height:30px; border-radius:8px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.04); color:var(--text-muted); cursor:pointer; transition:0.15s; display:flex; align-items:center; justify-content:center; font-size:0.78rem; }
+.notes-icon-btn:hover { color:var(--text-main); border-color:rgba(251,191,36,0.4); }
+body.light-mode .notes-icon-btn { background:#f8fafc; border-color:#e2e8f0; }
+.notes-format-toolbar { display:flex; align-items:center; gap:4px; padding:6px 8px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:10px; margin-bottom:10px; flex-wrap:wrap; }
+body.light-mode .notes-format-toolbar { background:#f8fafc; border-color:#e2e8f0; }
+.notes-format-toolbar button { width:28px; height:28px; border:none; background:transparent; color:var(--text-muted); border-radius:6px; cursor:pointer; font-size:0.78rem; }
+.notes-format-toolbar button:hover { background:rgba(251,191,36,0.15); color:#fbbf24; }
+.notes-format-sep { width:1px; height:18px; background:rgba(255,255,255,0.1); margin:0 4px; }
+.notes-editor { flex:1; min-height:280px; outline:none; font-size:0.92rem; line-height:1.6; overflow-y:auto; color:var(--text-main); }
+.notes-editor:empty:before { content:attr(placeholder); color:var(--text-muted); opacity:0.6; }
+.notes-editor h2 { font-size:1.15rem; margin:0.6em 0 0.3em; }
+.notes-editor ul, .notes-editor ol { padding-left:1.4em; }
+.notes-save-row { display:flex; align-items:center; justify-content:space-between; margin-top:12px; padding-top:10px; border-top:1px dashed rgba(255,255,255,0.08); }
+body.light-mode .notes-save-row { border-color:#e2e8f0; }
+.notes-save-status { font-size:0.74rem; color:var(--text-muted); }
+
 .cc-view-wrap { display:flex; gap:1.4rem; height:100%; }
 .cc-setup-panel {
   width:300px; flex-shrink:0; display:flex; flex-direction:column; gap:1rem;
@@ -509,20 +584,25 @@ body { background: radial-gradient(circle at 15% 0%, rgba(0,117,255,0.08), trans
 
 .glass-panel { background: linear-gradient(127.09deg, rgba(6, 11, 38, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; box-shadow: 0 4px 18px rgba(0, 117, 255, 0.05), inset 0 1px 0 rgba(255,255,255,0.04); padding: 1.2rem 1.4rem; margin-bottom: 1.4rem; transition: border-color .25s, transform .25s; }
 .panel-title { font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:2px; margin-bottom:1rem; display:flex; align-items:center; gap:7px; }
+body.light-mode .panel-title { color:#334155; font-weight: 800; }
 
 .kpi-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:.9rem; margin-bottom:1.4rem; }
 .kpi-card { background: linear-gradient(127.09deg, rgba(6, 11, 38, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%); border: 1px solid rgba(0, 117, 255, 0.1); border-radius: 20px; padding: 1rem 1.1rem; transition: all 0.25s; box-shadow: 0px 4px 18px rgba(0, 117, 255, 0.03); position: relative; overflow: hidden; }
 .kpi-card::before { content:''; position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.05), transparent 50%); pointer-events:none; }
 .kpi-card:hover { border-color:rgba(0,117,255,0.25); transform:translateY(-2px); box-shadow:0 10px 30px rgba(0,117,255,0.12); }
 .kpi-label { font-size:0.7rem; color:#94a3b8; text-transform:uppercase; letter-spacing:1.2px; font-weight:700; margin-bottom:6px; }
+body.light-mode .kpi-label { color: #1e293b; font-weight: 800; }
 .kpi-value { font-size:1.5rem; font-weight:700; font-family:'DM Mono',monospace; letter-spacing:-1.5px; line-height:1; background: linear-gradient(135deg, #ffffff 0%, #b8c4d9 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 body.light-mode .kpi-value {
-  background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: #0f172a;
 }
+
 .kpi-sub { font-size:0.7rem; color:#94a3b8; margin-top:3px; font-weight:500; }
+body.light-mode .kpi-sub { color: #1e293b; font-weight: 600; }
 
 .budget-status-grid { display:flex; flex-wrap:wrap; gap:7px; }
 .budget-alert-item { 
@@ -644,7 +724,8 @@ body.light-mode .inventory-pill span:last-child { color: #475569 !important; }
 .modal-title { font-size:1.05rem; font-weight:700; margin-bottom:1.3rem; }
 .budget-modal .modal-title { font-size:1.15rem; margin-bottom:0.35rem; }
 .budget-modal .modal-subtitle { font-size:0.78rem; color:var(--text-muted); margin-bottom:1rem; }
-.budget-modal-list { display:flex; flex-direction:column; gap:10px; margin: 0.9rem 0 1.15rem; max-height: 52vh; overflow:auto; padding-right: 2px; }
+.budget-modal-list { display:flex; flex-direction:column; gap:10px; margin: 0.9rem 0 1.15rem; max-height: 52vh; overflow:auto; padding-right: 2px; scrollbar-width: none; -ms-overflow-style: none; }
+.budget-modal-list::-webkit-scrollbar { display: none; }
 .budget-row { display:grid; grid-template-columns: 120px minmax(0, 1fr); align-items:center; gap:10px; }
 .budget-row label { font-size:0.78rem; color:var(--text-mid); min-width:0; }
 .budget-row .budget-input { margin-top:0; padding:9px 12px; font-size:0.84rem; border-radius:10px; }
@@ -672,7 +753,7 @@ body.light-mode input[type="date"]::-webkit-calendar-picker-indicator {
 body.light-mode input[type="date"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
-body.light-mode #daily-summary-time { color-scheme: light; }
+body.light-mode #daily-summary-time { color-scheme: light !important; }
 
 .input-field.port-focus:focus { border-color:#a78bfa; }
 .input-field option { background:#1e293b; }
@@ -788,6 +869,7 @@ body.light-mode .toggle-switch input:checked + .toggle-slider { background:var(-
   margin-top: 0.5rem;
 }
 .market-card {
+  #dash-port-donut-wrap canvas { width: 130px !important; height: 130px !important; }
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.2) 100%);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
@@ -1080,8 +1162,8 @@ body.light-mode {
   --glass-border: #e2e8f0; 
   --glass-bg: #ffffff !important; 
   --text-main: #0f172a; 
-  --text-muted: #64748b; 
-  --text-mid: #475569;
+  --text-muted: #334155; 
+  --text-mid: #1e293b;
   background: #f4f7f9; 
   color: var(--text-main);
   
@@ -1140,16 +1222,17 @@ body.light-mode .export-modal-box {
 /* Safety Net: Aggressively target ALL forms of hardcoded white text */
 body.light-mode .text-white,
 body.light-mode [class*="text-white"],
-body.light-mode div[style*="color:white"], 
-body.light-mode div[style*="color: white"],
-body.light-mode div[style*="color:#fff"],
-body.light-mode div[style*="color: #fff"],
-body.light-mode div[style*="color:#ffffff"],
-body.light-mode div[style*="color: #ffffff"],
-body.light-mode span[style*="color:white"],
-body.light-mode span[style*="color:#fff"] {
+body.light-mode [style*="color:white"], 
+body.light-mode [style*="color: white"],
+body.light-mode [style*="color:#fff"],
+body.light-mode [style*="color: #fff"],
+body.light-mode [style*="color:#ffffff"],
+body.light-mode [style*="color: #ffffff"],
+body.light-mode [style*="color: rgb(255, 255, 255)"],
+body.light-mode [style*="color:rgb(255, 255, 255)"] {
   color: var(--text-main) !important;
   text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
 }
 
 /* Clean SaaS Elements */
@@ -1164,14 +1247,33 @@ body.light-mode .filter-select, body.light-mode .port-filter-select {
 }
 body.light-mode .filter-select option, body.light-mode .port-filter-select option { background-color: #ffffff; color: #0f172a; }
 
-body.light-mode td { color: #1e293b; border-bottom-color: #f1f5f9; }
-body.light-mode th { color: #64748b; border-bottom-color: #e2e8f0; background: #f8fafc; }
+body.light-mode td { color: #0f172a; border-bottom-color: #f1f5f9; }
+body.light-mode th { color: #1e293b; font-weight: 800; border-bottom-color: #e2e8f0; background: #f8fafc; }
 body.light-mode tr:hover td { background: #f8fafc; }
 
 body.light-mode .port-filter-box { background: #f8fafc; border-color: var(--glass-border); }
 
-body.light-mode .kpi-label, body.light-mode .spark-card-label { color: #64748b; font-weight: 700; }
-body.light-mode .panel-title { color: #334155; font-weight: 700; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 12px; }
+body.light-mode .kpi-label, body.light-mode .spark-card-label { color: #1e293b; font-weight: 700; }
+body.light-mode .panel-title { color: #1e293b; font-weight: 800; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 12px; }
+
+/* GLOBAL TEXT DARKENER — catches every var(--text-muted)/var(--text-mid) consumer */
+body.light-mode {
+  --text-muted: #1e293b !important;
+  --text-mid: #0f172a !important;
+}
+body.light-mode .kpi-sub,
+body.light-mode .spark-card-trend.flat,
+body.light-mode .nav-section-label,
+body.light-mode .welcome-msg,
+body.light-mode .port-brand-sub,
+body.light-mode .calc-item-label,
+body.light-mode .budget-amounts,
+body.light-mode .insight-rec-desc,
+body.light-mode .empty-state,
+body.light-mode .set-desc,
+body.light-mode th {
+  color: #334155 !important;
+}
 
 body.light-mode .input-field { background-color: #ffffff; border-color: #cbd5e1; color: #0f172a; box-shadow: none; }
 body.light-mode .input-field:focus { border-color: var(--accent); box-shadow: none; }
@@ -1800,6 +1902,13 @@ body.light-mode .settings-undo-btn:hover { color: white; }
   width: 100%;
   transform-origin: left;
 }
+
+#dash-port-donut-wrap canvas { width: 130px !important; height: 130px !important; }
+#dash-credit-summary canvas { width: 104px !important; height: 104px !important; }
+#credit-type-donut-wrap canvas { width: 130px !important; height: 130px !important; }
+#port-profit-donut-wrap canvas { width: 130px !important; height: 130px !important; }
+
+#chart-invest-wrap canvas { width: 130px !important; height: 130px !important; }
 
 </style>
 
@@ -2711,6 +2820,16 @@ function toggleLoginPass(inputId, btn) {
     <span id="notif-count-badge" style="display:none" class="budget-badge over"></span>
   </div>
 
+  <div class="nav-section-label">My Zone</div>
+  <div class="nav-item" id="fin-nav-insurance" onclick="switchView('insurance',this,'finance')">
+    <div class="nav-icon"><i class="fas fa-shield-alt" style="color:#34d399"></i></div>
+    <span class="nav-label">Insurance</span>
+  </div>
+  <div class="nav-item" id="fin-nav-notes" onclick="switchView('notes',this,'finance')">
+    <div class="nav-icon"><i class="fas fa-sticky-note" style="color:#fbbf24"></i></div>
+    <span class="nav-label">Notes</span>
+  </div>
+
   <div class="sidebar-footer" style="margin-top:auto">
     <!-- Expanded footer -->
     <div class="sidebar-footer-expanded">
@@ -3354,7 +3473,7 @@ function toggleLoginPass(inputId, btn) {
       </div>
 
       <!-- Growth Chart -->
-      <div class="charts-row" style="margin-top:1.3rem">
+      <div class="charts-row" style="margin-top:1.3rem;grid-template-columns:minmax(0,7fr) minmax(0,3fr)">
         <div class="glass-panel" style="margin-bottom:0">
           <div class="panel-title">Wealth Growth Over Time</div>
           <div style="height:300px"><canvas id="sc-growth-chart"></canvas></div>
@@ -3730,11 +3849,12 @@ function toggleLoginPass(inputId, btn) {
 
     <!-- PORTFOLIO: ANALYTICS -->
     <div id="view-port-analytics" class="view-section">
-      <div class="analytics-grid">
-        <div class="glass-panel span-full" style="margin-bottom:1.3rem">
-          <div class="panel-title">Appreciation Timeline (by Purchase Date)</div>
-          <div style="height:250px"><canvas id="port-timeline"></canvas></div>
-        </div>
+     <div class="glass-panel span-full" style="margin-bottom:1.3rem">
+        <div class="panel-title">Appreciation Timeline (by Purchase Date)</div>
+        <div style="height:250px"><canvas id="port-timeline"></canvas></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:minmax(0,7fr) minmax(0,3fr);gap:1.3rem;margin-bottom:1.3rem">
         <div class="glass-panel" style="margin-bottom:0">
           <div class="panel-title">ROI% Distribution (Scatter)</div>
           <div style="height:220px"><canvas id="port-roi-scatter"></canvas></div>
@@ -3743,6 +3863,9 @@ function toggleLoginPass(inputId, btn) {
           <div class="panel-title">Gain/Loss Waterfall</div>
           <div style="height:220px"><canvas id="port-waterfall"></canvas></div>
         </div>
+      </div>
+
+      <div class="analytics-grid">
         <div class="glass-panel" style="margin-bottom:0">
           <div class="panel-title">Investment vs Current Value</div>
           <div style="height:220px"><canvas id="port-compare-bar"></canvas></div>
@@ -3758,7 +3881,7 @@ function toggleLoginPass(inputId, btn) {
         <div id="port-insights-container" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:1rem"></div>
       </div>
 
-      <div class="analytics-grid" style="margin-bottom:1.3rem">
+      <div class="analytics-grid" style="margin-bottom:1.3rem;grid-template-columns:minmax(0,4fr) minmax(0,6fr)">
         <div class="glass-panel" style="margin-bottom:0">
           <div class="panel-title">SECTOR ROI VELOCITY <i class="fas fa-tachometer-alt" style="margin-left:6px; color:#f43f5e; font-size: 0.85rem;"></i></div>
           <div style="height:260px"><canvas id="chart-port-roi"></canvas></div>
@@ -3768,12 +3891,12 @@ function toggleLoginPass(inputId, btn) {
           <div style="height:260px"><canvas id="chart-port-gains"></canvas></div>
         </div>
       </div>
-      <div class="analytics-grid" style="margin-bottom:1.3rem">
+     <div class="analytics-grid" style="margin-bottom:1.3rem;grid-template-columns:minmax(0,4fr) minmax(0,6fr)">
         <div class="glass-panel" style="margin-bottom:0">
   <div class="panel-title">CAPITAL LIQUIDITY MATRIX <i class="fas fa-water" style="margin-left:6px; color:#3b82f6; font-size: 0.85rem;"></i></div>
   <div style="height:320px"><canvas id="chart-port-liquidity"></canvas></div>
 </div>
-        <div class="glass-panel" style="margin-bottom:0">
+       <div class="glass-panel" style="margin-bottom:0">
   <div class="panel-title">SYSTEMIC EXPOSURE (ACTUAL VS IDEAL) <i class="fas fa-crosshairs" style="margin-left:6px; color:#38bdf8; font-size: 0.85rem;"></i></div>
   <div style="height:280px"><canvas id="chart-port-exposure"></canvas></div>
 </div>
@@ -3964,6 +4087,92 @@ function toggleLoginPass(inputId, btn) {
           <div class="panel-title" style="color:#f97316">Loan Type Mix</div>
           <div style="height:230px"><canvas id="credit-type-donut"></canvas></div>
         </div>
+      </div>
+    </div>
+
+    <div id="view-insurance" class="view-section">
+      <div class="ins-toolbar">
+        <div class="ins-filter-tabs">
+          <button class="ins-tab active" id="ins-tab-all" onclick="filterInsurance('all',this)">All Policies</button>
+          <button class="ins-tab" id="ins-tab-personal" onclick="filterInsurance('Personal',this)">Personal</button>
+          <button class="ins-tab" id="ins-tab-corporate" onclick="filterInsurance('Corporate',this)">Corporate</button>
+        </div>
+        <button class="btn-add" style="background:rgba(52,211,153,0.8)" onclick="openInsuranceModal()">
+          <i class="fas fa-plus"></i> Add Insurance
+        </button>
+      </div>
+
+      <div class="ins-summary-strip" id="ins-summary-strip"></div>
+
+      <div class="ins-grid" id="ins-grid"></div>
+
+      <div class="ins-empty" id="ins-empty" style="display:none">
+        <i class="fas fa-shield-alt" style="font-size:2.2rem;opacity:0.2;display:block;margin-bottom:10px"></i>
+        No insurance policies added yet. Click <b>Add Insurance</b> to get started.
+      </div>
+    </div>
+
+    <div id="view-notes" class="view-section">
+      <div class="notes-wrap">
+
+        <div class="notes-list-pane">
+          <div class="notes-list-header">
+            <button class="btn-add" style="width:100%;justify-content:center;background:rgba(251,191,36,0.85)" onclick="newNote()">
+              <i class="fas fa-plus"></i> New Note
+            </button>
+            <div class="notes-search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="notes-search-input" placeholder="Search notes…" oninput="renderNotesList(this.value)">
+            </div>
+          </div>
+          <div class="notes-list" id="notes-list"></div>
+        </div>
+
+        <div class="notes-editor-pane">
+          <div class="notes-empty-state" id="notes-empty-state">
+            <i class="fas fa-sticky-note" style="font-size:2.2rem;opacity:0.2;display:block;margin-bottom:10px"></i>
+            Select a note or click <b>New Note</b> to get started.
+          </div>
+
+          <div class="notes-editor-body" id="notes-editor-body" style="display:none">
+            <input type="text" id="note-title-input" class="notes-title-input" placeholder="Note title…" oninput="markNoteDirty()">
+
+            <div class="notes-meta-row">
+              <span id="note-meta-updated"></span>
+              <div class="notes-meta-actions">
+                <button class="notes-icon-btn" id="note-changepass-btn" style="display:none" onclick="openNotePasswordModal(activeNoteId,'change')" title="Change password"><i class="fas fa-key"></i></button>
+                <button class="notes-icon-btn" id="note-removepass-btn" style="display:none" onclick="removeNoteProtection()" title="Remove protection"><i class="fas fa-unlock"></i></button>
+                <button class="notes-icon-btn" id="note-lock-btn" onclick="handleLockButtonClick()" title="Protect this note"><i class="fas fa-lock-open"></i></button>
+                <button class="notes-icon-btn" onclick="deleteActiveNote()" title="Delete note"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+
+            <div class="notes-format-toolbar">
+              <button onclick="formatNote('bold')" title="Bold"><i class="fas fa-bold"></i></button>
+              <button onclick="formatNote('italic')" title="Italic"><i class="fas fa-italic"></i></button>
+              <button onclick="formatNote('underline')" title="Underline"><i class="fas fa-underline"></i></button>
+              <button onclick="formatNote('strikeThrough')" title="Strikethrough"><i class="fas fa-strikethrough"></i></button>
+              <span class="notes-format-sep"></span>
+              <button onclick="formatNoteBlock('h2')" title="Heading"><i class="fas fa-heading"></i></button>
+              <button onclick="formatNoteBlock('p')" title="Paragraph"><i class="fas fa-paragraph"></i></button>
+              <button onclick="formatNote('insertUnorderedList')" title="Bullet list"><i class="fas fa-list-ul"></i></button>
+              <button onclick="formatNote('insertOrderedList')" title="Numbered list"><i class="fas fa-list-ol"></i></button>
+              <span class="notes-format-sep"></span>
+              <button onclick="formatNote('justifyLeft')" title="Align left"><i class="fas fa-align-left"></i></button>
+              <button onclick="formatNote('justifyCenter')" title="Align center"><i class="fas fa-align-center"></i></button>
+              <span class="notes-format-sep"></span>
+              <button onclick="formatNote('removeFormat')" title="Clear formatting"><i class="fas fa-eraser"></i></button>
+            </div>
+
+            <div class="notes-editor" id="notes-editor" contenteditable="true" placeholder="Start typing…" oninput="markNoteDirty()"></div>
+
+            <div class="notes-save-row">
+              <span class="notes-save-status" id="notes-save-status">All changes saved</span>
+              <button class="btn-add" style="background:rgba(251,191,36,0.85)" onclick="saveActiveNote(true)">Save Note</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -4219,6 +4428,207 @@ function toggleLoginPass(inputId, btn) {
       <button onclick="saveCreditEntry()" class="btn-add" style="flex:1;justify-content:center;background:rgba(249,115,22,0.8)" id="credit-save-btn">Save Entry</button>
       <button onclick="closeCreditModal()" class="btn-secondary">Cancel</button>
       <button onclick="deleteCurrentCreditEntry()" class="btn-delete" style="display:none" id="credit-delete-btn"><i class="fas fa-trash"></i> Delete</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL: Add / Edit Insurance -->
+<div class="modal-overlay" id="insurance-modal">
+  <div class="modal-box" style="width:600px;border-color:rgba(52,211,153,0.28);box-shadow:0 0 60px rgba(52,211,153,0.12)">
+    <div class="modal-title" style="color:#34d399" id="insurance-modal-title">Add Insurance Policy</div>
+
+    <div class="modal-row">
+      <div class="input-group">
+        <label>Category</label>
+        <select id="ins-category" class="input-field" onchange="toggleInsuranceCategory()">
+          <option value="Personal">Personal</option>
+          <option value="Corporate">Corporate</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Insurance Type</label>
+        <select id="ins-type" class="input-field">
+          <option>Health Insurance</option>
+          <option>Life Insurance</option>
+          <option>Term Life Insurance</option>
+          <option>Motor Insurance - Car</option>
+          <option>Motor Insurance - Two Wheeler</option>
+          <option>Home / Property Insurance</option>
+          <option>Travel Insurance</option>
+          <option>Personal Accident Insurance</option>
+          <option>Critical Illness Insurance</option>
+          <option>ULIP</option>
+          <option>Group Health Insurance (Corporate)</option>
+          <option>Group Life Insurance (Corporate)</option>
+          <option>Group Personal Accident (Corporate)</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-row">
+      <div class="input-group" style="grid-column:1/-1">
+        <label>Insurance Provider</label>
+        <select id="ins-provider" class="input-field" onchange="toggleInsuranceOtherProvider()">
+          <optgroup label="Life Insurers">
+            <option>LIC of India</option>
+            <option>HDFC Life</option>
+            <option>ICICI Prudential Life</option>
+            <option>SBI Life</option>
+            <option>Max Life Insurance</option>
+            <option>Bajaj Allianz Life</option>
+            <option>Tata AIA Life</option>
+            <option>Kotak Mahindra Life</option>
+            <option>Aditya Birla Sun Life</option>
+            <option>PNB MetLife</option>
+            <option>Canara HSBC Life</option>
+            <option>Pramerica Life (Future Generali India Life)</option>
+            <option>Bharti AXA Life</option>
+            <option>Shriram Life</option>
+            <option>Star Union Dai-ichi Life</option>
+            <option>Edelweiss Tokio Life</option>
+          </optgroup>
+          <optgroup label="Health Insurers">
+            <option>Star Health Insurance</option>
+            <option>Niva Bupa Health (Max Bupa)</option>
+            <option>Care Health Insurance (Religare)</option>
+            <option>Manipal Cigna Health</option>
+            <option>Aditya Birla Health Insurance</option>
+            <option>HDFC ERGO Health</option>
+            <option>ICICI Lombard Health</option>
+          </optgroup>
+          <optgroup label="General Insurers">
+            <option>HDFC ERGO General</option>
+            <option>ICICI Lombard General</option>
+            <option>Bajaj Allianz General</option>
+            <option>Tata AIG General</option>
+            <option>New India Assurance</option>
+            <option>National Insurance Company</option>
+            <option>United India Insurance</option>
+            <option>Oriental Insurance Company</option>
+            <option>Reliance General Insurance</option>
+            <option>SBI General Insurance</option>
+            <option>Future Generali India Insurance</option>
+            <option>Cholamandalam MS General</option>
+            <option>Universal Sompo General</option>
+            <option>IFFCO Tokio General</option>
+            <option>Liberty General Insurance</option>
+            <option>Royal Sundaram General</option>
+            <option>Go Digit General Insurance</option>
+            <option>Acko General Insurance</option>
+            <option>Magma HDI General</option>
+            <option>Shriram General Insurance</option>
+            <option>Kotak Mahindra General</option>
+            <option>Edelweiss General Insurance</option>
+          </optgroup>
+          <option value="__other__">Other (type manually)</option>
+        </select>
+        <input type="text" id="ins-provider-other" class="input-field" placeholder="Enter provider name" style="display:none;margin-top:8px">
+      </div>
+    </div>
+
+    <div class="modal-row">
+      <div class="input-group">
+        <label>Policy Number</label>
+        <input type="text" id="ins-policy-number" class="input-field" placeholder="e.g. POL123456789">
+      </div>
+      <div class="input-group">
+        <label>Policy Holder Name</label>
+        <input type="text" id="ins-holder" class="input-field" placeholder="Name on the policy">
+      </div>
+    </div>
+
+    <div class="modal-row" id="ins-employer-row">
+      <div class="input-group" style="grid-column:1/-1">
+        <label>Employer / Company Name</label>
+        <input type="text" id="ins-employer" class="input-field" placeholder="e.g. Provided by your employer">
+      </div>
+    </div>
+
+    <div class="modal-row">
+      <div class="input-group">
+        <label>Sum Insured / Cover Amount (₹)</label>
+        <input type="number" id="ins-sum-insured" class="input-field" placeholder="0">
+      </div>
+      <div class="input-group">
+        <label>Premium Amount (₹)</label>
+        <input type="number" id="ins-premium" class="input-field" placeholder="0">
+      </div>
+    </div>
+
+    <div class="modal-row">
+      <div class="input-group">
+        <label>Premium Frequency</label>
+        <select id="ins-frequency" class="input-field">
+          <option>Yearly</option>
+          <option>Half-Yearly</option>
+          <option>Quarterly</option>
+          <option>Monthly</option>
+          <option>One-Time</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Status</label>
+        <select id="ins-status" class="input-field">
+          <option>Active</option>
+          <option>Expired</option>
+          <option>Lapsed</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-row">
+      <div class="input-group">
+        <label>Start Date</label>
+        <input type="date" id="ins-start-date" class="input-field">
+      </div>
+      <div class="input-group">
+        <label>Renewal / Expiry Date</label>
+        <input type="date" id="ins-end-date" class="input-field">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Nominee Name</label>
+      <input type="text" id="ins-nominee" class="input-field" placeholder="e.g. Spouse, Parent name">
+    </div>
+
+    <div class="input-group">
+      <label>Notes</label>
+      <input type="text" id="ins-notes" class="input-field" placeholder="Any additional details">
+    </div>
+
+    <input type="hidden" id="ins-edit-id" value="">
+
+    <div style="display:flex;gap:8px;margin-top:1.3rem">
+      <button onclick="saveInsuranceEntry()" class="btn-add" style="flex:1;justify-content:center;background:rgba(52,211,153,0.8)" id="insurance-save-btn">Save Policy</button>
+      <button onclick="closeInsuranceModal()" class="btn-secondary">Cancel</button>
+      <button onclick="deleteCurrentInsuranceEntry()" class="btn-delete" style="display:none" id="insurance-delete-btn"><i class="fas fa-trash"></i> Delete</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL: Note Password (Protect / Unlock / Change) -->
+<div class="modal-overlay" id="note-password-modal">
+  <div class="modal-box" style="width:380px;border-color:rgba(251,191,36,0.28);box-shadow:0 0 60px rgba(251,191,36,0.12)">
+    <div class="modal-title" style="color:#fbbf24" id="note-password-modal-title">Enter Password</div>
+    <div class="modal-subtitle" id="note-password-modal-subtitle" style="font-size:0.78rem;color:var(--text-muted);margin-bottom:1rem">This note is protected.</div>
+
+    <div class="input-group">
+      <label id="note-pass-label-1">Password</label>
+      <input type="password" id="note-pass-input-1" class="input-field" placeholder="Enter password" onkeydown="if(event.key==='Enter')submitNotePasswordAction()">
+    </div>
+    <div class="input-group" id="note-pass-group-2" style="display:none">
+      <label id="note-pass-label-2">Confirm Password</label>
+      <input type="password" id="note-pass-input-2" class="input-field" placeholder="Confirm password" onkeydown="if(event.key==='Enter')submitNotePasswordAction()">
+    </div>
+    <div id="note-pass-error" style="display:none;color:#f87171;font-size:0.78rem;margin-top:4px">❌ Incorrect password.</div>
+
+    <div style="display:flex;gap:8px;margin-top:1.2rem">
+      <button onclick="submitNotePasswordAction()" class="btn-add" style="flex:1;justify-content:center;background:rgba(251,191,36,0.85)" id="note-pass-submit-btn">Unlock</button>
+      <button onclick="closeNotePasswordModal()" class="btn-secondary">Cancel</button>
     </div>
   </div>
 </div>
@@ -5053,6 +5463,10 @@ let creditDb = JSON.parse(localStorage.getItem('fos_credit_v1')) || [
   {id:211, lenderName:"Poneeri Real Estate 2", type:"Assets",  principalAmount:258750, outstandingBalance:172750, interestRate:0, monthlyEmi:5000.00, dueDate:"1st",  tenureMonths:41, balanceTenure:0,  startDate:"2024-08-01", endDate:"2028-08-01", status:"Active", remarks:"Investment"},
 ];
 
+let insuranceDb = JSON.parse(localStorage.getItem('fos_insurance_v1')) || [];
+
+let notesDb = JSON.parse(localStorage.getItem('fos_notes_v1')) || [];
+
 let budgets = JSON.parse(localStorage.getItem('fos_budgets')) || {};
 
 // ── DATA STORAGE ────────────────────────────────────────────────────────────
@@ -5167,6 +5581,8 @@ async function doAutoSave() {
   localStorage.setItem('fos_db_v3',     JSON.stringify(db));
   localStorage.setItem('fos_port_v3',   JSON.stringify(portDb));
   localStorage.setItem('fos_credit_v1', JSON.stringify(creditDb));
+  localStorage.setItem('fos_insurance_v1', JSON.stringify(insuranceDb));
+  localStorage.setItem('fos_notes_v1', JSON.stringify(notesDb));
   localStorage.setItem('fos_budgets',   JSON.stringify(budgets));
   localStorage.setItem('financeOS_ccCards', JSON.stringify(ccCards));
   localStorage.setItem('fos_notifications', JSON.stringify(notifications));
@@ -5181,6 +5597,8 @@ async function doAutoSave() {
         db: db,
         portDb: portDb,
         creditDb: creditDb,
+        insuranceDb: insuranceDb,
+        notesDb: notesDb,
         budgets: budgets,
         ccCards: ccCards,
         notifications: notifications,
@@ -5449,6 +5867,8 @@ function switchView(viewName, btn, group) {
     'roughboard':     '<span>Playbook</span> <b>Rough Board</b>',
     'calculator':     '<span>Playbook</span> <b>Calculator</b>',
           'ccutil':         '<span>Credit Card</span> <b>Utilization</b>',
+    'insurance':      '<span>My Zone</span> <b>Insurance</b>',
+    'notes':          '<span>My Zone</span> <b>Notes</b>',
   };
 
   document.getElementById('page-header').innerHTML = headerMap[viewName] || '';
@@ -5468,6 +5888,8 @@ function switchView(viewName, btn, group) {
     'port-analytics': 'view-port-analytics',
     'roughboard':     'view-roughboard',
     'calculator':     'view-calculator',
+    'insurance':      'view-insurance',
+    'notes':          'view-notes',
   };
 
   const domId = viewIdMap[viewName];
@@ -5489,6 +5911,8 @@ function switchView(viewName, btn, group) {
   else if (viewName === 'ccutil') { setTimeout(initCCView, 50); }
   else if (viewName === 'roughboard') { setTimeout(initRoughBoard, 100); }
   else if (viewName === 'calculator') { setTimeout(initCalculator, 100); }
+  else if (viewName === 'insurance') { renderInsurance(); }
+  else if (viewName === 'notes') { renderNotesList(); }
 }
 
 // ── DASHBOARD ──────────────────────────────────────────────────────────────
@@ -5525,12 +5949,16 @@ function renderDashboard() {
 }
 
 function renderDashboardImmediate() {
-  // Wait for canvases to be fully painted
-  const requiredCanvases = ['dashChart', 'dashDonut', 'dash-port-donut', 'dash-roi-bar'];
-  const allReady = requiredCanvases.every(id => {
-    const el = document.getElementById(id);
-    return el && el.offsetParent !== null && el.offsetWidth > 0;
-  });
+  // Wait for elements to be fully painted (accounting for dynamic HTML wrappers)
+  const requiredElements = [
+    document.getElementById('dashChart') || document.getElementById('dashChart-liquid-wrap'),
+    document.getElementById('dashDonut') || document.getElementById('dashDonut-mix-wrap'),
+    document.getElementById('dash-port-donut') || document.getElementById('dash-port-donut-wrap'),
+    document.getElementById('dash-roi-bar')
+  ];
+  
+  const allReady = requiredElements.every(el => el && el.offsetParent !== null && el.offsetWidth > 0);
+  
   if (!allReady) {
     setTimeout(renderDashboardImmediate, 100);
     return;
@@ -5563,137 +5991,112 @@ function renderDashboardImmediate() {
   roiEl.textContent = pStats.avgRoi.toFixed(1) + '%';
   roiEl.style.color = pStats.avgRoi >= 0 ? 'var(--c-inc)' : 'var(--danger)';
 
-// 1. Cash Flow Snapshot - Matte Orbital Rings
+// 1. Cash Flow Snapshot - Glowing Liquid Flow Bars
   destroyChart('dash');
-  const dashCtx = document.getElementById('dashChart').getContext('2d');
-  
+  const dashEl = document.getElementById('dashChart');
+
   const cfLabels = ['Income', 'Investments', 'Expenses', 'Loans'];
-  const orbitalColors = ['#34d399', '#fbbf24', '#f472b6', '#60a5fa'];
-  const orbitalData = [totalInc, totalInv, totalExp, totalLoan];
-  const maxVal = Math.max(...orbitalData) * 1.1;
+  const flowColors = ['#34d399', '#fbbf24', '#f472b6', '#60a5fa'];
+  const flowData = [totalInc, totalInv, totalExp, totalLoan];
+  const flowTotal = flowData.reduce((a,b) => a+b, 0) || 1;
 
-  charts['dash'] = new Chart(dashCtx, {
-    type: 'doughnut',
-    data: {
-      labels: cfLabels,
-      datasets: orbitalData.map((val, i) => {
-        // FIX 1: Stretched the gradient to 360 to match the new taller container
-        const isLight = document.body.classList.contains('light-mode');
-        const g = dashCtx.createLinearGradient(0, 0, 0, 360);
-        g.addColorStop(0, orbitalColors[i] + (isLight ? 'ff' : 'dd')); // Crisp solid in light mode
-        g.addColorStop(1, orbitalColors[i] + (isLight ? 'dd' : '33')); // No dirty fade in light mode
+  // Replace canvas with an HTML container so we can build a richer liquid-bar UI
+  let dashWrap = document.getElementById('dashChart-liquid-wrap');
+  if (dashEl && dashEl.tagName === 'CANVAS') {
+    dashWrap = document.createElement('div');
+    dashWrap.id = 'dashChart-liquid-wrap';
+    dashWrap.style.cssText = 'width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;gap:18px;padding:6px 4px';
+    dashEl.parentNode.replaceChild(dashWrap, dashEl);
+  }
 
-        return {
-          data: [val, maxVal - val],
-          backgroundColor: [g, 'transparent'], 
-          borderWidth: 0,
-          borderRadius: 100, 
-          circumference: 270,
-          rotation: 225,
-          weight: 0.5
-        };
-      })
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      cutout: '30%',
-      spacing: 8,
-      layout: { padding: { bottom: 20, top: 10 } }, // FIX 2: Prevents the 3D drop-shadow from clipping at the bottom edge
-      plugins: {
-        legend: { 
-          position: 'right', 
-          labels: { 
-            usePointStyle: true, 
-            font: { size: 11, weight: '700' },
-            generateLabels: function(chart) {
-              return chart.data.labels.map((label, i) => ({
-                text: label,
-                fillStyle: orbitalColors[i],
-                strokeStyle: 'transparent',
-                lineWidth: 0,
-                datasetIndex: i,
-                fontColor: chartTextColor()
-              }));
-            }
-          },
-          onClick: null 
-        },
-        tooltip: { 
-          filter: function(tooltipItem) { return tooltipItem.dataIndex === 0; },
-          callbacks: { 
-            label: function(context) {
-              const label = context.chart.data.labels[context.datasetIndex];
-              return ` ${label}: ₹${context.raw.toLocaleString('en-IN')}`;
-            }
-          } 
-        }
-      }
-    }
+  const maxFlow = Math.max(...flowData) || 1;
+  const isLightDash = document.body.classList.contains('light-mode');
+
+  dashWrap.innerHTML = cfLabels.map((label, i) => {
+    const val = flowData[i];
+    const hex = flowColors[i];
+    const pctOfMax = Math.max(2, (val / maxFlow) * 100);
+    const pctOfTotal = ((val / flowTotal) * 100).toFixed(1);
+    const trackBg = isLightDash ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+    return `
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="width:8px;height:8px;border-radius:50%;background:${hex};box-shadow:0 0 10px ${hex}"></span>
+            <span style="font-size:0.8rem;font-weight:700;color:${chartTextColor()}">${label}</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span style="font-family:'DM Mono',monospace;font-size:0.92rem;font-weight:700;color:${isLightDash ? '#0f172a' : hex}">₹${Math.round(val).toLocaleString('en-IN')}</span>
+            <span style="font-size:0.65rem;color:var(--text-muted);font-family:'DM Mono',monospace">${pctOfTotal}%</span>
+          </div>
+        </div>
+        <div style="height:14px;border-radius:99px;background:${trackBg};overflow:hidden;position:relative;border:1px solid ${hex}22">
+          <div style="height:100%;width:${pctOfMax}%;border-radius:99px;background:linear-gradient(90deg, ${hex}aa, ${hex});box-shadow:0 0 14px ${hex}80, inset 0 1px 0 rgba(255,255,255,0.3);transition:width 0.8s cubic-bezier(0.16,1,0.3,1);position:relative">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.25), transparent 60%);border-radius:99px"></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+
+/// 2. Spending Mix - Premium Ranked Flow Bars
+  const mixEl = document.getElementById('dashDonut');
+
+  let mixWrap = document.getElementById('dashDonut-mix-wrap');
+  if (mixEl && mixEl.tagName === 'CANVAS') {
+    mixWrap = document.createElement('div');
+    mixWrap.id = 'dashDonut-mix-wrap';
+    mixEl.parentNode.replaceChild(mixWrap, mixEl);
+  }
+  if (!mixWrap) mixWrap = document.getElementById('dashDonut-mix-wrap');
+
+  mixWrap.style.cssText = 'width:100%;height:360px;overflow-y:auto;overflow-x:hidden;padding:4px 6px 4px 2px;scrollbar-width:none;-ms-overflow-style:none';
+
+  const expByCat2 = {};
+  const filteredData2 = getFilteredData();
+  filteredData2.filter(t => t.type === 'Expense').forEach(t => {
+    const catName = t.sub || t.category || 'General';
+    expByCat2[catName] = (expByCat2[catName] || 0) + t.amount;
   });
 
+  const mixEntries = Object.entries(expByCat2).sort((a,b) => b[1] - a[1]);
+  const mixTotal = mixEntries.reduce((a,[,v]) => a+v, 0) || 1;
+  const mixMax = mixEntries.length ? mixEntries[0][1] : 1;
+  const mixPalette = ['#34d399','#60a5fa','#f472b6','#fbbf24','#a78bfa','#2dd4bf','#fb923c','#38bdf8','#f87171','#4ade80','#c084fc','#facc15','#22d3ee'];
+  const isLightMix = document.body.classList.contains('light-mode');
 
-// 2. Sankey Spending Flow (Income → Categories) - THEME & OVERLAP FIX
-  const mixEl = document.getElementById('dashDonut');
-  
-  if (mixEl && mixEl.tagName === 'CANVAS') {
-    const sankeyDiv = document.createElement('div');
-    sankeyDiv.id = 'dashDonut';
-    sankeyDiv.style.width = '100%';
-    sankeyDiv.style.height = '360px'; // Matching the new massive container
-    sankeyDiv.style.position = 'relative'; // Creates strict boundary
-    sankeyDiv.style.overflow = 'hidden'; // STRICT clipping to kill spidey lines
-    sankeyDiv.style.borderRadius = '12px'; // Smooth rounded corners
-    mixEl.parentNode.replaceChild(sankeyDiv, mixEl);
+  if (mixEntries.length === 0) {
+    mixWrap.innerHTML = `<div class="empty-state" style="padding-top:2.5rem"><i class="fas fa-receipt"></i><p>No expense data for this period</p></div>`;
+  } else {
+    mixWrap.innerHTML = `<style>#dashDonut-mix-wrap::-webkit-scrollbar{display:none}</style>` + mixEntries.map(([cat, amt], i) => {
+      const hex = mixPalette[i % mixPalette.length];
+      const pctOfMax = Math.max(3, (amt / mixMax) * 100);
+      const pctOfTotal = ((amt / mixTotal) * 100).toFixed(1);
+      const trackBg = isLightMix ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)';
+      return `
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+          <div style="width:108px;flex-shrink:0;display:flex;align-items:center;gap:7px;overflow:hidden">
+            <span style="width:7px;height:7px;border-radius:50%;background:${hex};box-shadow:0 0 8px ${hex};flex-shrink:0"></span>
+            <span style="font-size:0.74rem;font-weight:600;color:${chartTextColor()};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${cat}</span>
+          </div>
+          <div style="flex:1;height:11px;border-radius:99px;background:${trackBg};overflow:hidden;position:relative">
+            <div style="height:100%;width:${pctOfMax}%;border-radius:99px;background:linear-gradient(90deg, ${hex}99, ${hex});box-shadow:0 0 10px ${hex}66;position:relative">
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.25), transparent 60%);border-radius:99px"></div>
+            </div>
+          </div>
+          <div style="width:78px;flex-shrink:0;text-align:right">
+            <span style="font-family:'DM Mono',monospace;font-size:0.74rem;font-weight:700;color:${isLightMix ? '#0f172a' : hex}">₹${Math.round(amt).toLocaleString('en-IN')}</span>
+          </div>
+          <div style="width:42px;flex-shrink:0;text-align:right">
+            <span style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text-muted)">${pctOfTotal}%</span>
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
-  if (window.google && google.charts) {
-    google.charts.load('current', {'packages':['sankey']});
-    google.charts.setOnLoadCallback(() => {
-      const dataTable = new google.visualization.DataTable();
-      dataTable.addColumn('string', 'From');
-      dataTable.addColumn('string', 'To');
-      dataTable.addColumn('number', 'Amount');
-
-      const expByCat = {};
-      const filteredData = getFilteredData();
-      filteredData.filter(t => t.type === 'Expense').forEach(t => {
-        const catName = t.sub || t.category || 'General';
-        expByCat[catName] = (expByCat[catName] || 0) + t.amount;
-      });
-
-      const rows = [];
-      Object.keys(expByCat).forEach(cat => {
-        rows.push(['Income', cat, expByCat[cat]]);
-      });
-
-      if (rows.length === 0) rows.push(['Income', 'No Expenses', 0.1]);
-      dataTable.addRows(rows);
-
-      const isLight = document.body.classList.contains('light-mode');
-      const options = {
-        height: 350, // Gives a safe 10px buffer inside the 360px box
-        width: '100%',
-        tooltip: { isHtml: true }, 
-        sankey: {
-          node: {
-            colors: ['#34d399', '#f472b6', '#60a5fa', '#fbbf24', '#a78bfa', '#2dd4bf'],
-            label: { fontName: 'DM Sans', fontSize: 11, color: isLight ? '#0f172a' : '#ffffff', bold: true },
-            width: 10,
-            nodePadding: 16 // REDUCED: Prevents the bottom nodes from pushing the lines into the floor
-          },
-          link: {
-            colorMode: 'gradient',
-            fillOpacity: 0.15 
-          }
-        }
-      };
-
-      const chart = new google.visualization.Sankey(document.getElementById('dashDonut'));
-      chart.draw(dataTable, options);
-    });
-  }
-
-  // Portfolio by asset type donut — colours keyed by asset type
+ // Portfolio by asset type - Center-Stat Ring + Progress Legend
   const byType = {};
   pd.forEach(e => {
     const c = portCalc(e);
@@ -5703,21 +6106,84 @@ function renderDashboardImmediate() {
   const typeKeys   = Object.keys(byType);
   const typeLabels = typeKeys.map(k => assetTypeLabel(k));
   const hasPortData = typeKeys.length > 0;
-  
-  if (hasPortData && !charts['dash-port-donut']) {
-    charts['dash-port-donut'] = makeDonut(
-      'dash-port-donut',
-      typeLabels,
-      typeKeys.map(k => byType[k]),
-      typeKeys.map(k => assetColor(k))
-    );
-  } else if (hasPortData && charts['dash-port-donut']) {
-    charts['dash-port-donut'].data.labels = typeLabels;
-    charts['dash-port-donut'].data.datasets[0].data = typeKeys.map(k => byType[k]);
-    charts['dash-port-donut'].options.plugins.legend.labels.color = chartTextColor();
-    charts['dash-port-donut'].update('none');
-  } else if (!hasPortData && charts['dash-port-donut']) {
-    destroyChart('dash-port-donut');
+
+  destroyChart('dash-port-donut');
+  const portDonutEl = document.getElementById('dash-port-donut');
+
+  let portDonutWrap = document.getElementById('dash-port-donut-wrap');
+  if (portDonutEl && portDonutEl.tagName === 'CANVAS') {
+    portDonutWrap = document.createElement('div');
+    portDonutWrap.id = 'dash-port-donut-wrap';
+    portDonutEl.parentNode.replaceChild(portDonutWrap, portDonutEl);
+  }
+  if (!portDonutWrap) portDonutWrap = document.getElementById('dash-port-donut-wrap');
+
+  if (!hasPortData) {
+    portDonutWrap.innerHTML = '<div class="empty-state" style="padding-top:2rem"><i class="fas fa-gem"></i><p>No portfolio data</p></div>';
+  } else {
+    const portDonutTotal = typeKeys.reduce((a,k) => a + byType[k], 0) || 1;
+    portDonutWrap.style.cssText = 'display:flex;align-items:center;gap:18px;height:100%;padding:4px';
+    portDonutWrap.innerHTML = `
+      <div style="position:relative;width:130px;height:130px;flex-shrink:0">
+        <canvas id="dash-port-donut-ring"></canvas>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+          <div style="font-family:'DM Mono',monospace;font-weight:700;font-size:1rem;color:${chartTextColor()}">${typeKeys.length}</div>
+          <div style="font-size:0.6rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-top:1px">Assets</div>
+        </div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:9px;min-width:0;max-height:170px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none">
+        <style>#dash-port-donut-wrap .legend-scroll::-webkit-scrollbar{display:none}</style>
+        ${typeKeys.map(k => {
+          const hex = assetColor(k);
+          const pct = (byType[k] / portDonutTotal) * 100;
+          return `
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <div style="display:flex;align-items:center;gap:6px;min-width:0">
+                  <span style="width:7px;height:7px;border-radius:50%;background:${hex};box-shadow:0 0 8px ${hex};flex-shrink:0"></span>
+                  <span style="font-size:0.74rem;font-weight:600;color:${chartTextColor()};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${assetTypeLabel(k)}</span>
+                </div>
+                <span style="font-family:'DM Mono',monospace;font-size:0.74rem;font-weight:700;color:${hex};flex-shrink:0">${pct.toFixed(0)}%</span>
+              </div>
+              <div style="height:4px;border-radius:99px;background:rgba(255,255,255,0.06);overflow:hidden">
+                <div style="height:100%;width:${pct}%;border-radius:99px;background:${hex};box-shadow:0 0 6px ${hex}80"></div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    const ringCtx = document.getElementById('dash-port-donut-ring').getContext('2d');
+    charts['dash-port-donut'] = new Chart(ringCtx, {
+      type: 'doughnut',
+      data: {
+        labels: typeLabels,
+        datasets: [{
+          data: typeKeys.map(k => byType[k]),
+          backgroundColor: typeKeys.map(k => assetColor(k)),
+          borderColor: 'transparent',
+          borderWidth: 0,
+          spacing: 3,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '72%',
+        animation: { animateRotate: true, duration: 800, easing: 'easeOutQuart' },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(8,11,26,0.97)',
+            titleFont: { family:'DM Sans', size:12, weight:'700' },
+            bodyFont:  { family:'DM Mono', size:11 },
+            callbacks: { label: ctx => `  ₹${Math.round(ctx.raw).toLocaleString('en-IN')}` }
+          }
+        }
+      }
+    });
   }
 
 
@@ -5790,92 +6256,40 @@ function renderDashboardImmediate() {
     });
   }
 
-  // Top 3 Holdings - Modern Floating Pill Leaderboard
+  // Top 3 Holdings - Liquid Flow Bars (matches Cash Flow Snapshot style)
   const sorted = pd.map(e => ({...e, ...portCalc(e)})).sort((a,b) => b.roi - a.roi).slice(0,3);
   const top3El = document.getElementById('dash-top3');
-  
+
   if (sorted.length) {
-    // Inject a canvas container safely
-    top3El.innerHTML = `<div style="height:190px; position:relative; margin-top:-5px;"><canvas id="dash-top3-chart"></canvas></div>`;
-    destroyChart('dash-top3-chart');
-    
-    // Safety delay to ensure canvas is drawn before Chart.js takes over
-    setTimeout(() => {
-      const canvas = document.getElementById('dash-top3-chart');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      
-      charts['dash-top3-chart'] = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          // Cleanly formats the label (e.g. "Silver 20g" or "Real Estate 1u")
-          labels: sorted.map(s => {
-            const u = s.unit === 'grams' ? 'g' : s.unit === 'units' ? 'u' : '';
-            return `${assetTypeLabel(s.assetType)} ${s.quantity}${u}`;
-          }),
-          datasets: [{
-            data: sorted.map(s => s.roi),
-            backgroundColor: sorted.map(s => {
-              const hex = assetColor(s.assetType);
-              
-              // Generate the sleek diagonal glass stripe overlay
-              const pCanvas = document.createElement('canvas');
-              pCanvas.width = 16; pCanvas.height = 16;
-              const pCtx = pCanvas.getContext('2d');
-              
-              pCtx.fillStyle = hex + 'cc'; // Matte solid base
-              pCtx.fillRect(0, 0, 16, 16);
-              
-              pCtx.strokeStyle = 'rgba(0, 0, 0, 0.3)'; // 25% white glassy lines
-              pCtx.lineWidth = 3;
-              pCtx.beginPath(); pCtx.moveTo(-5, 21); pCtx.lineTo(21, -5); pCtx.stroke();
-              
-              const targetCtx = document.getElementById('dash-top3-chart').getContext('2d');
-              return targetCtx.createPattern(pCanvas, 'repeat');
-            }),
-            borderColor: 'transparent',
-            borderWidth: 0,
-            borderRadius: 100, // Forces the perfectly rounded floating pill
-            borderSkipped: false, // Ensures the base is rounded too!
-            barThickness: 26 // Premium, thick leaderboard capsules
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          indexAxis: 'y', // Horizontal bars
-          plugins: {
-            legend: { display: false }, // Hides the legend for a cleaner UI
-            tooltip: {
-              backgroundColor: 'rgba(8,11,26,0.97)',
-              titleFont: { family:'DM Sans', size:12, weight:'700' },
-              bodyFont:  { family:'DM Mono', size:11 },
-              callbacks: { 
-                title: ctx => {
-                  const s = sorted[ctx[0].dataIndex];
-                  return `${assetTypeLabel(s.assetType)} · Purchased ${s.date}`;
-                },
-                label: ctx => {
-                  const s = sorted[ctx.dataIndex];
-                  return `  ${s.roi.toFixed(1)}% ROI  (₹${s.gainLoss.toLocaleString('en-IN')} gain)`;
-                }
-              }
-            }
-          },
-          scales: {
-            x: { 
-              display: false, 
-              grid: { display: false },
-              grace: '15%' 
-            },
-            y: { 
-              grid: { display: false }, 
-              border: { display: false }, // <-- Removes the vertical line
-              ticks: { color: chartTextColor(), font: { size: 11, weight: '600' } }
-            }
-          }
-        }
-      });
-    }, 10);
+    const top3Max = Math.max(...sorted.map(s => Math.abs(s.roi))) || 1;
+    const isLightTop3 = document.body.classList.contains('light-mode');
+    top3El.innerHTML = `<div style="display:flex;flex-direction:column;gap:18px;padding:6px 4px">` +
+      sorted.map(s => {
+        const u = s.unit === 'grams' ? 'g' : s.unit === 'units' ? 'u' : '';
+        const label = `${assetTypeLabel(s.assetType)} ${s.quantity}${u}`;
+        const hex = assetColor(s.assetType);
+        const pct = Math.max(3, (Math.abs(s.roi) / top3Max) * 100);
+        const trackBg = isLightTop3 ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+        return `
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="width:8px;height:8px;border-radius:50%;background:${hex};box-shadow:0 0 10px ${hex}"></span>
+                <span style="font-size:0.8rem;font-weight:700;color:${chartTextColor()}">${label}</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:8px">
+                <span style="font-family:'DM Mono',monospace;font-size:0.92rem;font-weight:700;color:${hex}">${s.roi.toFixed(1)}%</span>
+                <span style="font-size:0.65rem;color:var(--text-muted);font-family:'DM Mono',monospace">₹${Math.round(s.gainLoss).toLocaleString('en-IN')}</span>
+              </div>
+            </div>
+            <div style="height:14px;border-radius:99px;background:${trackBg};overflow:hidden;position:relative;border:1px solid ${hex}22">
+              <div style="height:100%;width:${pct}%;border-radius:99px;background:linear-gradient(90deg, ${hex}aa, ${hex});box-shadow:0 0 14px ${hex}80, inset 0 1px 0 rgba(255,255,255,0.3);transition:width 0.8s cubic-bezier(0.16,1,0.3,1);position:relative">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.25), transparent 60%);border-radius:99px"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('') + `</div>`;
   } else {
     top3El.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>No portfolio data</div>';
   }
@@ -7311,55 +7725,40 @@ function renderPortOverview() {
     });
   }
 
-  // ── BEST PERFORMERS: ELEVATED PODIUM CARDS ──
+// ── BEST PERFORMERS: Liquid Flow Bars (matches Cash Flow Snapshot style) ──
   const rawTop3 = data.map(e => ({...e, ...portCalc(e)})).sort((a,b) => b.roi - a.roi).slice(0,3);
   const portTop3El = document.getElementById('port-top3');
 
   if (rawTop3.length) {
-    // Layout for visual elevation: [2nd (Left), 1st (Center), 3rd (Right)]
-    const podiumOrder = [];
-    if (rawTop3[1]) podiumOrder.push({ ...rawTop3[1], rank: 2, medal: '🥈', color: '#cbd5e1', podiumH: '72%' });
-    if (rawTop3[0]) podiumOrder.push({ ...rawTop3[0], rank: 1, medal: '🥇', color: '#fbbf24', podiumH: '100%' });
-    if (rawTop3[2]) podiumOrder.push({ ...rawTop3[2], rank: 3, medal: '🥉', color: '#cd7f32', podiumH: '58%' });
-
-    portTop3El.innerHTML = `
-      <div style="display: flex; align-items: flex-end; justify-content: center; gap: 10px; height: 180px; padding: 10px 5px;">
-        ${podiumOrder.map(item => {
-          const isFirst = item.rank === 1;
-          // Set physical elevation heights
-          const h = isFirst ? '100%' : item.rank === 2 ? '82%' : '72%';
-          const unitLabel = item.unit === 'grams' ? 'g' : item.unit === 'units' ? 'u' : '';
-          const themeColor = assetColor(item.assetType);
-          
-    const isLight = document.body.classList.contains('light-mode');
-          const podBg = isLight ? 'linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%)' : 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0.5) 100%)';
-          const podShadow = isLight ? 'none' : '0 12px 40px rgba(0,0,0,0.6)';
-          const podText = isLight ? '#0f172a' : 'white';
-          
-          return `
-            <div style="flex: 1; height: ${h}; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; position: relative;">
-              <div style="font-size: 1.4rem; margin-bottom: 6px; filter: drop-shadow(0 0 10px ${item.color}${isLight ? '40' : '80'});">${item.medal}</div>
-              
-              <div style="
-                width: 100%; 
-                background: ${podBg}; 
-                border: 1px solid ${isLight ? '#e2e8f0' : item.color+'30'}; 
-                border-top: 3px solid ${themeColor};
-                border-radius: 14px 14px 6px 6px; 
-                padding: 12px 4px; 
-                text-align: center;
-                box-shadow: ${podShadow};
-                transition: transform 0.3s ease;
-              ">
-                <div style="font-size: 0.62rem; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px;">${assetTypeLabel(item.assetType)}</div>
-                <div style="font-size: 0.75rem; font-weight: 700; color: ${podText}; margin-bottom: 4px;">${item.quantity}${unitLabel}</div>
-                <div style="font-family: 'DM Mono', monospace; font-size: 1.1rem; font-weight: 800; color: #34d399; text-shadow: ${isLight ? 'none' : '0 0 12px rgba(52,211,153,0.5)'};">+${item.roi.toFixed(0)}%</div>
+    const portTop3Max = Math.max(...rawTop3.map(s => Math.abs(s.roi))) || 1;
+    const isLightPortTop3 = document.body.classList.contains('light-mode');
+    portTop3El.innerHTML = `<div style="display:flex;flex-direction:column;gap:18px;padding:6px 4px">` +
+      rawTop3.map(item => {
+        const unitLabel = item.unit === 'grams' ? 'g' : item.unit === 'units' ? 'u' : '';
+        const label = `${assetTypeLabel(item.assetType)} ${item.quantity}${unitLabel}`;
+        const hex = assetColor(item.assetType);
+        const pct = Math.max(3, (Math.abs(item.roi) / portTop3Max) * 100);
+        const trackBg = isLightPortTop3 ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+        return `
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="width:8px;height:8px;border-radius:50%;background:${hex};box-shadow:0 0 10px ${hex}"></span>
+                <span style="font-size:0.8rem;font-weight:700;color:${chartTextColor()}">${label}</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:8px">
+                <span style="font-family:'DM Mono',monospace;font-size:0.92rem;font-weight:700;color:${hex}">+${item.roi.toFixed(1)}%</span>
+                <span style="font-size:0.65rem;color:var(--text-muted);font-family:'DM Mono',monospace">₹${Math.round(item.gainLoss).toLocaleString('en-IN')}</span>
               </div>
             </div>
-          `;
-        }).join('')}
-      </div>
-    `;
+            <div style="height:14px;border-radius:99px;background:${trackBg};overflow:hidden;position:relative;border:1px solid ${hex}22">
+              <div style="height:100%;width:${pct}%;border-radius:99px;background:linear-gradient(90deg, ${hex}aa, ${hex});box-shadow:0 0 14px ${hex}80, inset 0 1px 0 rgba(255,255,255,0.3);transition:width 0.8s cubic-bezier(0.16,1,0.3,1);position:relative">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.25), transparent 60%);border-radius:99px"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('') + `</div>`;
   } else {
     portTop3El.innerHTML = '<div class="empty-state" style="padding:1rem"><i class="fas fa-gem"></i><p>No data</p></div>';
   }
@@ -7442,106 +7841,102 @@ function renderPortAnalytics() {
     } // <--- ADDED THIS MISSING BRACE
   });
 
- // 3. Asset Heatmap Matrix (Premium Glowing Tiles)
+ // 3. Capital Pulse Grid — Radial Gain/Loss Visualization
   destroyChart('port-waterfall');
   const wfContainer = document.getElementById('port-waterfall').parentNode;
-  
-  // Automatically rename the panel title above it
+
   const titleEl = wfContainer.previousElementSibling;
-  if(titleEl && titleEl.classList.contains('panel-title')) {
-      titleEl.textContent = 'Gain/Loss Heatmap Matrix';
+  if (titleEl && titleEl.classList.contains('panel-title')) {
+    titleEl.innerHTML = 'CAPITAL PULSE GRID <i class="fas fa-satellite-dish" style="margin-left:6px; color:#38bdf8; font-size: 0.85rem;"></i>';
   }
 
-  // Create or grab the custom HTML container
-  let matrixDiv = document.getElementById('port-matrix-heatmap');
-  if (!matrixDiv) {
-      matrixDiv = document.createElement('div');
-      matrixDiv.id = 'port-matrix-heatmap';
-      matrixDiv.style.height = '220px';
-      matrixDiv.style.width = '100%';
-      matrixDiv.style.overflowY = 'auto';
-      matrixDiv.style.display = 'flex';
-      matrixDiv.style.flexDirection = 'column';
-      matrixDiv.style.gap = '10px';
-      matrixDiv.style.padding = '5px 5px 5px 0';
-      matrixDiv.style.scrollbarWidth = 'thin';
-      matrixDiv.style.scrollbarColor = 'rgba(255,255,255,0.1) transparent';
-
-      wfContainer.appendChild(matrixDiv);
-      document.getElementById('port-waterfall').style.display = 'none'; // Hide the raw canvas
-      wfContainer.style.height = 'auto'; 
+  let pulseDiv = document.getElementById('port-pulse-grid');
+  if (!pulseDiv) {
+    pulseDiv = document.createElement('div');
+    pulseDiv.id = 'port-pulse-grid';
+    pulseDiv.style.cssText = 'height:280px;width:100%;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden';
+    wfContainer.appendChild(pulseDiv);
+    document.getElementById('port-waterfall').style.display = 'none';
+    wfContainer.style.height = 'auto';
   }
 
-  // Group data by Asset Type and calculate total investment per row
-  const grouped = {};
+  const pulseGrouped = {};
   data.forEach(e => {
-      const k = assetTypeLabel(e.assetType);
-      if (!grouped[k]) grouped[k] = { items: [], totalInv: 0 };
-      grouped[k].items.push(e);
-      grouped[k].totalInv += e.totalInvestment;
+    const k = normalizeAssetType(e.assetType);
+    if (!pulseGrouped[k]) pulseGrouped[k] = [];
+    pulseGrouped[k].push(e);
+  });
+  const pulseAssetKeys = Object.keys(pulseGrouped).sort((a,b) => {
+    const totalA = pulseGrouped[a].reduce((s,e)=>s+e.totalInvestment,0);
+    const totalB = pulseGrouped[b].reduce((s,e)=>s+e.totalInvestment,0);
+    return totalB - totalA;
   });
 
-  // Sort groups so your heaviest asset classes are at the top
-  const sortedGroups = Object.entries(grouped).sort((a,b) => b[1].totalInv - a[1].totalInv);
+  if (pulseAssetKeys.length === 0) {
+    pulseDiv.innerHTML = '<div class="empty-state"><i class="fas fa-satellite-dish"></i><p>No portfolio data</p></div>';
+  } else {
+    const pulseTotalGain = data.reduce((s,e)=>s+e.gainLoss,0);
+    const pulseTotalInv  = data.reduce((s,e)=>s+e.totalInvestment,0);
+    const pulseTotalPct  = pulseTotalInv > 0 ? ((pulseTotalGain/pulseTotalInv)*100) : 0;
+    const pulseCenterColor = pulseTotalGain >= 0 ? '#34d399' : '#ef4444';
 
-  let html = '';
-  sortedGroups.forEach(([label, group]) => {
-      // Sort individual tiles left-to-right by purchase date
-      const items = group.items.sort((a,b) => new Date(a.date) - new Date(b.date));
-      
-      html += `<div style="display:flex; align-items:center; gap:14px; width:100%;">`;
-      
-      // Row Label (e.g., "GOLD", "SILVER")
-      html += `<div style="width:75px; font-size:0.72rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:1px; flex-shrink:0; text-align:right;">${label}</div>`;
-      
-      // Background Track
-      html += `<div style="display:flex; flex:1; gap:6px; height:28px; background:rgba(255,255,255,0.03); border-radius:6px; padding:4px; overflow:hidden; border: 1px solid rgba(255,255,255,0.02)">`;
-      
+    const cx = 50, cy = 50;
+    const ringCount = pulseAssetKeys.length;
+    const maxRadius = 42, minRadius = 14;
+    const ringGap = ringCount > 1 ? (maxRadius - minRadius) / (ringCount - 1) : 0;
+
+    let svgRings = '';
+    let labelHtml = '';
+
+    pulseAssetKeys.forEach((key, ringIdx) => {
+      const radius = minRadius + ringIdx * ringGap;
+      const items = pulseGrouped[key];
+      const ringInv = items.reduce((s,e)=>s+e.totalInvestment,0) || 1;
+      const assetHex = assetColor(key);
+      let angleStart = -90;
+
+      // faint background track for the ring
+      svgRings += `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="${assetHex}1a" stroke-width="3.2" />`;
+
       items.forEach(item => {
-          const isProfit = item.gainLoss >= 0;
-          const absRoi = Math.abs(item.roi);
-          const intensity = Math.min(1, 0.2 + (absRoi / 50)); 
-          
-          // 1. Grab the specific asset's theme color
-          const itemHex = assetColor(item.assetType);
-          
-          // 2. Convert that Hex to "R, G, B" so we can apply glowing opacity
-          let cleanHex = itemHex.replace('#', '');
-          if(cleanHex.length === 3) cleanHex = cleanHex.split('').map(c=>c+c).join('');
-          const assetRgb = `${parseInt(cleanHex.substring(0,2), 16)}, ${parseInt(cleanHex.substring(2,4), 16)}, ${parseInt(cleanHex.substring(4,6), 16)}`;
-          
-          // 3. Use Asset Color for Profits, Neon Red for Losses
-          const rgbColor = isProfit ? assetRgb : '239, 68, 68'; 
-          
-          const baseColor = `rgba(${rgbColor}, ${intensity})`;
-          const glowColor = `rgba(${rgbColor}, ${intensity * 0.6})`;
-          const borderColor = `rgba(${rgbColor}, ${Math.min(1, intensity + 0.3)})`;
-          
-          const flexGrow = Math.max(1, item.totalInvestment); 
-
-          html += `
-          <div style="
-              flex-grow: ${flexGrow};
-              flex-basis: 8px; 
-              height: 100%;
-              background: linear-gradient(135deg, ${baseColor}, rgba(${rgbColor}, ${intensity * 0.7}));
-              border: 1px solid ${borderColor};
-              border-radius: 4px;
-              box-shadow: 0 0 12px ${glowColor};
-              cursor: crosshair;
-              transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s;
-              position: relative;
-          "
-          onmousemove="this.style.transform='scaleY(1.3) scaleX(1.05)'; this.style.filter='brightness(1.3)'; this.style.zIndex='10'; showMatrixTooltip(event, '${assetTypeLabel(item.assetType)}', '${item.date}', ${item.totalInvestment}, ${item.currentValue}, ${item.gainLoss}, ${item.roi}, '${itemHex}')"
-          onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)'; this.style.zIndex='1'; hideMatrixTooltip()"
-          ></div>
-          `;
+        const sweep = Math.max(4, (item.totalInvestment / ringInv) * 340);
+        const isProfit = item.gainLoss >= 0;
+        const intensity = Math.min(1, 0.35 + Math.abs(item.roi) / 80);
+        const segColor = isProfit ? assetHex : '#ef4444';
+        const a0 = (angleStart * Math.PI) / 180;
+        const a1 = ((angleStart + sweep) * Math.PI) / 180;
+        const x0 = cx + radius * Math.cos(a0), y0 = cy + radius * Math.sin(a0);
+        const x1 = cx + radius * Math.cos(a1), y1 = cy + radius * Math.sin(a1);
+        const largeArc = sweep > 180 ? 1 : 0;
+        svgRings += `<path d="M ${x0} ${y0} A ${radius} ${radius} 0 ${largeArc} 1 ${x1} ${y1}"
+          fill="none" stroke="${segColor}" stroke-width="3.2" stroke-linecap="round"
+          opacity="${intensity}"
+          style="cursor:pointer;filter:drop-shadow(0 0 3px ${segColor})"
+          onmousemove="showMatrixTooltip(event,'${assetTypeLabel(key)}','${item.date}',${item.totalInvestment},${item.currentValue},${item.gainLoss},${item.roi},'${assetHex}')"
+          onmouseout="hideMatrixTooltip()" />`;
+        angleStart += sweep + 3;
       });
-      
-      html += `</div></div>`;
-  });
 
-  matrixDiv.innerHTML = html;
+      labelHtml += `<div style="display:flex;align-items:center;gap:6px">
+        <span style="width:7px;height:7px;border-radius:50%;background:${assetHex};box-shadow:0 0 7px ${assetHex}"></span>
+        <span style="font-size:0.66rem;font-weight:600;color:${chartTextColor()}">${assetTypeLabel(key)}</span>
+      </div>`;
+    });
+
+    pulseDiv.innerHTML = `
+      <svg viewBox="0 0 100 100" style="width:240px;height:240px;flex-shrink:0;animation:pulseSpin 60s linear infinite">
+        ${svgRings}
+      </svg>
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none">
+        <div style="font-family:'DM Mono',monospace;font-weight:800;font-size:1.05rem;color:${pulseCenterColor};text-shadow:0 0 14px ${pulseCenterColor}80">${pulseTotalPct>=0?'+':''}${pulseTotalPct.toFixed(1)}%</div>
+        <div style="font-size:0.55rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Net ROI</div>
+      </div>
+      <div style="position:absolute;right:6px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px">
+        ${labelHtml}
+      </div>
+      <style>@keyframes pulseSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}</style>
+    `;
+  }
 
   // Global Tooltip Engine (only injects once)
   if (!window.showMatrixTooltip) {
@@ -7567,7 +7962,7 @@ function renderPortAnalytics() {
           
           let x = e.clientX + 15;
           let y = e.clientY + 15;
-          if (x + 200 > window.innerWidth) x = e.clientX - 220; // Prevents bleeding off right edge
+          if (x + 200 > window.innerWidth) x = e.clientX - 220;
           
           ttip.style.left = x + 'px';
           ttip.style.top = y + 'px';
@@ -7579,7 +7974,7 @@ function renderPortAnalytics() {
       };
   }
 
-// 4. Investment vs Value - High-Tech Radar Chart
+// 4. Investment vs Current Value - Capital Terrain (3D Landscape)
   const cvByType = {};
   data.forEach(e => {
     const key = normalizeAssetType(e.assetType);
@@ -7587,41 +7982,124 @@ function renderPortAnalytics() {
     cvByType[key].inv += e.totalInvestment;
     cvByType[key].val += e.currentValue;
   });
-  const cvKeys = Object.keys(cvByType);
+  const cvKeys = Object.keys(cvByType).sort((a,b) => cvByType[b].val - cvByType[a].val);
   const cvLabels = cvKeys.map(k => assetTypeLabel(k));
   destroyChart('port-compare-bar');
-  charts['port-compare-bar'] = new Chart(document.getElementById('port-compare-bar').getContext('2d'), {
-    type: 'radar',
+
+  const terrainCtx = document.getElementById('port-compare-bar').getContext('2d');
+  const terrainH = terrainCtx.canvas.height || 220;
+
+  const investedGrad = terrainCtx.createLinearGradient(0, 0, 0, terrainH);
+  investedGrad.addColorStop(0, 'rgba(167,139,250,0.55)');
+  investedGrad.addColorStop(0.6, 'rgba(167,139,250,0.18)');
+  investedGrad.addColorStop(1, 'rgba(167,139,250,0.02)');
+
+  const valueGrad = terrainCtx.createLinearGradient(0, 0, 0, terrainH);
+  valueGrad.addColorStop(0, 'rgba(52,211,153,0.65)');
+  valueGrad.addColorStop(0.6, 'rgba(52,211,153,0.22)');
+  valueGrad.addColorStop(1, 'rgba(52,211,153,0.02)');
+
+  // Skyline depth plugin — adds a faint "ridge shadow" beneath the front layer for parallax depth
+  const terrainDepthPlugin = {
+    id: 'terrainDepth',
+    beforeDatasetsDraw: (chart) => {
+      chart.ctx.save();
+      chart.ctx.shadowColor = 'rgba(0,0,0,0.45)';
+      chart.ctx.shadowBlur = 14;
+      chart.ctx.shadowOffsetY = 8;
+    },
+    afterDatasetsDraw: (chart) => { chart.ctx.restore(); }
+  };
+
+  charts['port-compare-bar'] = new Chart(terrainCtx, {
+    type: 'line',
     data: {
       labels: cvLabels,
       datasets: [
-        { label:'Total Invested', data:cvKeys.map(k=>cvByType[k].inv), borderColor:'#a78bfa', backgroundColor:'rgba(167,139,250,0.15)', borderWidth:2, pointRadius:3 },
-        { label:'Current Value',  data:cvKeys.map(k=>cvByType[k].val), borderColor:'#34d399', backgroundColor:'rgba(52,211,153,0.15)', borderWidth:2, pointRadius:3 }
+        {
+          label: 'Total Invested',
+          data: cvKeys.map(k => cvByType[k].inv),
+          borderColor: '#a78bfa',
+          backgroundColor: investedGrad,
+          fill: 'origin',
+          borderWidth: 2,
+          tension: 0.42,
+          pointRadius: 3,
+          pointBackgroundColor: '#0f172a',
+          pointBorderColor: '#a78bfa',
+          pointBorderWidth: 2,
+          pointHoverRadius: 6,
+          order: 2
+        },
+        {
+          label: 'Current Value',
+          data: cvKeys.map(k => cvByType[k].val),
+          borderColor: '#34d399',
+          backgroundColor: valueGrad,
+          fill: 'origin',
+          borderWidth: 2.5,
+          tension: 0.42,
+          pointRadius: 4,
+          pointBackgroundColor: '#0f172a',
+          pointBorderColor: '#34d399',
+          pointBorderWidth: 2.5,
+          pointHoverRadius: 7,
+          pointHoverBackgroundColor: '#34d399',
+          pointHoverBorderColor: '#fff',
+          order: 1
+        }
       ]
     },
     options: {
-      ...cOpts(true),
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      animation: { duration: 900, easing: 'easeOutQuart' },
+      layout: { padding: { top: 10, bottom: 4 } },
       scales: {
-        r: {
-          grid: { 
-            display: true, 
-            color: chartGridColor() // Uses your theme-aware grid color
-          },
-          angleLines: { 
-            display: true, 
-            color: chartGridColor() // Shows the lines radiating from center
-          },
-          pointLabels: { 
-            color: chartTextColor(), 
-            font: { size: 10, weight: '600' } 
-          },
-          ticks: { display: false }
+        y: {
+          beginAtZero: true,
+          grid: { color: chartGridColor(), drawBorder: false },
+          ticks: {
+            color: chartTextColor(),
+            font: { size: 10, family: 'DM Mono' },
+            callback: v => '₹' + (v/1000).toFixed(0) + 'k'
+          }
+        },
+        x: {
+          grid: { display: false, drawBorder: false },
+          ticks: { color: chartTextColor(), font: { size: 10.5, family: 'DM Sans', weight: '700' } }
+        }
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            color: chartTextColor(),
+            usePointStyle: true,
+            pointStyle: 'circle',
+            boxWidth: 8,
+            font: { size: 11, family: 'DM Sans', weight: '700' },
+            padding: 14
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(8,11,26,0.97)',
+          titleFont: { family:'DM Sans', size:12, weight:'700' },
+          bodyFont:  { family:'DM Mono', size:11 },
+          borderColor: 'rgba(52,211,153,0.35)',
+          borderWidth: 1,
+          callbacks: {
+            label: ctx => `  ${ctx.dataset.label}: ₹${Number(ctx.raw).toLocaleString('en-IN')}`
+          }
         }
       }
-    }
+    },
+    plugins: [terrainDepthPlugin]
   });
 
-  // 5. Profit% donut - FIXED LOGIC & TOOLTIP
+  // 5. Profit% Distribution - Center-Stat Ring + Progress Legend
   const profitBuckets = { 'Loss (< 0%)':0, '0–25%':0, '25–50%':0, '50–100%':0, '>100%':0 };
   data.forEach(e => {
     const p = e.profitPct;
@@ -7631,20 +8109,87 @@ function renderPortAnalytics() {
     else if (p <= 100) profitBuckets['50–100%']++;
     else              profitBuckets['>100%']++;
   });
+  const profitColors = ['#ef4444', '#64748b', '#60a5fa', '#34d399', '#fbbf24'];
+  const profitLabels = Object.keys(profitBuckets);
   const profitVals = Object.values(profitBuckets);
+
   destroyChart('port-profit-donut');
-  
-  if (profitVals.some(v => v > 0)) {
-    const pChart = makeDonut('port-profit-donut', Object.keys(profitBuckets), profitVals,
-      ['#ef4444', '#64748b', '#60a5fa', '#34d399', '#fbbf24']);
-      
-    // FIX: Override the default Rupee tooltip to show the number of assets instead
-    pChart.options.plugins.tooltip.callbacks.label = ctx => {
-      return `  ${ctx.raw} Asset${ctx.raw !== 1 ? 's' : ''}`;
-    };
-    pChart.update('none');
-    
-    charts['port-profit-donut'] = pChart;
+  const profitDonutEl = document.getElementById('port-profit-donut');
+
+  let profitDonutWrap = document.getElementById('port-profit-donut-wrap');
+  if (profitDonutEl && profitDonutEl.tagName === 'CANVAS') {
+    profitDonutWrap = document.createElement('div');
+    profitDonutWrap.id = 'port-profit-donut-wrap';
+    profitDonutEl.parentNode.replaceChild(profitDonutWrap, profitDonutEl);
+  }
+  if (!profitDonutWrap) profitDonutWrap = document.getElementById('port-profit-donut-wrap');
+
+  const profitTotalAssets = profitVals.reduce((a,b)=>a+b,0);
+
+  if (profitTotalAssets === 0) {
+    profitDonutWrap.innerHTML = '<div class="empty-state" style="padding-top:2rem"><i class="fas fa-chart-pie"></i><p>No portfolio data</p></div>';
+  } else {
+    profitDonutWrap.style.cssText = 'display:flex;align-items:center;gap:18px;height:100%;padding:4px';
+    profitDonutWrap.innerHTML = `
+      <div style="position:relative;width:130px;height:130px;flex-shrink:0">
+        <canvas id="port-profit-donut-ring"></canvas>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+          <div style="font-family:'DM Mono',monospace;font-weight:700;font-size:1rem;color:${chartTextColor()}">${profitTotalAssets}</div>
+          <div style="font-size:0.6rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-top:1px">Assets</div>
+        </div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:9px;min-width:0;max-height:170px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none">
+        <style>#port-profit-donut-wrap::-webkit-scrollbar{display:none}</style>
+        ${profitLabels.map((label, i) => {
+          const hex = profitColors[i];
+          const count = profitVals[i];
+          const pct = (count / profitTotalAssets) * 100;
+          return `
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <div style="display:flex;align-items:center;gap:6px;min-width:0">
+                  <span style="width:7px;height:7px;border-radius:50%;background:${hex};box-shadow:0 0 8px ${hex};flex-shrink:0"></span>
+                  <span style="font-size:0.74rem;font-weight:600;color:${chartTextColor()};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${label}</span>
+                </div>
+                <span style="font-family:'DM Mono',monospace;font-size:0.74rem;font-weight:700;color:${hex};flex-shrink:0">${count} ${count===1?'asset':'assets'}</span>
+              </div>
+              <div style="height:4px;border-radius:99px;background:rgba(255,255,255,0.06);overflow:hidden">
+                <div style="height:100%;width:${pct}%;border-radius:99px;background:${hex};box-shadow:0 0 6px ${hex}80"></div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    const profitRingCtx = document.getElementById('port-profit-donut-ring').getContext('2d');
+    charts['port-profit-donut'] = new Chart(profitRingCtx, {
+      type: 'doughnut',
+      data: {
+        labels: profitLabels,
+        datasets: [{
+          data: profitVals,
+          backgroundColor: profitColors,
+          borderColor: 'transparent',
+          borderWidth: 0,
+          spacing: 3,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: '72%',
+        animation: { animateRotate: true, duration: 800, easing: 'easeOutQuart' },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(8,11,26,0.97)',
+            titleFont: { family:'DM Sans', size:12, weight:'700' },
+            bodyFont:  { family:'DM Mono', size:11 },
+            callbacks: { label: ctx => `  ${ctx.raw} Asset${ctx.raw !== 1 ? 's' : ''}` }
+          }
+        }
+      }
+    });
   }
 
   // ── NEW: ELITE AI PORTFOLIO INSIGHTS ──────────────────────────────────────
@@ -7771,75 +8316,79 @@ function renderPortAnalytics() {
     });
   }
 
-  // 7. CAPITAL GAINS ENGINE (Stacked Horizontal Bar)
+  // 7. CAPITAL GAINS ENGINE - Dual Liquid Flow Bars (Principal + Gains)
   destroyChart('portgains');
   const gainsCanvas = document.getElementById('chart-port-gains');
-  if (gainsCanvas && types.length > 0) {
-    charts['portgains'] = new Chart(gainsCanvas.getContext('2d'), {
-      type: 'bar',
-      data: {
-        labels: typeLabels,
-        datasets: [
-          { 
-            label: 'Principal', 
-            data: typeInvested, 
-            backgroundColor: document.body.classList.contains('light-mode') ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)', 
-            borderColor: document.body.classList.contains('light-mode') ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.2)', 
-            borderWidth: 1 
-          },
-          { 
-            label: 'Unrealized Gains', 
-            data: typeGains, 
-            backgroundColor: 'rgba(16, 185, 129, 0.6)', // Increased opacity for better visibility
-            borderColor: '#10b981', 
-            borderWidth: 2 
-          }
-        ]
-      },
-      options: {
-          ...cOpts(true), maintainAspectRatio: false, indexAxis: 'y',
-          scales: {
-            x: { 
-              stacked: true, 
-              grid: { display: false }, 
-              border: { display: false }, // <-- Removes the bottom horizontal line
-              ticks: { display: false } 
-            },
-            y: { 
-              stacked: true, 
-              grid: { display: false }, 
-              border: { display: false }, // <-- Removes the left vertical line
-              ticks: { color: chartTextColor(), font: {family: 'DM Sans', weight: '700'} } 
-            }
-          },
-        plugins: {
-           legend: { display: false },
-           tooltip: { ...cOpts(true).plugins.tooltip, callbacks: { label: ctx => `  ${ctx.dataset.label}: ₹${ctx.raw.toLocaleString('en-IN')}` } }
-        }
-      }
-    });
+
+  let gainsWrap = document.getElementById('chart-port-gains-wrap');
+  if (gainsCanvas && gainsCanvas.tagName === 'CANVAS') {
+    gainsWrap = document.createElement('div');
+    gainsWrap.id = 'chart-port-gains-wrap';
+    gainsCanvas.parentNode.replaceChild(gainsWrap, gainsCanvas);
+  }
+  if (!gainsWrap) gainsWrap = document.getElementById('chart-port-gains-wrap');
+
+  if (!types.length) {
+    gainsWrap.innerHTML = '<div class="empty-state" style="padding-top:2rem"><i class="fas fa-layer-group"></i><p>No portfolio data</p></div>';
+  } else {
+    const gainsMaxInv  = Math.max(...typeInvested, 1);
+    const gainsMaxGain = Math.max(...typeGains.map(g => Math.abs(g)), 1);
+    const isLightGains = document.body.classList.contains('light-mode');
+    const principalHex = isLightGains ? '#94a3b8' : '#64748b';
+    const trackBg = isLightGains ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+
+    gainsWrap.style.cssText = 'display:flex;flex-direction:column;gap:16px;padding:8px 4px;height:100%;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none';
+    gainsWrap.innerHTML = `<style>#chart-port-gains-wrap::-webkit-scrollbar{display:none}</style>` +
+      types.map((t, i) => {
+        const inv  = typeInvested[i] || 0;
+        const gain = typeGains[i] || 0;
+        const gainHex = gain >= 0 ? '#10b981' : '#ef4444';
+        const invPct  = Math.max(inv > 0 ? 3 : 0, (inv / gainsMaxInv) * 100);
+        const gainPct = Math.max(gain !== 0 ? 3 : 0, (Math.abs(gain) / gainsMaxGain) * 100);
+        return `
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:0.78rem;font-weight:700;color:${chartTextColor()}">${assetTypeLabel(t)}</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="flex:1;height:9px;border-radius:99px;background:${trackBg};overflow:hidden;position:relative">
+                  <div style="height:100%;width:${invPct}%;border-radius:99px;background:linear-gradient(90deg, ${principalHex}99, ${principalHex});box-shadow:0 0 8px ${principalHex}55;position:relative">
+                    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.2), transparent 60%);border-radius:99px"></div>
+                  </div>
+                </div>
+                <span style="font-family:'DM Mono',monospace;font-size:0.66rem;color:${principalHex};font-weight:700;width:70px;text-align:right;flex-shrink:0">₹${Math.round(inv).toLocaleString('en-IN')}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="flex:1;height:9px;border-radius:99px;background:${trackBg};overflow:hidden;position:relative">
+                  <div style="height:100%;width:${gainPct}%;border-radius:99px;background:linear-gradient(90deg, ${gainHex}99, ${gainHex});box-shadow:0 0 10px ${gainHex}70;position:relative">
+                    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.25), transparent 60%);border-radius:99px"></div>
+                  </div>
+                </div>
+                <span style="font-family:'DM Mono',monospace;font-size:0.66rem;color:${gainHex};font-weight:700;width:70px;text-align:right;flex-shrink:0">${gain>=0?'+':''}₹${Math.round(gain).toLocaleString('en-IN')}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('') +
+      `<div style="display:flex;gap:16px;justify-content:center;margin-top:4px;padding-top:8px;border-top:1px solid ${trackBg}">
+         <div style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:${principalHex}"></span><span style="font-size:0.68rem;color:var(--text-muted);font-weight:600">Principal</span></div>
+         <div style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:#10b981"></span><span style="font-size:0.68rem;color:var(--text-muted);font-weight:600">Gains</span></div>
+       </div>`;
   }
 
-  // 8. SYSTEMIC EXPOSURE (Bloomberg-Style Bullet Graph)
+// 8. SYSTEMIC EXPOSURE (Glowing Bullet Graph + Delta Readout)
   destroyChart('port-exposure');
   const expCanvas = document.getElementById('chart-port-exposure');
   if (expCanvas && data.length > 0) {
-    // UPDATED: Added FD and RD to the labels
     const labels = ['Stocks', 'Mutual Funds', 'Gold', 'Silver', 'Crypto', 'Real Estate', 'Fixed Deposit', 'Recurring Deposit'];
-    
-    // 1. Calculate Actual % distribution
+
     const totals = { Stocks: 0, MutualFund: 0, Gold: 0, Silver: 0, Crypto: 0, RealEstate: 0, FixedDeposit: 0, RecurringDeposit: 0 };
     let grandTotal = 0;
-    
     data.forEach(d => {
       grandTotal += d.currentValue;
       const t = normalizeAssetType(d.assetType);
-      if (totals[t] !== undefined) {
-        totals[t] += d.currentValue;
-      }
+      if (totals[t] !== undefined) totals[t] += d.currentValue;
     });
 
-    // Prevent NaN errors if grandTotal is 0
     const actualData = [
       grandTotal ? (totals.Stocks / grandTotal) * 100 : 0,
       grandTotal ? (totals.MutualFund / grandTotal) * 100 : 0,
@@ -7851,201 +8400,241 @@ function renderPortAnalytics() {
       grandTotal ? (totals.RecurringDeposit / grandTotal) * 100 : 0
     ];
 
-    // 2. Dynamically Define Ideal Targets based on User's Age AND Income
     let ageTier = 'thirties';
-    let incomeTier = 'mid'; // Default fallback
+    let incomeTier = 'mid';
     try {
       const currUser = JSON.parse(localStorage.getItem('fos_current_user') || '{}');
       const users = JSON.parse(localStorage.getItem('fos_users') || '[]');
       const userData = users.find(u => u.identifier === currUser.identifier);
-      
       if (userData && userData.onboarding) {
         if (userData.onboarding.age) ageTier = userData.onboarding.age;
         if (userData.onboarding.income) incomeTier = userData.onboarding.income;
       }
     } catch(e) { }
 
-    // Labels Order: ['Stocks', 'Mutual Funds', 'Gold', 'Silver', 'Crypto', 'Real Estate', 'FD', 'RD']
     let baseData;
-    
-    // STEP A: Set Base Allocation by AGE (Risk Horizon)
     switch (ageTier) {
-      case 'twenties':  baseData = [25, 30, 5, 5, 5, 10, 15, 5]; break; // Aggressive (Now with 10% Real Estate)
-      case 'thirties':  baseData = [25, 25, 10, 5, 5, 10, 15, 5]; break; // Growth
-      case 'forties':   baseData = [15, 15, 10, 5, 0, 10, 35, 10]; break; // Balanced
-      case 'fifties':   baseData = [10, 10, 10, 5, 0, 0, 50, 15]; break; // Conservative
+      case 'twenties':  baseData = [25, 30, 5, 5, 5, 10, 15, 5]; break;
+      case 'thirties':  baseData = [25, 25, 10, 5, 5, 10, 15, 5]; break;
+      case 'forties':   baseData = [15, 15, 10, 5, 0, 10, 35, 10]; break;
+      case 'fifties':   baseData = [10, 10, 10, 5, 0, 0, 50, 15]; break;
       default:          baseData = [25, 25, 10, 5, 5, 10, 15, 5]; break;
     }
 
-    // STEP B: Adjust Allocation by INCOME (Liquidity/Risk Capacity)
     let idealData = [...baseData];
-    
     if (incomeTier === 'tiny') {
-        // Under 25k: Shift 10% from Stocks/MF to FD for emergency safety
-        idealData[0] = Math.max(0, idealData[0] - 5);
-        idealData[1] = Math.max(0, idealData[1] - 5);
-        idealData[6] += 10; 
+      idealData[0] = Math.max(0, idealData[0] - 5);
+      idealData[1] = Math.max(0, idealData[1] - 5);
+      idealData[6] += 10;
     } else if (incomeTier === 'small') {
-        // 25k-50k: Shift 5% from Stocks/MF to FD
-        idealData[0] = Math.max(0, idealData[0] - 2.5);
-        idealData[1] = Math.max(0, idealData[1] - 2.5);
-        idealData[6] += 5;
+      idealData[0] = Math.max(0, idealData[0] - 2.5);
+      idealData[1] = Math.max(0, idealData[1] - 2.5);
+      idealData[6] += 5;
     } else if (incomeTier === 'high') {
-        // 1L-2L: Can take more risk. Shift 5% from FD to Stocks/Crypto
-        if (idealData[6] >= 5) {
-            idealData[6] -= 5;
-            idealData[0] += 2.5; // Stocks bump
-            idealData[4] += 2.5; // Crypto bump
-        }
+      if (idealData[6] >= 5) { idealData[6] -= 5; idealData[0] += 2.5; idealData[4] += 2.5; }
     } else if (incomeTier === 'vhigh') {
-        // 2L+: High risk tolerance. Shift 10% from Safe Assets to Real Estate/Stocks
-        if (idealData[6] >= 5) idealData[6] -= 5;
-        if (idealData[7] >= 2.5) idealData[7] -= 2.5;
-        if (idealData[2] >= 2.5) idealData[2] -= 2.5;
-        idealData[5] += 5; // Real Estate bump
-        idealData[0] += 5; // Stocks bump
+      if (idealData[6] >= 5) idealData[6] -= 5;
+      if (idealData[7] >= 2.5) idealData[7] -= 2.5;
+      if (idealData[2] >= 2.5) idealData[2] -= 2.5;
+      idealData[5] += 5;
+      idealData[0] += 5;
     }
-    // 'mid' (50k-1L) stays exactly at the base age target.
 
+    destroyChart('port-exposure');
+    const expEl = document.getElementById('chart-port-exposure');
 
-    // Custom Plugin for the Target Lines (|)
-    // Locate the bulletTargetPlugin definition
-const bulletTargetPlugin = {
-  id: 'bulletTarget',
-  afterDatasetsDraw: (chart) => {
-    const { ctx, chartArea: { left, right }, scales: { x, y } } = chart;
-    const isLight = document.body.classList.contains('light-mode'); // ADD THIS
-    ctx.save();
-    chart.getDatasetMeta(0).data.forEach((bar, index) => {
-      const targetX = x.getPixelForValue(idealData[index]);
-      ctx.beginPath();
-      // UPDATE THIS LINE:
-      ctx.strokeStyle = isLight ? '#0f172a' : '#ffffff'; 
-      ctx.lineWidth = 3;
-      ctx.moveTo(targetX, bar.y - 12);
-      ctx.lineTo(targetX, bar.y + 12);
-      ctx.stroke();
-    });
-    ctx.restore();
-  }
-};
+    let expWrap = document.getElementById('chart-port-exposure-wrap');
+    if (expEl && expEl.tagName === 'CANVAS') {
+      expWrap = document.createElement('div');
+      expWrap.id = 'chart-port-exposure-wrap';
+      expEl.parentNode.replaceChild(expWrap, expEl);
+    }
+    if (!expWrap) expWrap = document.getElementById('chart-port-exposure-wrap');
 
-    charts['port-exposure'] = new Chart(expCanvas.getContext('2d'), {
-      type: 'bar',
-      plugins: [bulletTargetPlugin],
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Actual Exposure %',
-          data: actualData,
-          backgroundColor: actualData.map((val, i) => val > idealData[i] ? '#f43f5e' : '#38bdf8'), // Red if over-exposed, Blue if under
-          borderRadius: 4,
-          barThickness: 12,
-        }]
-      },
-      options: {
-        ...cOpts(true),
-        indexAxis: 'y', // Makes it horizontal
-        maintainAspectRatio: false,
-      scales: {
-          x: {
-            grid: { display: false }, // <-- This removes the vertical background lines!
-            border: { display: false }, 
-            ticks: { color: chartTextColor(), font: { size: 10 } },
-            max: Math.max(...actualData, ...idealData) + 10, 
-            title: { display: true, text: 'Allocation %', color: chartTextColor(), font: { size: 9 } }
-          },
-          y: {
-            grid: { display: false },
-            border: { display: false }, 
-            ticks: { color: chartTextColor(), font: { size: 11, weight: '700' } }
-          }
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: (ctx) => {
-                const target = idealData[ctx.dataIndex];
-                const diff = (ctx.raw - target).toFixed(1);
-                return ` Actual: ${ctx.raw.toFixed(1)}% | Target: ${target}% (${diff > 0 ? '+' : ''}${diff}%)`;
-              }
-            }
-          }
-        }
-      }
-    });
+    const expMax = Math.max(...actualData, ...idealData) * 1.15 || 10;
+    const isLightExp = document.body.classList.contains('light-mode');
+    const trackBg = isLightExp ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+
+    expWrap.style.cssText = 'display:flex;flex-direction:column;gap:13px;padding:8px 4px;height:100%;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none';
+    expWrap.innerHTML = `<style>#chart-port-exposure-wrap::-webkit-scrollbar{display:none}</style>` +
+      labels.map((label, i) => {
+        const actual = actualData[i];
+        const target = idealData[i];
+        const diff = actual - target;
+        const overExposed = diff > 0.5;
+        const underExposed = diff < -0.5;
+        const hex = overExposed ? '#f43f5e' : underExposed ? '#fbbf24' : '#34d399';
+        const actualPct = Math.max(actual > 0 ? 2 : 0, (actual / expMax) * 100);
+        const targetPct = Math.max(2, (target / expMax) * 100);
+        const diffLabel = diff === 0 ? 'On target' : (diff > 0 ? `+${diff.toFixed(1)}% over` : `${diff.toFixed(1)}% under`);
+        return `
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span style="font-size:0.76rem;font-weight:700;color:${chartTextColor()}">${label}</span>
+              <div style="display:flex;align-items:baseline;gap:7px">
+                <span style="font-family:'DM Mono',monospace;font-size:0.78rem;font-weight:700;color:${hex}">${actual.toFixed(1)}%</span>
+                <span style="font-size:0.6rem;color:${hex};font-weight:600">${diffLabel}</span>
+              </div>
+            </div>
+            <div style="height:12px;border-radius:99px;background:${trackBg};overflow:hidden;position:relative">
+              <div style="height:100%;width:${actualPct}%;border-radius:99px;background:linear-gradient(90deg, ${hex}99, ${hex});box-shadow:0 0 12px ${hex}70,inset 0 1px 0 rgba(255,255,255,0.3);position:relative;transition:width 0.8s cubic-bezier(0.16,1,0.3,1)">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.25), transparent 60%);border-radius:99px"></div>
+              </div>
+              <div style="position:absolute;top:-2px;bottom:-2px;left:${targetPct}%;width:2px;background:${isLightExp ? '#0f172a' : '#ffffff'};box-shadow:0 0 6px rgba(255,255,255,0.6);transform:translateX(-1px)" title="Target: ${target.toFixed(1)}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('') +
+      `<div style="display:flex;gap:18px;justify-content:center;margin-top:2px;padding-top:8px;border-top:1px solid ${trackBg};font-size:0.65rem;font-weight:600;color:var(--text-muted)">
+         <div style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:#34d399"></span>On Target</div>
+         <div style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:#fbbf24"></span>Under-exposed</div>
+         <div style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:#f43f5e"></span>Over-exposed</div>
+         <div style="display:flex;align-items:center;gap:6px"><span style="width:2px;height:9px;background:${isLightExp ? '#0f172a' : '#ffffff'}"></span>Ideal Target</div>
+       </div>`;
   }
 
-// 9. CAPITAL LIQUIDITY MATRIX (Radar Chart Version)
+// 9. CAPITAL LIQUIDITY MATRIX - Glass Orbital Radar
   destroyChart('portliquidity');
   const liqCanvas = document.getElementById('chart-port-liquidity');
-  if (liqCanvas && data.length > 0) {
-    let high = 0, med = 0, low = 0;
-    
-    data.forEach(d => {
-      const t = normalizeAssetType(d.assetType);
-      const val = d.currentValue;
-      if (['MutualFund', 'Stocks', 'Crypto'].includes(t)) high += val;
-      else if (['Gold', 'Silver'].includes(t)) med += val;
-      else low += val; 
-    });
 
-    const liqData = [high, med, low];
-    const liqLabels = ['High Liquidity', 'Medium Liquidity', 'Illiquid'];
-    
-    charts['portliquidity'] = new Chart(liqCanvas.getContext('2d'), {
-      type: 'radar',
-      data: {
-        labels: liqLabels,
-        datasets: [{
-          label: 'Capital Distribution',
-          data: liqData,
-          fill: true,
-          backgroundColor: 'rgba(59, 130, 246, 0.2)',
-          borderColor: '#3b82f6',
-          borderWidth: 2,
-          pointBackgroundColor: '#3b82f6',
-          pointBorderColor: '#fff',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: '#3b82f6'
-        }]
+  let liqWrap = document.getElementById('chart-port-liquidity-wrap');
+  if (liqWrap) {
+    const freshCanvas = document.createElement('canvas');
+    freshCanvas.id = 'chart-port-liquidity';
+    liqWrap.parentNode.replaceChild(freshCanvas, liqWrap);
+  }
+  const liqCtx = document.getElementById('chart-port-liquidity').getContext('2d');
+
+  let high = 0, med = 0, low = 0;
+  data.forEach(d => {
+    const t = normalizeAssetType(d.assetType);
+    const val = d.currentValue;
+    if (['MutualFund', 'Stocks', 'Crypto'].includes(t)) high += val;
+    else if (['Gold', 'Silver'].includes(t)) med += val;
+    else low += val;
+  });
+
+  const liqData = [high, med, low];
+  const liqLabels = ['High Liquidity', 'Medium Liquidity', 'Illiquid'];
+  const liqTotal = high + med + low || 1;
+  const isLightLiq = document.body.classList.contains('light-mode');
+
+  const liqGrad = liqCtx.createLinearGradient(0, 0, 0, liqCtx.canvas.height || 280);
+  liqGrad.addColorStop(0, 'rgba(56,189,248,0.45)');
+  liqGrad.addColorStop(0.55, 'rgba(56,189,248,0.18)');
+  liqGrad.addColorStop(1, 'rgba(56,189,248,0.02)');
+
+  // Glow + glass-ring plugin: outer halo, concentric depth rings, glowing stroke
+  const liqGlassPlugin = {
+    id: 'liqGlass',
+    beforeDraw: (chart) => {
+      const { ctx, chartArea } = chart;
+      if (!chartArea) return;
+      const cx = (chartArea.left + chartArea.right) / 2;
+      const cy = (chartArea.top + chartArea.bottom) / 2;
+      const r  = Math.min(chartArea.right - chartArea.left, chartArea.bottom - chartArea.top) / 2;
+      ctx.save();
+      const halo = ctx.createRadialGradient(cx, cy, r * 0.1, cx, cy, r * 1.1);
+      halo.addColorStop(0, isLightLiq ? 'rgba(56,189,248,0.08)' : 'rgba(56,189,248,0.14)');
+      halo.addColorStop(1, 'rgba(56,189,248,0)');
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * 1.1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    },
+    beforeDatasetsDraw: (chart) => {
+      chart.ctx.save();
+      if (!isLightLiq) {
+        chart.ctx.shadowColor = 'rgba(56,189,248,0.65)';
+        chart.ctx.shadowBlur = 18;
+        chart.ctx.shadowOffsetY = 4;
+      }
+    },
+    afterDatasetsDraw: (chart) => { chart.ctx.restore(); }
+  };
+
+  // Center readout: dominant liquidity tier + its %
+  const liqCenterPlugin = {
+    id: 'liqCenter',
+    afterDraw: (chart) => {
+      const { ctx, chartArea } = chart;
+      if (!chartArea) return;
+      const cx = (chartArea.left + chartArea.right) / 2;
+      const cy = (chartArea.top + chartArea.bottom) / 2;
+      const maxIdx = liqData.indexOf(Math.max(...liqData));
+      const pct = ((liqData[maxIdx] / liqTotal) * 100).toFixed(0);
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = "800 18px 'DM Mono', monospace";
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText(pct + '%', cx, cy - 6);
+      ctx.font = "600 9px 'DM Sans', sans-serif";
+      ctx.fillStyle = isLightLiq ? '#475569' : '#94a3b8';
+      ctx.fillText(liqLabels[maxIdx].toUpperCase(), cx, cy + 11);
+      ctx.restore();
+    }
+  };
+
+  charts['portliquidity'] = new Chart(liqCtx, {
+    type: 'radar',
+    data: {
+      labels: liqLabels,
+      datasets: [{
+        label: 'Capital Distribution',
+        data: liqData,
+        fill: true,
+        backgroundColor: liqGrad,
+        borderColor: '#38bdf8',
+        borderWidth: 2.5,
+        pointRadius: 6,
+        pointBackgroundColor: isLightLiq ? '#ffffff' : '#0f172a',
+        pointBorderColor: '#38bdf8',
+        pointBorderWidth: 2.5,
+        pointHoverRadius: 9,
+        pointHoverBackgroundColor: '#38bdf8',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2,
+        tension: 0.15
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1000, easing: 'easeOutBack' },
+      scales: {
+        r: {
+          grid: { display: true, color: chartGridColor(), circular: true },
+          angleLines: { display: true, color: chartGridColor() },
+          pointLabels: {
+            color: chartTextColor(),
+            font: { family: 'DM Sans', size: 11, weight: '700' },
+            padding: 12
+          },
+          ticks: { display: false },
+          suggestedMin: 0
+        }
       },
-      options: {
-        ...cOpts(true),
-        maintainAspectRatio: false,
-        scales: {
-          r: {
-            display: true,          // Ensures the scale is rendered
-            grid: { 
-              display: true,        // TURNS ON THE GRID LINES
-              color: chartGridColor() // Uses your theme-aware color function
-            },
-            angleLines: { 
-              display: true,        // TURNS ON THE ANGLE LINES
-              color: chartGridColor() 
-            },
-            pointLabels: {
-              color: chartTextColor(),
-              font: { family: 'DM Sans', size: 11, weight: '700' }
-            },
-            ticks: {
-              display: false // Keeps the center clean
-            },
-            suggestedMin: 0
-          }
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: (ctx) => ` ₹${ctx.raw.toLocaleString('en-IN')}`
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(8,11,26,0.97)',
+          titleFont: { family:'DM Sans', size:12, weight:'700' },
+          bodyFont:  { family:'DM Mono', size:11 },
+          borderColor: 'rgba(56,189,248,0.4)',
+          borderWidth: 1,
+          callbacks: {
+            label: ctx => {
+              const pct = ((ctx.raw / liqTotal) * 100).toFixed(1);
+              return `  ₹${Math.round(ctx.raw).toLocaleString('en-IN')}  (${pct}%)`;
             }
           }
         }
       }
-    });
-  }
+    },
+    plugins: [liqGlassPlugin, liqCenterPlugin]
+  });
 }
 
 // ── ANALYTICS (Finance) ────────────────────────────────────────────────────
@@ -8518,78 +9107,86 @@ function renderAnalytics() {
         console.error("Radar Chart failed safely:", e);
       }
 
-      // ── Wealth Ring Ecosystem (Investment Portfolio) ──────────────────────
+      // ── Investment Portfolio - Center-Stat Ring + Progress Legend ──────────
       const invGroupData = groupData('Investment', data);
       const invEmpty = document.getElementById('empty-invest');
       const invCanvas = document.getElementById('chart-invest');
-      
-      if (invCanvas) invCanvas.style.display = 'none';
-      if (invEmpty) invEmpty.style.display = 'none';
+
       destroyChart('invest');
 
+      let invWrap = document.getElementById('chart-invest-wrap');
+      if (invCanvas && invCanvas.tagName === 'CANVAS') {
+        invWrap = document.createElement('div');
+        invWrap.id = 'chart-invest-wrap';
+        invCanvas.parentNode.replaceChild(invWrap, invCanvas);
+      }
+      if (!invWrap) invWrap = document.getElementById('chart-invest-wrap');
+      if (invEmpty) invEmpty.style.display = 'none';
+
       const sortedInv = Object.entries(invGroupData).sort((a,b) => b[1] - a[1]);
-      const totalInvSum = sortedInv.reduce((sum, [, val]) => sum + val, 0);
+      const totalInvSum = sortedInv.reduce((sum, [, val]) => sum + val, 0) || 1;
+      const ringColors = ['#06b6d4', '#8b5cf6', '#f59e0b', '#10b981', '#f472b6', '#3b82f6', '#fb923c', '#a3e635'];
 
       if (sortedInv.length > 0) {
-        if (invCanvas) invCanvas.style.display = '';
-        const invCtx = invCanvas.getContext('2d');
-        
-        // Premium Neon Fintech Palette (Outer ring to Inner ring)
-        const ringColors = [
-          { c: '#06b6d4', glow: 'rgba(6, 182, 212, 0.2)' },  // Cyan 
-          { c: '#8b5cf6', glow: 'rgba(139, 92, 246, 0.2)' }, // Purple
-          { c: '#f59e0b', glow: 'rgba(245, 158, 11, 0.2)' }, // Amber
-          { c: '#10b981', glow: 'rgba(16, 185, 129, 0.2)' }, // Emerald
-          { c: '#f472b6', glow: 'rgba(244, 114, 182, 0.2)' },// Pink
-          { c: '#3b82f6', glow: 'rgba(59, 130, 246, 0.2)' }  // Blue
-        ];
+        invWrap.style.cssText = 'display:flex;align-items:center;gap:18px;height:100%;padding:4px';
+        invWrap.innerHTML = `
+          <div style="position:relative;width:130px;height:130px;flex-shrink:0">
+            <canvas id="chart-invest-ring"></canvas>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+              <div style="font-family:'DM Mono',monospace;font-weight:700;font-size:1rem;color:${chartTextColor()}">${sortedInv.length}</div>
+              <div style="font-size:0.6rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-top:1px">Holdings</div>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:9px;min-width:0;max-height:220px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none">
+            <style>#chart-invest-wrap::-webkit-scrollbar{display:none}</style>
+            ${sortedInv.map(([label, val], i) => {
+              const hex = ringColors[i % ringColors.length];
+              const pct = (val / totalInvSum) * 100;
+              return `
+                <div style="display:flex;flex-direction:column;gap:4px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                    <div style="display:flex;align-items:center;gap:6px;min-width:0">
+                      <span style="width:7px;height:7px;border-radius:50%;background:${hex};box-shadow:0 0 8px ${hex};flex-shrink:0"></span>
+                      <span style="font-size:0.74rem;font-weight:600;color:${chartTextColor()};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${label}</span>
+                    </div>
+                    <span style="font-family:'DM Mono',monospace;font-size:0.74rem;font-weight:700;color:${hex};flex-shrink:0">${pct.toFixed(0)}%</span>
+                  </div>
+                  <div style="height:4px;border-radius:99px;background:rgba(255,255,255,0.06);overflow:hidden">
+                    <div style="height:100%;width:${pct}%;border-radius:99px;background:${hex};box-shadow:0 0 6px ${hex}80"></div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
 
-        charts['invest'] = new Chart(invCtx, {
+        const invRingCtx = document.getElementById('chart-invest-ring').getContext('2d');
+        charts['invest'] = new Chart(invRingCtx, {
           type: 'doughnut',
           data: {
             labels: sortedInv.map(inv => inv[0]),
             datasets: [{
               data: sortedInv.map(inv => inv[1]),
-              backgroundColor: sortedInv.map((inv, i) => {
-                const colorObj = ringColors[i % ringColors.length];
-                const g = invCtx.createLinearGradient(0, 0, 0, 250);
-                g.addColorStop(0, colorObj.c);
-                g.addColorStop(1, colorObj.glow);
-                return g;
-              }),
+              backgroundColor: sortedInv.map((_, i) => ringColors[i % ringColors.length]),
+              borderColor: 'transparent',
               borderWidth: 0,
-              borderRadius: 6, // Smooth edges on the slices
-              hoverOffset: 8   // Pops out slightly when hovered
+              spacing: 3,
+              hoverOffset: 6
             }]
           },
           options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '70%', // Creates a thin, elegant premium ring
-            layout: { padding: { top: 10, bottom: 10 } },
+            responsive: true, maintainAspectRatio: false, cutout: '72%',
+            animation: { animateRotate: true, duration: 800, easing: 'easeOutQuart' },
             plugins: {
-              legend: { 
-                display: true, 
-                position: 'right', // Moves labels to the side for readability
-                labels: { 
-                  color: chartTextColor(), 
-                  usePointStyle: true, 
-                  pointStyle: 'circle',
-                  font: { family: 'DM Sans', size: 11, weight: '600' },
-                  padding: 15
-                } 
-              },
+              legend: { display: false },
               tooltip: {
                 backgroundColor: 'rgba(8,11,26,0.97)',
-                titleFont: { family:'DM Sans', size:13, weight:'700', color: '#ffffff' },
-                bodyFont:  { family:'DM Mono', size:12, color: '#e2e8f0' },
-                borderColor: 'rgba(255,255,255,0.1)',
-                borderWidth: 1,
+                titleFont: { family:'DM Sans', size:12, weight:'700' },
+                bodyFont:  { family:'DM Mono', size:11 },
                 callbacks: {
-                  label: (ctx) => {
-                    const val = ctx.raw;
-                    const pct = ((val / totalInvSum) * 100).toFixed(1);
-                    return `  ₹${val.toLocaleString('en-IN')} (${pct}%)`;
+                  label: ctx => {
+                    const pct = ((ctx.raw / totalInvSum) * 100).toFixed(1);
+                    return `  ₹${Math.round(ctx.raw).toLocaleString('en-IN')} (${pct}%)`;
                   }
                 }
               }
@@ -8597,10 +9194,7 @@ function renderAnalytics() {
           }
         });
       } else {
-        if (invEmpty) {
-          invEmpty.style.display = 'flex';
-          invEmpty.innerHTML = '<i class="fas fa-coins"></i>No investment data';
-        }
+        invWrap.innerHTML = '<div class="empty-state"><i class="fas fa-coins"></i><p>No investment data</p></div>';
       }
 
       // ── Debt Pyramid / Tier System ─────────────────────────────────────────────
@@ -10098,7 +10692,7 @@ function destroyChart(key) {
     delete charts[key];
   }
 }
-function chartTextColor() { return document.body.classList.contains('light-mode') ? '#334155' : '#e2e8f0'; }
+function chartTextColor() { return document.body.classList.contains('light-mode') ? '#0f172a' : '#e2e8f0'; }
 function chartGridColor() { return document.body.classList.contains('light-mode') ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.04)'; }
 function donutBorderColor() { return document.body.classList.contains('light-mode') ? 'rgba(255,255,255,0.9)' : 'rgba(7,9,26,0.9)'; }
 
@@ -10731,7 +11325,15 @@ function renderCreditCharts() {
   const colors  = ['#f97316','#fb923c','#fdba74','#fbbf24','#f59e0b','#ef4444','#ec4899','#a78bfa','#0075ff','#38bdf8','#34d399'];
 
 destroyChart('credit-bar');
-  const creditBarCtx = document.getElementById('credit-bar-chart').getContext('2d');
+  const creditBarEl = document.getElementById('credit-bar-chart');
+
+  let creditBarWrap = document.getElementById('credit-bar-chart-wrap');
+  if (creditBarEl && creditBarEl.tagName === 'CANVAS') {
+    creditBarWrap = document.createElement('div');
+    creditBarWrap.id = 'credit-bar-chart-wrap';
+    creditBarEl.parentNode.replaceChild(creditBarWrap, creditBarEl);
+  }
+  if (!creditBarWrap) creditBarWrap = document.getElementById('credit-bar-chart-wrap');
 
   // Group duplicate lender names and sum their balances
   const groupedCredit = creditDb.reduce((acc, curr) => {
@@ -10744,59 +11346,114 @@ destroyChart('credit-bar');
     .map(name => ({ lenderName: name, outstandingBalance: groupedCredit[name] }))
     .sort((a,b) => b.outstandingBalance - a.outstandingBalance);
 
-  charts['credit-bar'] = new Chart(creditBarCtx, {
-    type: 'bar',
-    data: {
-      labels: sortedCreditData.map(c => c.lenderName),
-      datasets: [{
-          label: 'Outstanding Balance',
-          data: sortedCreditData.map(c => c.outstandingBalance),
-          backgroundColor: '#4169e1', // Sleek Royal Blue
-          hoverBackgroundColor: '#ffd700', // Gold on hover for premium feel
-          borderColor: 'transparent',
-          borderWidth: 0,                    
-          borderRadius: 6, // Subtle rounded corners on the ends        
-          borderSkipped: false,
-          barPercentage: 0.75 // Gives the bars breathing room
-        }]
-    },
-    options: { 
-      ...cOpts(false),
-      indexAxis: 'y', // CRITICAL: This flips the chart horizontally
-      scales: { 
-          x: { 
-            display: true,
-            grid: { color: 'rgba(255, 255, 255, 0.05)' }, 
-            border: { display: false }, // <-- Removes the bottom horizontal line
-            ticks: { 
-              color: chartTextColor(), 
-              font: { size: 10, weight: '500' },
-              // Auto-format large numbers to 'k' or 'L' to save space
-              callback: function(value) {
-                  if (value >= 100000) return '₹' + (value / 100000).toFixed(1) + 'L';
-                  if (value >= 1000) return '₹' + (value / 1000).toFixed(0) + 'k';
-                  return '₹' + value;
-              }
-            } 
-          },
-          y: { 
-            grid: { display: false }, 
-            border: { display: false }, // <-- Removes the left vertical line
-            ticks: { color: chartTextColor(), font: { size: 11, weight: '600' } } 
-          } 
-        }
-    }
-  });
+  if (sortedCreditData.length === 0) {
+    creditBarWrap.innerHTML = '<div class="empty-state" style="padding-top:2rem"><i class="fas fa-credit-card"></i><p>No credit data</p></div>';
+  } else {
+    const creditBarMax = Math.max(...sortedCreditData.map(c => c.outstandingBalance)) || 1;
+    const isLightCreditBar = document.body.classList.contains('light-mode');
+    const creditBarHex = '#f97316';
+    creditBarWrap.style.cssText = 'display:flex;flex-direction:column;gap:14px;padding:6px 4px;overflow-y:auto;height:100%;scrollbar-width:none;-ms-overflow-style:none';
+    creditBarWrap.innerHTML = `<style>#credit-bar-chart-wrap::-webkit-scrollbar{display:none}</style>` + sortedCreditData.map(c => {
+      const pct = Math.max(3, (c.outstandingBalance / creditBarMax) * 100);
+      const trackBg = isLightCreditBar ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+      return `
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <span style="font-size:0.8rem;font-weight:700;color:${chartTextColor()}">${c.lenderName}</span>
+            <span style="font-family:'DM Mono',monospace;font-size:0.88rem;font-weight:700;color:${creditBarHex}">₹${Math.round(c.outstandingBalance).toLocaleString('en-IN')}</span>
+          </div>
+          <div style="height:13px;border-radius:99px;background:${trackBg};overflow:hidden;position:relative;border:1px solid ${creditBarHex}22">
+            <div style="height:100%;width:${pct}%;border-radius:99px;background:linear-gradient(90deg, ${creditBarHex}aa, ${creditBarHex});box-shadow:0 0 14px ${creditBarHex}80,inset 0 1px 0 rgba(255,255,255,0.3);transition:width 0.8s cubic-bezier(0.16,1,0.3,1);position:relative">
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.25), transparent 60%);border-radius:99px"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
 
-  // Type mix donut
+  // Loan Type Mix - Center-Stat Ring + Progress Legend
   const typeMap = {};
   data.forEach(c => { typeMap[c.type] = (typeMap[c.type]||0) + c.outstandingBalance; });
   const typeLabels = Object.keys(typeMap);
   const typeVals   = typeLabels.map(k => typeMap[k]);
   const typeColors = ['#f97316','#fbbf24','#60a5fa','#34d399','#a78bfa'];
+
   destroyChart('credit-type-d');
-  if (typeLabels.length) {
-    charts['credit-type-d'] = makeDonut('credit-type-donut', typeLabels, typeVals, typeColors);
+  const creditDonutEl = document.getElementById('credit-type-donut');
+
+  let creditDonutWrap = document.getElementById('credit-type-donut-wrap');
+  if (creditDonutEl && creditDonutEl.tagName === 'CANVAS') {
+    creditDonutWrap = document.createElement('div');
+    creditDonutWrap.id = 'credit-type-donut-wrap';
+    creditDonutEl.parentNode.replaceChild(creditDonutWrap, creditDonutEl);
+  }
+  if (!creditDonutWrap) creditDonutWrap = document.getElementById('credit-type-donut-wrap');
+
+  if (!typeLabels.length) {
+    creditDonutWrap.innerHTML = '<div class="empty-state" style="padding-top:2rem"><i class="fas fa-credit-card"></i><p>No credit data</p></div>';
+  } else {
+    const creditTypeTotal = typeVals.reduce((a,b)=>a+b,0) || 1;
+    creditDonutWrap.style.cssText = 'display:flex;align-items:center;gap:18px;height:100%;padding:4px';
+    creditDonutWrap.innerHTML = `
+      <div style="position:relative;width:130px;height:130px;flex-shrink:0">
+        <canvas id="credit-type-donut-ring"></canvas>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+          <div style="font-family:'DM Mono',monospace;font-weight:700;font-size:1rem;color:${chartTextColor()}">${typeLabels.length}</div>
+          <div style="font-size:0.6rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-top:1px">Types</div>
+        </div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:9px;min-width:0;max-height:170px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none">
+        <style>#credit-type-donut-wrap::-webkit-scrollbar{display:none}</style>
+        ${typeLabels.map((label, i) => {
+          const hex = typeColors[i % typeColors.length];
+          const pct = (typeVals[i] / creditTypeTotal) * 100;
+          return `
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <div style="display:flex;align-items:center;gap:6px;min-width:0">
+                  <span style="width:7px;height:7px;border-radius:50%;background:${hex};box-shadow:0 0 8px ${hex};flex-shrink:0"></span>
+                  <span style="font-size:0.74rem;font-weight:600;color:${chartTextColor()};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${label}</span>
+                </div>
+                <span style="font-family:'DM Mono',monospace;font-size:0.74rem;font-weight:700;color:${hex};flex-shrink:0">${pct.toFixed(0)}%</span>
+              </div>
+              <div style="height:4px;border-radius:99px;background:rgba(255,255,255,0.06);overflow:hidden">
+                <div style="height:100%;width:${pct}%;border-radius:99px;background:${hex};box-shadow:0 0 6px ${hex}80"></div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    const creditRingCtx = document.getElementById('credit-type-donut-ring').getContext('2d');
+    charts['credit-type-d'] = new Chart(creditRingCtx, {
+      type: 'doughnut',
+      data: {
+        labels: typeLabels,
+        datasets: [{
+          data: typeVals,
+          backgroundColor: typeLabels.map((_, i) => typeColors[i % typeColors.length]),
+          borderColor: 'transparent',
+          borderWidth: 0,
+          spacing: 3,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: '72%',
+        animation: { animateRotate: true, duration: 800, easing: 'easeOutQuart' },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(8,11,26,0.97)',
+            titleFont: { family:'DM Sans', size:12, weight:'700' },
+            bodyFont:  { family:'DM Mono', size:11 },
+            callbacks: { label: ctx => `  ₹${Math.round(ctx.raw).toLocaleString('en-IN')}` }
+          }
+        }
+      }
+    });
   }
 }
 
@@ -10893,6 +11550,475 @@ function deleteCreditItem(id) {
   }
 }
 
+// ── INSURANCE (MY ZONE) ──────────────────────────────────────────────────
+let editingInsuranceId = null;
+let insuranceFilter = 'all';
+
+function toggleInsuranceCategory() {
+  const cat = document.getElementById('ins-category').value;
+  document.getElementById('ins-employer-row').style.display = (cat === 'Corporate') ? 'flex' : 'none';
+}
+
+function toggleInsuranceOtherProvider() {
+  const isOther = document.getElementById('ins-provider').value === '__other__';
+  document.getElementById('ins-provider-other').style.display = isOther ? 'block' : 'none';
+}
+
+function openInsuranceModal() {
+  editingInsuranceId = null;
+  document.getElementById('insurance-modal-title').textContent = 'Add Insurance Policy';
+  document.getElementById('insurance-save-btn').textContent = 'Save Policy';
+  document.getElementById('insurance-delete-btn').style.display = 'none';
+  ['ins-policy-number','ins-holder','ins-employer','ins-sum-insured','ins-premium','ins-nominee','ins-notes','ins-provider-other'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('ins-category').value = 'Personal';
+  document.getElementById('ins-type').value = 'Health Insurance';
+  document.getElementById('ins-provider').value = 'LIC of India';
+  document.getElementById('ins-frequency').value = 'Yearly';
+  document.getElementById('ins-status').value = 'Active';
+  document.getElementById('ins-start-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('ins-end-date').value = '';
+  document.getElementById('ins-edit-id').value = '';
+  toggleInsuranceCategory();
+  toggleInsuranceOtherProvider();
+  document.getElementById('insurance-modal').style.display = 'flex';
+}
+
+function closeInsuranceModal() { document.getElementById('insurance-modal').style.display = 'none'; }
+
+function editInsuranceEntry(id) {
+  const p = insuranceDb.find(x => x.id === id);
+  if (!p) return;
+  editingInsuranceId = id;
+  document.getElementById('insurance-modal-title').textContent = 'Edit Insurance Policy';
+  document.getElementById('insurance-save-btn').textContent = 'Update Policy';
+  document.getElementById('insurance-delete-btn').style.display = 'block';
+  document.getElementById('ins-category').value      = p.category;
+  document.getElementById('ins-type').value          = p.insType;
+
+  const providerSelect = document.getElementById('ins-provider');
+  const knownProvider = Array.from(providerSelect.options).some(o => o.value === p.provider);
+  providerSelect.value = knownProvider ? p.provider : '__other__';
+  document.getElementById('ins-provider-other').value = knownProvider ? '' : p.provider;
+
+  document.getElementById('ins-policy-number').value = p.policyNumber || '';
+  document.getElementById('ins-holder').value         = p.holderName || '';
+  document.getElementById('ins-employer').value       = p.employer || '';
+  document.getElementById('ins-sum-insured').value    = p.sumInsured || '';
+  document.getElementById('ins-premium').value        = p.premium || '';
+  document.getElementById('ins-frequency').value      = p.frequency || 'Yearly';
+  document.getElementById('ins-status').value         = p.status || 'Active';
+  document.getElementById('ins-start-date').value     = p.startDate || '';
+  document.getElementById('ins-end-date').value       = p.endDate || '';
+  document.getElementById('ins-nominee').value        = p.nominee || '';
+  document.getElementById('ins-notes').value          = p.notes || '';
+
+  toggleInsuranceCategory();
+  toggleInsuranceOtherProvider();
+  document.getElementById('insurance-modal').style.display = 'flex';
+}
+
+function saveInsuranceEntry() {
+  const category     = document.getElementById('ins-category').value;
+  const insType       = document.getElementById('ins-type').value;
+  const providerSel    = document.getElementById('ins-provider').value;
+  const provider       = providerSel === '__other__' ? document.getElementById('ins-provider-other').value.trim() : providerSel;
+  const policyNumber   = document.getElementById('ins-policy-number').value.trim();
+  const holderName     = document.getElementById('ins-holder').value.trim();
+  const employer       = document.getElementById('ins-employer').value.trim();
+  const sumInsured     = Number(document.getElementById('ins-sum-insured').value) || 0;
+  const premium        = Number(document.getElementById('ins-premium').value) || 0;
+  const frequency      = document.getElementById('ins-frequency').value;
+  const status         = document.getElementById('ins-status').value;
+  const startDate       = document.getElementById('ins-start-date').value;
+  const endDate         = document.getElementById('ins-end-date').value;
+  const nominee         = document.getElementById('ins-nominee').value.trim();
+  const notes           = document.getElementById('ins-notes').value.trim();
+
+  if (!provider) { alert('Please select or enter an Insurance Provider'); return; }
+  if (!policyNumber) { alert('Please enter the Policy Number'); return; }
+  if (!holderName) { alert('Please enter the Policy Holder Name'); return; }
+
+  const entry = { category, insType, provider, policyNumber, holderName, employer, sumInsured, premium, frequency, status, startDate, endDate, nominee, notes };
+
+  if (editingInsuranceId) {
+    const idx = insuranceDb.findIndex(x => x.id === editingInsuranceId);
+    if (idx >= 0) insuranceDb[idx] = { ...insuranceDb[idx], ...entry };
+  } else {
+    insuranceDb.push({ id: Date.now(), ...entry });
+  }
+  scheduleSave();
+  closeInsuranceModal();
+  renderInsurance();
+}
+
+function deleteCurrentInsuranceEntry() {
+  if (editingInsuranceId && confirm('Delete this insurance policy?')) {
+    insuranceDb = insuranceDb.filter(x => x.id !== editingInsuranceId);
+    scheduleSave();
+    closeInsuranceModal();
+    renderInsurance();
+  }
+}
+
+function filterInsurance(cat, btn) {
+  insuranceFilter = cat;
+  document.querySelectorAll('.ins-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderInsurance();
+}
+
+function fmtInsCurrency(n) {
+  return '₹' + Number(n || 0).toLocaleString('en-IN');
+}
+
+function renderInsurance() {
+  const grid = document.getElementById('ins-grid');
+  const empty = document.getElementById('ins-empty');
+  const summary = document.getElementById('ins-summary-strip');
+  if (!grid) return;
+
+  const list = insuranceFilter === 'all' ? insuranceDb : insuranceDb.filter(p => p.category === insuranceFilter);
+
+  // Summary strip (always based on full set, not filtered, except active count uses filtered)
+  const totalPolicies   = insuranceDb.length;
+  const totalCover      = insuranceDb.reduce((s,p) => s + Number(p.sumInsured||0), 0);
+  const totalPremium    = insuranceDb.reduce((s,p) => s + Number(p.premium||0), 0);
+  const expiringSoon    = insuranceDb.filter(p => {
+    if (!p.endDate) return false;
+    const days = (new Date(p.endDate) - new Date()) / 86400000;
+    return days >= 0 && days <= 45;
+  }).length;
+
+  summary.innerHTML = `
+    <div class="ins-summary-card">
+      <div class="ins-summary-label">Total Policies</div>
+      <div class="ins-summary-val" style="color:#34d399">${totalPolicies}</div>
+    </div>
+    <div class="ins-summary-card">
+      <div class="ins-summary-label">Total Cover</div>
+      <div class="ins-summary-val">${fmtInsCurrency(totalCover)}</div>
+    </div>
+    <div class="ins-summary-card">
+      <div class="ins-summary-label">Total Annual Premium</div>
+      <div class="ins-summary-val" style="color:#f59e0b">${fmtInsCurrency(totalPremium)}</div>
+    </div>
+    <div class="ins-summary-card">
+      <div class="ins-summary-label">Renewing Soon (45d)</div>
+      <div class="ins-summary-val" style="color:${expiringSoon ? '#f87171' : 'inherit'}">${expiringSoon}</div>
+    </div>`;
+
+  if (!list.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = list.map(p => `
+    <div class="ins-card" onclick="editInsuranceEntry(${p.id})">
+      <div class="ins-card-top">
+        <div>
+          <div class="ins-card-provider">${p.provider}</div>
+          <div class="ins-card-type">${p.insType}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end">
+          <span class="ins-badge ${p.category}">${p.category}</span>
+          <span class="ins-badge status-${p.status}">${p.status}</span>
+        </div>
+      </div>
+      <div class="ins-card-row"><span>Policy No.</span><span>${p.policyNumber}</span></div>
+      <div class="ins-card-row"><span>Holder</span><span>${p.holderName}</span></div>
+      ${p.employer ? `<div class="ins-card-row"><span>Employer</span><span>${p.employer}</span></div>` : ''}
+      <div class="ins-card-row"><span>Sum Insured</span><span>${fmtInsCurrency(p.sumInsured)}</span></div>
+      <div class="ins-card-row"><span>Premium</span><span>${fmtInsCurrency(p.premium)} / ${p.frequency}</span></div>
+      <div class="ins-card-row"><span>Renewal Date</span><span>${p.endDate || '—'}</span></div>
+      ${p.nominee ? `<div class="ins-card-row"><span>Nominee</span><span>${p.nominee}</span></div>` : ''}
+      <div class="ins-card-footer">
+        <button class="btn-secondary" style="padding:5px 12px;font-size:0.75rem" onclick="event.stopPropagation();editInsuranceEntry(${p.id})"><i class="fas fa-edit"></i> Edit</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── NOTES (MY ZONE) ──────────────────────────────────────────────────────
+let activeNoteId = null;
+let unlockedNoteIds = new Set();
+let notePasswordMode = null;   // 'unlock' | 'set' | 'change'
+let notePasswordTargetId = null;
+let noteSaveTimer = null;
+
+function stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html || '';
+  return (tmp.textContent || tmp.innerText || '').trim();
+}
+
+function fmtNoteDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) + ' · ' +
+         d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+}
+
+function renderNotesList(query) {
+  const listEl = document.getElementById('notes-list');
+  if (!listEl) return;
+  query = (query || '').toLowerCase();
+
+  let list = [...notesDb].sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  if (query) {
+    list = list.filter(n => {
+      if (n.locked) return n.title.toLowerCase().includes(query); // don't search inside locked content
+      return n.title.toLowerCase().includes(query) || stripHtml(n.content).toLowerCase().includes(query);
+    });
+  }
+
+  if (!list.length) {
+    listEl.innerHTML = `<div style="text-align:center;padding:2rem 0.5rem;color:var(--text-muted);font-size:0.8rem">
+      <i class="fas fa-sticky-note" style="font-size:1.6rem;opacity:0.2;display:block;margin-bottom:8px"></i>
+      No notes found.
+    </div>`;
+    return;
+  }
+
+  listEl.innerHTML = list.map(n => {
+    const isLocked = n.locked && !unlockedNoteIds.has(n.id);
+    const activeCls = (n.id === activeNoteId) ? 'active' : '';
+    if (isLocked) {
+      return `
+        <div class="note-card ${activeCls}" onclick="selectNote(${n.id})">
+          <div class="note-card-locked">
+            <div class="eye-circle"><i class="fas fa-eye"></i></div>
+            <div class="note-card-locked-label">Protected Note</div>
+          </div>
+        </div>`;
+    }
+    const snippet = stripHtml(n.content).slice(0, 90) || 'No additional text';
+    return `
+      <div class="note-card ${activeCls}" onclick="selectNote(${n.id})">
+        <div class="note-card-title">${n.locked ? '<i class="fas fa-lock" style="font-size:0.68rem;margin-right:5px;color:#fbbf24"></i>' : ''}${n.title || 'Untitled Note'}</div>
+        <div class="note-card-snippet">${snippet}</div>
+        <div class="note-card-date">${fmtNoteDate(n.updatedAt)}</div>
+      </div>`;
+  }).join('');
+}
+
+function newNote() {
+  const note = { id: Date.now(), title: '', content: '', locked: false, password: null, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+  notesDb.unshift(note);
+  unlockedNoteIds.add(note.id);
+  scheduleSave();
+  renderNotesList(document.getElementById('notes-search-input')?.value || '');
+  loadNoteIntoEditor(note.id);
+  setTimeout(() => document.getElementById('note-title-input')?.focus(), 50);
+}
+
+function selectNote(id) {
+  const note = notesDb.find(n => n.id === id);
+  if (!note) return;
+  if (note.locked && !unlockedNoteIds.has(id)) {
+    openNotePasswordModal(id, 'unlock');
+    return;
+  }
+  loadNoteIntoEditor(id);
+}
+
+function loadNoteIntoEditor(id) {
+  const note = notesDb.find(n => n.id === id);
+  if (!note) return;
+  activeNoteId = id;
+
+  document.getElementById('notes-empty-state').style.display = 'none';
+  document.getElementById('notes-editor-body').style.display = 'flex';
+  document.getElementById('note-title-input').value = note.title || '';
+  document.getElementById('notes-editor').innerHTML = note.content || '';
+  document.getElementById('note-meta-updated').textContent = note.updatedAt ? `Last edited ${fmtNoteDate(note.updatedAt)}` : '';
+  document.getElementById('notes-save-status').textContent = 'All changes saved';
+
+  updateLockButtonUI(note);
+  renderNotesList(document.getElementById('notes-search-input')?.value || '');
+}
+
+function updateLockButtonUI(note) {
+  const lockBtn = document.getElementById('note-lock-btn');
+  const changeBtn = document.getElementById('note-changepass-btn');
+  const removeBtn = document.getElementById('note-removepass-btn');
+  if (!lockBtn) return;
+  if (note.locked) {
+    lockBtn.innerHTML = '<i class="fas fa-lock"></i>';
+    lockBtn.title = 'Lock note now';
+    lockBtn.style.color = '#fbbf24';
+    changeBtn.style.display = 'flex';
+    removeBtn.style.display = 'flex';
+  } else {
+    lockBtn.innerHTML = '<i class="fas fa-lock-open"></i>';
+    lockBtn.title = 'Protect this note';
+    lockBtn.style.color = '';
+    changeBtn.style.display = 'none';
+    removeBtn.style.display = 'none';
+  }
+}
+
+function markNoteDirty() {
+  document.getElementById('notes-save-status').textContent = 'Unsaved changes…';
+  clearTimeout(noteSaveTimer);
+  noteSaveTimer = setTimeout(() => saveActiveNote(false), 900);
+}
+
+function saveActiveNote(manual) {
+  if (!activeNoteId) return;
+  const note = notesDb.find(n => n.id === activeNoteId);
+  if (!note) return;
+  note.title = document.getElementById('note-title-input').value.trim() || 'Untitled Note';
+  note.content = document.getElementById('notes-editor').innerHTML;
+  note.updatedAt = new Date().toISOString();
+  scheduleSave();
+  document.getElementById('notes-save-status').textContent = 'All changes saved';
+  document.getElementById('note-meta-updated').textContent = `Last edited ${fmtNoteDate(note.updatedAt)}`;
+  renderNotesList(document.getElementById('notes-search-input')?.value || '');
+  if (manual) { /* keep editor open */ }
+}
+
+function deleteActiveNote() {
+  if (!activeNoteId) return;
+  if (!confirm('Delete this note? This cannot be undone.')) return;
+  notesDb = notesDb.filter(n => n.id !== activeNoteId);
+  unlockedNoteIds.delete(activeNoteId);
+  activeNoteId = null;
+  scheduleSave();
+  document.getElementById('notes-editor-body').style.display = 'none';
+  document.getElementById('notes-empty-state').style.display = 'flex';
+  renderNotesList(document.getElementById('notes-search-input')?.value || '');
+}
+
+function formatNote(cmd) {
+  document.getElementById('notes-editor').focus();
+  document.execCommand(cmd, false, null);
+  markNoteDirty();
+}
+
+function formatNoteBlock(tag) {
+  document.getElementById('notes-editor').focus();
+  document.execCommand('formatBlock', false, tag);
+  markNoteDirty();
+}
+
+function handleLockButtonClick() {
+  if (!activeNoteId) return;
+  const note = notesDb.find(n => n.id === activeNoteId);
+  if (!note) return;
+  if (!note.locked) {
+    openNotePasswordModal(activeNoteId, 'set');
+  } else {
+    // Lock the note right now and return to the list
+    saveActiveNote(false);
+    unlockedNoteIds.delete(activeNoteId);
+    activeNoteId = null;
+    document.getElementById('notes-editor-body').style.display = 'none';
+    document.getElementById('notes-empty-state').style.display = 'flex';
+    renderNotesList(document.getElementById('notes-search-input')?.value || '');
+  }
+}
+
+function removeNoteProtection() {
+  if (!activeNoteId) return;
+  if (!confirm('Remove password protection from this note?')) return;
+  const note = notesDb.find(n => n.id === activeNoteId);
+  if (!note) return;
+  note.locked = false;
+  note.password = null;
+  scheduleSave();
+  updateLockButtonUI(note);
+  renderNotesList(document.getElementById('notes-search-input')?.value || '');
+}
+
+function openNotePasswordModal(id, mode) {
+  notePasswordTargetId = id;
+  notePasswordMode = mode;
+
+  document.getElementById('note-pass-input-1').value = '';
+  document.getElementById('note-pass-input-2').value = '';
+  document.getElementById('note-pass-error').style.display = 'none';
+
+  const title = document.getElementById('note-password-modal-title');
+  const subtitle = document.getElementById('note-password-modal-subtitle');
+  const label1 = document.getElementById('note-pass-label-1');
+  const group2 = document.getElementById('note-pass-group-2');
+  const submitBtn = document.getElementById('note-pass-submit-btn');
+
+  if (mode === 'unlock') {
+    title.textContent = 'Enter Password';
+    subtitle.textContent = 'This note is protected. Enter the password to view it.';
+    label1.textContent = 'Password';
+    group2.style.display = 'none';
+    submitBtn.textContent = 'Unlock';
+  } else if (mode === 'set') {
+    title.textContent = 'Protect This Note';
+    subtitle.textContent = 'Set a password to lock this note. You will need it to view or edit the note later.';
+    label1.textContent = 'New Password';
+    group2.style.display = 'block';
+    submitBtn.textContent = 'Protect Note';
+  } else if (mode === 'change') {
+    title.textContent = 'Change Password';
+    subtitle.textContent = 'Set a new password for this note.';
+    label1.textContent = 'New Password';
+    group2.style.display = 'block';
+    submitBtn.textContent = 'Update Password';
+  }
+
+  document.getElementById('note-password-modal').style.display = 'flex';
+  setTimeout(() => document.getElementById('note-pass-input-1').focus(), 50);
+}
+
+function closeNotePasswordModal() {
+  document.getElementById('note-password-modal').style.display = 'none';
+  notePasswordTargetId = null;
+  notePasswordMode = null;
+}
+
+function submitNotePasswordAction() {
+  const note = notesDb.find(n => n.id === notePasswordTargetId);
+  if (!note) { closeNotePasswordModal(); return; }
+  const p1 = document.getElementById('note-pass-input-1').value;
+  const p2 = document.getElementById('note-pass-input-2').value;
+  const errEl = document.getElementById('note-pass-error');
+
+  if (notePasswordMode === 'unlock') {
+    if (note.password === p1) {
+      unlockedNoteIds.add(note.id);
+      closeNotePasswordModal();
+      loadNoteIntoEditor(note.id);
+    } else {
+      errEl.textContent = '❌ Incorrect password.';
+      errEl.style.display = 'block';
+    }
+  } else if (notePasswordMode === 'change') {
+    if (!p1) { errEl.textContent = '❌ Please enter a password.'; errEl.style.display = 'block'; return; }
+    if (p1 !== p2) { errEl.textContent = '❌ Passwords do not match.'; errEl.style.display = 'block'; return; }
+    note.locked = true;
+    note.password = p1;
+    unlockedNoteIds.add(note.id);
+    scheduleSave();
+    closeNotePasswordModal();
+    loadNoteIntoEditor(note.id);
+  } else { // 'set' — lock it immediately, don't leave it open
+    if (!p1) { errEl.textContent = '❌ Please enter a password.'; errEl.style.display = 'block'; return; }
+    if (p1 !== p2) { errEl.textContent = '❌ Passwords do not match.'; errEl.style.display = 'block'; return; }
+    saveActiveNote(false);
+    note.locked = true;
+    note.password = p1;
+    unlockedNoteIds.delete(note.id);
+    scheduleSave();
+    closeNotePasswordModal();
+    activeNoteId = null;
+    document.getElementById('notes-editor-body').style.display = 'none';
+    document.getElementById('notes-empty-state').style.display = 'flex';
+    renderNotesList(document.getElementById('notes-search-input')?.value || '');
+  }
+}
+
 // ── DASHBOARD CREDIT CHARTS ─────────────────────────────────────────────────
 function renderDashCreditCharts() {
   const activeCredit = creditDb.filter(c => c.status === 'Active');
@@ -10906,65 +12032,53 @@ function renderDashCreditCharts() {
     document.getElementById('kpi-credit-sub').textContent = `${activeCredit.length} active · ₹${Math.round(totalEmi).toLocaleString('en-IN')}/mo EMI`;
   }
 
-// Outstanding by lender bar (Floating Capsule UI)
+// Outstanding by lender - Liquid Flow Bars
   // Group duplicate lender names and sum their balances for the dashboard
   const groupedDashCredit = creditDb.reduce((acc, curr) => {
     acc[curr.lenderName] = (acc[curr.lenderName] || 0) + curr.outstandingBalance;
     return acc;
   }, {});
-  
+
   const sorted = Object.keys(groupedDashCredit)
     .map(name => ({ lenderName: name, outstandingBalance: groupedDashCredit[name] }))
     .sort((a,b) => b.outstandingBalance - a.outstandingBalance)
     .slice(0, 6);
-    
+
   destroyChart('dash-credit-bar');
-  
-  if (sorted.length) {
-    const outCtx = document.getElementById('dash-credit-bar').getContext('2d');
-    
-    charts['dash-credit-bar'] = new Chart(outCtx, {
-      type: 'bar',
-      data: {
-        labels: sorted.map(c => c.lenderName.length > 12 ? c.lenderName.slice(0,12)+'…' : c.lenderName),
-        datasets: [{
-          data: sorted.map(c => c.outstandingBalance),
-          backgroundColor: '#4169e1', 
-          hoverBackgroundColor: '#ffd700',
-          borderColor: 'transparent', 
-          borderWidth: 0, 
-          borderRadius: 6,
-          borderSkipped: false,
-          barPercentage: 0.75 
-        }]
-      },
-      options: { 
-        responsive: true,
-        maintainAspectRatio: false,
-        indexAxis: 'y', // Flipped to horizontal
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: 'rgba(8,11,26,0.97)',
-            titleFont: { family:'DM Sans', size:12, weight:'700' },
-            bodyFont:  { family:'DM Mono', size:11 },
-            callbacks: { label: ctx => `  ₹${ctx.raw.toLocaleString('en-IN')}` }
-          }
-        },
-        scales: { 
-          x: { 
-            display: false, // Keep the dashboard clean by hiding the X axis
-            grid: { display: false, drawBorder: false }, 
-            beginAtZero: true,
-            grace: '10%' 
-          }, 
-          y: { 
-            grid: { display: false, drawBorder: false },
-            ticks: { color: chartTextColor(), font: { size: 11, weight: '600' } }
-          } 
-        } 
-      }
-    });
+  const dashCreditEl = document.getElementById('dash-credit-bar');
+
+  let dashCreditWrap = document.getElementById('dash-credit-bar-wrap');
+  if (dashCreditEl && dashCreditEl.tagName === 'CANVAS') {
+    dashCreditWrap = document.createElement('div');
+    dashCreditWrap.id = 'dash-credit-bar-wrap';
+    dashCreditEl.parentNode.replaceChild(dashCreditWrap, dashCreditEl);
+  }
+  if (!dashCreditWrap) dashCreditWrap = document.getElementById('dash-credit-bar-wrap');
+
+  if (sorted.length === 0) {
+    dashCreditWrap.innerHTML = '<div class="empty-state" style="padding-top:2rem"><i class="fas fa-credit-card"></i><p>No credit data</p></div>';
+  } else {
+    const dashCreditMax = Math.max(...sorted.map(c => c.outstandingBalance)) || 1;
+    const isLightDashCredit = document.body.classList.contains('light-mode');
+    const creditHex = '#f97316';
+    dashCreditWrap.style.cssText = 'display:flex;flex-direction:column;gap:10px;padding:6px 4px 0;height:100%;justify-content:flex-start;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none';
+    dashCreditWrap.innerHTML = `<style>#dash-credit-bar-wrap::-webkit-scrollbar{display:none}</style>` + sorted.map(c => {
+      const pct = Math.max(3, (c.outstandingBalance / dashCreditMax) * 100);
+      const trackBg = isLightDashCredit ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+      return `
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <span style="font-size:0.76rem;font-weight:700;color:${chartTextColor()};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.lenderName}</span>
+            <span style="font-family:'DM Mono',monospace;font-size:0.8rem;font-weight:700;color:${creditHex}">₹${Math.round(c.outstandingBalance).toLocaleString('en-IN')}</span>
+          </div>
+          <div style="height:11px;border-radius:99px;background:${trackBg};overflow:hidden;position:relative;border:1px solid ${creditHex}22">
+            <div style="height:100%;width:${pct}%;border-radius:99px;background:linear-gradient(90deg, ${creditHex}aa, ${creditHex});box-shadow:0 0 12px ${creditHex}70,inset 0 1px 0 rgba(255,255,255,0.3);transition:width 0.8s cubic-bezier(0.16,1,0.3,1);position:relative">
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.25), transparent 60%);border-radius:99px"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
 // EMI vs Outstanding comparison - Modern Dual-Axis (Bar + Line)
@@ -11048,11 +12162,11 @@ function renderDashCreditCharts() {
     });
   }
 
- // Credit summary card - Modern Doughnut Upgrade
+ // Credit summary card - Center-Stat Ring + Progress Legend
   const summaryEl = document.getElementById('dash-credit-summary');
   if (summaryEl) {
     const byType = {};
-    
+
     // Group active balances
     creditDb.forEach(c => { 
       if (c.outstandingBalance > 0) {
@@ -11063,34 +12177,86 @@ function renderDashCreditCharts() {
     });
 
     const sortedTypes = Object.entries(byType).sort((a,b) => b[1].bal - a[1].bal);
-    const donutLabels = sortedTypes.map(t => `${t[0]} (${t[1].count})`);
-    const donutValues = sortedTypes.map(t => t[1].bal);
+    const typeColors = ['#f97316', '#fbbf24', '#ef4444', '#60a5fa', '#34d399', '#a78bfa'];
 
-    // Inject canvas safely
-    summaryEl.innerHTML = `
-      <div style="height:150px; position:relative; margin-top:5px;"><canvas id="dash-credit-donut"></canvas></div>
-      <div style="display:flex; justify-content:space-between; align-items:center; padding-top:12px; margin-top:10px; border-top:1px solid rgba(255,255,255,0.06)">
-        <div style="font-weight:700; font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Total EMI / Mo</div>
-        <div style="font-family:'DM Mono',monospace; font-weight:700; color:#fbbf24; font-size:1.15rem; text-shadow:0 0 12px rgba(251,191,36,0.3)">${fmt(totalEmi)}</div>
-      </div>
-    `;
+    if (sortedTypes.length === 0) {
+      summaryEl.innerHTML = `
+        <div class="empty-state" style="padding:1.5rem 0"><i class="fas fa-credit-card"></i><p>No active balances</p></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding-top:12px; margin-top:10px; border-top:1px solid rgba(255,255,255,0.06)">
+          <div style="font-weight:700; font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Total EMI / Mo</div>
+          <div style="font-family:'DM Mono',monospace; font-weight:700; color:#fbbf24; font-size:1.15rem; text-shadow:0 0 12px rgba(251,191,36,0.3)">${fmt(totalEmi)}</div>
+        </div>`;
+    } else {
+      const creditTotal = sortedTypes.reduce((a,[,v]) => a + v.bal, 0) || 1;
+      summaryEl.innerHTML = `
+        <div style="display:flex;align-items:center;gap:16px;margin-top:5px">
+          <div style="position:relative;width:104px;height:104px;flex-shrink:0">
+            <canvas id="dash-credit-donut"></canvas>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+              <div style="font-family:'DM Mono',monospace;font-weight:700;font-size:0.92rem;color:${chartTextColor()}">${sortedTypes.length}</div>
+              <div style="font-size:0.55rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Types</div>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:7px;min-width:0">
+            ${sortedTypes.map(([type, s], i) => {
+              const hex = typeColors[i % typeColors.length];
+              const pct = (s.bal / creditTotal) * 100;
+              return `
+                <div style="display:flex;flex-direction:column;gap:3px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                    <div style="display:flex;align-items:center;gap:6px;min-width:0">
+                      <span style="width:6px;height:6px;border-radius:50%;background:${hex};box-shadow:0 0 7px ${hex};flex-shrink:0"></span>
+                      <span style="font-size:0.68rem;font-weight:600;color:${chartTextColor()};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${type} (${s.count})</span>
+                    </div>
+                    <span style="font-family:'DM Mono',monospace;font-size:0.68rem;font-weight:700;color:${hex};flex-shrink:0">${pct.toFixed(0)}%</span>
+                  </div>
+                  <div style="height:3.5px;border-radius:99px;background:rgba(255,255,255,0.06);overflow:hidden">
+                    <div style="height:100%;width:${pct}%;border-radius:99px;background:${hex};box-shadow:0 0 5px ${hex}80"></div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding-top:12px; margin-top:10px; border-top:1px solid rgba(255,255,255,0.06)">
+          <div style="font-weight:700; font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Total EMI / Mo</div>
+          <div style="font-family:'DM Mono',monospace; font-weight:700; color:#fbbf24; font-size:1.15rem; text-shadow:0 0 12px rgba(251,191,36,0.3)">${fmt(totalEmi)}</div>
+        </div>
+      `;
 
-    destroyChart('dash-credit-donut');
-    
-    // Safety delay to ensure the canvas exists before Chart.js draws on it
-    setTimeout(() => {
-      const canvas = document.getElementById('dash-credit-donut');
-      if (!canvas) return;
-      
-      if (donutValues.length > 0) {
-        const typeColors = ['#f97316', '#fbbf24', '#ef4444', '#60a5fa', '#34d399', '#a78bfa'];
-        charts['dash-credit-donut'] = makeDonut('dash-credit-donut', donutLabels, donutValues, typeColors.slice(0, donutLabels.length));
-      } else {
-        const ctx = canvas.getContext('2d');
-        ctx.font = '12px DM Sans'; ctx.fillStyle = '#64748b'; ctx.textAlign = 'center';
-        ctx.fillText('No active balances', canvas.width/2, canvas.height/2);
-      }
-    }, 10);
+      destroyChart('dash-credit-donut');
+      setTimeout(() => {
+        const ringCtx = document.getElementById('dash-credit-donut')?.getContext('2d');
+        if (!ringCtx) return;
+        charts['dash-credit-donut'] = new Chart(ringCtx, {
+          type: 'doughnut',
+          data: {
+            labels: sortedTypes.map(([type]) => type),
+            datasets: [{
+              data: sortedTypes.map(([,s]) => s.bal),
+              backgroundColor: sortedTypes.map((_, i) => typeColors[i % typeColors.length]),
+              borderColor: 'transparent',
+              borderWidth: 0,
+              spacing: 3,
+              hoverOffset: 5
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false, cutout: '72%',
+            animation: { animateRotate: true, duration: 800, easing: 'easeOutQuart' },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: 'rgba(8,11,26,0.97)',
+                titleFont: { family:'DM Sans', size:12, weight:'700' },
+                bodyFont:  { family:'DM Mono', size:11 },
+                callbacks: { label: ctx => `  ₹${Math.round(ctx.raw).toLocaleString('en-IN')}` }
+              }
+            }
+          }
+        });
+      }, 10);
+    }
   }
 }
 
@@ -12619,6 +13785,8 @@ function downloadBackup() {
     version: 3,
     exportedAt: new Date().toISOString(),
     db, portDb, creditDb, budgets,
+    insuranceDb,
+    notesDb,
     ccCards,
     notifications,
     gameStats,
@@ -12675,6 +13843,8 @@ function readRestoreFile(file) {
           ${(data.db||[]).length} transactions · 
           ${(data.portDb||[]).length} holdings · 
           ${(data.creditDb||[]).length} credit entries · 
+          ${(data.insuranceDb||[]).length} insurance policies · 
+          ${(data.notesDb||[]).length} notes · 
           ${(data.ccCards||[]).length} CC cards · 
           v${data.version||1} · 
           Exported ${data.exportedAt ? new Date(data.exportedAt).toLocaleDateString() : 'unknown date'}
@@ -12695,6 +13865,8 @@ function confirmRestore() {
   if (pendingRestoreData.db)       { db       = pendingRestoreData.db; localStorage.setItem('fos_db_v3', JSON.stringify(db)); }
   if (pendingRestoreData.portDb)   { portDb   = pendingRestoreData.portDb.map(normalizePortRecord); localStorage.setItem('fos_port_v3', JSON.stringify(portDb)); }
   if (pendingRestoreData.creditDb) { creditDb = pendingRestoreData.creditDb; localStorage.setItem('fos_credit_v1', JSON.stringify(creditDb)); }
+  if (pendingRestoreData.insuranceDb) { insuranceDb = pendingRestoreData.insuranceDb; localStorage.setItem('fos_insurance_v1', JSON.stringify(insuranceDb)); }
+  if (pendingRestoreData.notesDb) { notesDb = pendingRestoreData.notesDb; localStorage.setItem('fos_notes_v1', JSON.stringify(notesDb)); }
   if (pendingRestoreData.budgets)  { budgets  = pendingRestoreData.budgets; localStorage.setItem('fos_budgets', JSON.stringify(budgets)); }
 
   // CC Utilization cards
@@ -13753,24 +14925,24 @@ function triggerBackupExport() {
 // CC UTILIZATION MODULE
 // ══════════════════════════════════════════════════
 const CC_BANKS = [
-  { id:'hdfc',    name:'HDFC',           abbr:'HDFC', color:'#004C8F', text:'#fff', logo:'https://logo.clearbit.com/hdfcbank.com' },
-  { id:'sbi',     name:'SBI',            abbr:'SBI',  color:'#2563eb', text:'#fff', logo:'https://logo.clearbit.com/sbi.co.in' },
-  { id:'icici',   name:'ICICI',          abbr:'ICIC', color:'#F37021', text:'#fff', logo:'https://logo.clearbit.com/icicibank.com' },
-  { id:'axis',    name:'Axis',           abbr:'AXIS', color:'#97144D', text:'#fff', logo:'https://logo.clearbit.com/axisbank.com' },
-  { id:'kotak',   name:'Kotak',          abbr:'KMB',  color:'#ED1C24', text:'#fff', logo:'https://logo.clearbit.com/kotak.com' },
-  { id:'yes',     name:'Yes Bank',       abbr:'YES',  color:'#00A3E0', text:'#fff', logo:'https://logo.clearbit.com/yesbank.in' },
-  { id:'indusind',name:'IndusInd',       abbr:'IIB',  color:'#005DA0', text:'#fff', logo:'https://logo.clearbit.com/indusind.com' },
-  { id:'rbl',     name:'RBL',            abbr:'RBL',  color:'#0047AB', text:'#fff', logo:'https://logo.clearbit.com/rblbank.com' },
-  { id:'sc',      name:'StanChart',      abbr:'SCB',  color:'#008B5E', text:'#fff', logo:'https://logo.clearbit.com/sc.com' },
-  { id:'hsbc',    name:'HSBC',           abbr:'HSBC', color:'#DB0011', text:'#fff', logo:'https://logo.clearbit.com/hsbc.com' },
-  { id:'amex',    name:'Amex',           abbr:'AMEX', color:'#016FD0', text:'#fff', logo:'https://logo.clearbit.com/americanexpress.com' },
-  { id:'citi',    name:'Citi',           abbr:'CITI', color:'#003B8E', text:'#fff', logo:'https://logo.clearbit.com/citi.com' },
-  { id:'bob',     name:'Bank of Baroda', abbr:'BOB',  color:'#F26522', text:'#fff', logo:'https://logo.clearbit.com/bankofbaroda.in' },
-  { id:'pnb',     name:'PNB',            abbr:'PNB',  color:'#8B0000', text:'#fff', logo:'https://logo.clearbit.com/pnbindia.in' },
-  { id:'union',   name:'Union Bank',     abbr:'UBI',  color:'#1B4F8A', text:'#fff', logo:'https://logo.clearbit.com/unionbankofindia.co.in' },
-  { id:'canara',  name:'Canara',         abbr:'CNR',  color:'#005F6A', text:'#fff', logo:'https://logo.clearbit.com/canarabank.com' },
-  { id:'idfc',    name:'IDFC First',     abbr:'IDFC', color:'#F26522', text:'#fff', logo:'https://logo.clearbit.com/idfcfirstbank.com' },
-  { id:'au',      name:'AU Small',       abbr:'AU',   color:'#E31837', text:'#fff', logo:'https://logo.clearbit.com/aubank.in' },
+  { id:'hdfc',    name:'HDFC',           abbr:'HDFC', color:'#004C8F', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=hdfcbank.com&sz=128' },
+  { id:'sbi',     name:'SBI',            abbr:'SBI',  color:'#2563eb', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=sbi.co.in&sz=128' },
+  { id:'icici',   name:'ICICI',          abbr:'ICIC', color:'#F37021', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=icicibank.com&sz=128' },
+  { id:'axis',    name:'Axis',           abbr:'AXIS', color:'#97144D', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=axisbank.com&sz=128' },
+  { id:'kotak',   name:'Kotak',          abbr:'KMB',  color:'#ED1C24', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=kotak.com&sz=128' },
+  { id:'yes',     name:'Yes Bank',       abbr:'YES',  color:'#00A3E0', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=yesbank.in&sz=128' },
+  { id:'indusind',name:'IndusInd',       abbr:'IIB',  color:'#005DA0', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=indusind.com&sz=128' },
+  { id:'rbl',     name:'RBL',            abbr:'RBL',  color:'#0047AB', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=rblbank.com&sz=128' },
+  { id:'sc',      name:'StanChart',      abbr:'SCB',  color:'#008B5E', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=sc.com&sz=128' },
+  { id:'hsbc',    name:'HSBC',           abbr:'HSBC', color:'#DB0011', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=hsbc.com&sz=128' },
+  { id:'amex',    name:'Amex',           abbr:'AMEX', color:'#016FD0', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=americanexpress.com&sz=128' },
+  { id:'citi',    name:'Citi',           abbr:'CITI', color:'#003B8E', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=citi.com&sz=128' },
+  { id:'bob',     name:'Bank of Baroda', abbr:'BOB',  color:'#F26522', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=bankofbaroda.in&sz=128' },
+  { id:'pnb',     name:'PNB',            abbr:'PNB',  color:'#8B0000', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=pnbindia.in&sz=128' },
+  { id:'union',   name:'Union Bank',     abbr:'UBI',  color:'#1B4F8A', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=unionbankofindia.co.in&sz=128' },
+  { id:'canara',  name:'Canara',         abbr:'CNR',  color:'#005F6A', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=canarabank.com&sz=128' },
+  { id:'idfc',    name:'IDFC First',     abbr:'IDFC', color:'#F26522', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=idfcfirstbank.com&sz=128' },
+  { id:'au',      name:'AU Small',       abbr:'AU',   color:'#E31837', text:'#fff', logo:'https://www.google.com/s2/favicons?domain=aubank.in&sz=128' },
 ];
 
 let ccSelectedBank = null;
@@ -13781,10 +14953,10 @@ function initCCView() {
   if (!grid) return;
   grid.innerHTML = CC_BANKS.map(b => `
     <button class="cc-bank-btn ${ccSelectedBank===b.id?'selected':''}" onclick="selectCCBank('${b.id}')">
-      <div class="cc-bank-logo" style="background:${b.color};overflow:hidden;padding:2px;">
+      <div class="cc-bank-logo" style="background:#ffffff;border:1px solid rgba(0,0,0,0.06);overflow:hidden;padding:3px;box-shadow:0 1px 3px rgba(0,0,0,0.18);">
         <img src="${b.logo}" alt="${b.name}"
-          style="width:100%;height:100%;object-fit:contain;border-radius:4px;"
-          onerror="this.style.display='none';this.parentNode.innerHTML='<span style=color:${b.text};font-size:0.62rem;font-weight:800;letter-spacing:-0.5px>${b.name.split(' ')[0].substring(0,4)}</span>'">
+          style="width:100%;height:100%;object-fit:contain;border-radius:3px;"
+          onerror="this.style.display='none';this.parentNode.innerHTML='<span style=color:${b.color};font-size:0.62rem;font-weight:800;letter-spacing:-0.5px>${b.name.split(' ')[0].substring(0,4)}</span>'">
       </div>
       <span>${b.name}</span>
     </button>
@@ -13989,15 +15161,20 @@ function renderCCCards() {
     const status = getCCUtilStatus(pct);
     const maskedNum = c.number.replace(/\d(?=\d{4})/g, '•').replace(/\s+/g,' ').trim();
 
+    const freshBank = CC_BANKS.find(b => b.id === c.bankId);
+    const logoUrl   = freshBank ? freshBank.logo  : c.bankLogo;
+    const bankColor = freshBank ? freshBank.color : (c.bankColor || '#334155');
+    const bankAbbr  = freshBank ? freshBank.abbr  : (c.bankAbbr || c.bankName || 'BANK');
+
     return `
     <div class="cc-card-item">
       <div class="cc-card-top">
-        <div class="cc-card-logo-big" style="background:${c.bankColor||'#334155'};color:${c.bankText||'#fff'};overflow:hidden;padding:3px;">
-  ${c.bankLogo
-    ? `<img src="${c.bankLogo}" alt="${c.bankName||''}"
+        <div class="cc-card-logo-big" style="background:#ffffff;border:1px solid rgba(0,0,0,0.06);overflow:hidden;padding:4px;box-shadow:0 1px 3px rgba(0,0,0,0.18);">
+  ${logoUrl
+    ? `<img src="${logoUrl}" alt="${c.bankName||''}"
          style="width:100%;height:100%;object-fit:contain;border-radius:4px;"
-         onerror="this.style.display='none';this.parentNode.innerHTML='<span style=font-size:0.62rem;font-weight:800;letter-spacing:-0.5px>${c.bankAbbr||c.bankName||'BANK'}</span>'">`
-    : `<span style="font-size:0.62rem;font-weight:800;letter-spacing:-0.5px">${c.bankAbbr||c.bankName||'BANK'}</span>`
+         onerror="this.style.display='none';this.parentNode.innerHTML='<span style=color:${bankColor};font-size:0.62rem;font-weight:800;letter-spacing:-0.5px>${bankAbbr}</span>'">`
+    : `<span style="color:${bankColor};font-size:0.62rem;font-weight:800;letter-spacing:-0.5px">${bankAbbr}</span>`
   }
 </div>
         <div class="cc-card-info">
@@ -15279,6 +16456,7 @@ function calcFn(key) {
     Calc.operand = parseFloat(Calc.display || '0');
     Calc.operator = key;
     Calc.history = (Calc.display || '0') + ' ' + key;
+    Calc.display = '';
     Calc.justEvaled = true;
   }
   else if (key === '=') calcDoEquals();
@@ -15382,8 +16560,16 @@ function sciFn(key) {
 }
 
 function sciHandleInput(val) {
+  if (Sci.justEvaled) {
+    // Starting a fresh number after a result/operator — ignore whatever
+    // leftover text the browser left in the box and start clean.
+    Sci.display = val.slice(-1) === '.' ? '0.' : val.slice(-1) || '';
+    Sci.justEvaled = false;
+    const d = document.getElementById('sci-display');
+    if (d) d.value = Sci.display;
+    return;
+  }
   Sci.display = val;
-  Sci.justEvaled = false;
 }
 
 // ══════════════════════════════════════════════
@@ -15419,8 +16605,36 @@ const UNIT_DATA = {
   temperature: { celsius:1, fahrenheit:1, kelvin:1 },
   area:        { sqm:1, sqkm:0.000001, sqft:10.7639, sqyard:1.19599, acre:0.000247105, hectare:0.0001 },
   volume:      { liter:1, ml:1000, gallon:0.264172, pint:2.11338, cup:4.22675, tbsp:67.628, tsp:202.884 },
-  currency:    { INR:1, USD:0.012, EUR:0.011, GBP:0.0095, JPY:1.79, AED:0.044, SGD:0.016 }
+  // Fallback rates only — used if live fetch fails or hasn't loaded yet
+  currency:    { INR:1, USD:0.012, EUR:0.011, GBP:0.0095, JPY:1.79, AED:0.044, SGD:0.016, AUD:0.018, CAD:0.016, CHF:0.011, CNY:0.087, SAR:0.044 }
 };
+
+// ── LIVE CURRENCY RATES (relative to 1 INR) ──────────────────────────────
+let liveCurrencyRates = null;
+let liveCurrencyTimestamp = null;
+let liveCurrencyFetching = false;
+
+async function fetchLiveCurrencyRates() {
+  if (liveCurrencyFetching) return;
+  liveCurrencyFetching = true;
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/INR');
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.rates) {
+        liveCurrencyRates = data.rates; // e.g. { USD: 0.012, EUR: 0.011, ... } per 1 INR
+        liveCurrencyTimestamp = new Date();
+        const catSel = document.getElementById('unit-category');
+        if (catSel && catSel.value === 'currency') convertUnit();
+      }
+    }
+  } catch(e) {
+    console.warn('Live currency fetch failed — using fallback rates.', e);
+  }
+  liveCurrencyFetching = false;
+}
+fetchLiveCurrencyRates();
+setInterval(fetchLiveCurrencyRates, 5 * 60 * 1000); // refresh every 5 minutes
 
 function loadUnitOptions() {
   const cat = document.getElementById('unit-category').value;
@@ -15429,6 +16643,7 @@ function loadUnitOptions() {
   const toSel   = document.getElementById('unit-to');
   fromSel.innerHTML = units.map(u => `<option value="${u}">${u}</option>`).join('');
   toSel.innerHTML   = units.map((u,i) => `<option value="${u}" ${i===1?'selected':''}>${u}</option>`).join('');
+  if (cat === 'currency') fetchLiveCurrencyRates();
   convertUnit();
 }
 
@@ -15442,6 +16657,8 @@ function convertUnit() {
   if (isNaN(val)) { resultEl.textContent = '—'; formulaEl.textContent = ''; return; }
 
   let result;
+  let usingLive = false;
+
   if (cat === 'temperature') {
     if (from === 'celsius' && to === 'fahrenheit') result = val * 9/5 + 32;
     else if (from === 'fahrenheit' && to === 'celsius') result = (val - 32) * 5/9;
@@ -15450,13 +16667,29 @@ function convertUnit() {
     else if (from === 'fahrenheit' && to === 'kelvin') result = (val - 32) * 5/9 + 273.15;
     else if (from === 'kelvin' && to === 'fahrenheit') result = (val - 273.15) * 9/5 + 32;
     else result = val;
+  } else if (cat === 'currency' && liveCurrencyRates && liveCurrencyRates[from] && liveCurrencyRates[to]) {
+    // liveCurrencyRates are per 1 INR, so convert via INR as the pivot
+    const inrValue = val / liveCurrencyRates[from];
+    result = inrValue * liveCurrencyRates[to];
+    usingLive = true;
   } else {
     const data = UNIT_DATA[cat];
     result = (val / data[from]) * data[to];
   }
 
   resultEl.textContent = parseFloat(result.toFixed(6)).toLocaleString();
-  formulaEl.textContent = `${val} ${from} = ${parseFloat(result.toFixed(6))} ${to}`;
+
+  if (cat === 'currency') {
+    if (usingLive) {
+      const timeStr = liveCurrencyTimestamp ? liveCurrencyTimestamp.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '';
+      formulaEl.innerHTML = `${val} ${from} = ${parseFloat(result.toFixed(6))} ${to} &nbsp;<span style="color:#34d399;font-weight:700">● Live</span> <span style="color:var(--text-muted)">(${timeStr})</span>`;
+    } else {
+      formulaEl.innerHTML = `${val} ${from} = ${parseFloat(result.toFixed(6))} ${to} &nbsp;<span style="color:#f59e0b;font-weight:700">⚠ Fallback rate — fetching live…</span>`;
+      fetchLiveCurrencyRates();
+    }
+  } else {
+    formulaEl.textContent = `${val} ${from} = ${parseFloat(result.toFixed(6))} ${to}`;
+  }
 }
 
 function switchAdvTab(tab, btn) {
@@ -15508,20 +16741,41 @@ document.addEventListener('keydown', (e) => {
     // 1.5. CALCULATOR PHYSICAL KEYBOARD SYNC
     // =====================================================================
     if (activeView === 'calculator') {
-        const keyMap = {
-            '0':'0', '1':'1', '2':'2', '3':'3', '4':'4', '5':'5', '6':'6', '7':'7', '8':'8', '9':'9',
-            '.':'.', '+':'+', '-': '−', '*':'×', '/':'÷', 'Enter':'=', '=':'=', 'Escape':'C', 'Backspace':'⌫', 'Delete':'C'
-        };
-        
-        // Only route the keystroke if we ARE NOT currently focused on the input field manually
-        if (keyMap[e.key] !== undefined && document.activeElement.tagName !== 'INPUT') {
-            e.preventDefault(); 
-            // Send it to the active panel
-            if (document.getElementById('adv-panel-sci').style.display === 'block') sciFn(keyMap[e.key]);
-            else calcFn(keyMap[e.key]);
-            return; 
+    const keyMap = {
+        '0':'0', '1':'1', '2':'2', '3':'3', '4':'4', '5':'5', '6':'6', '7':'7', '8':'8', '9':'9',
+        '.':'.', '+':'+', '-': '−', '*':'×', '/':'÷', 'Enter':'=', '=':'=', 'Escape':'C', 'Backspace':'⌫', 'Delete':'C'
+    };
+
+    const focusedId = document.activeElement ? document.activeElement.id : '';
+    const isCalcInput = focusedId === 'calc-display';
+    const isSciInput  = focusedId === 'sci-display';
+    const isOtherInput = document.activeElement &&
+        document.activeElement.tagName === 'INPUT' &&
+        !isCalcInput && !isSciInput;
+
+    if (keyMap[e.key] !== undefined && !isOtherInput) {
+        // For operators/Enter/Escape/Backspace, let calcFn/sciFn handle it instead of the browser's default input behavior
+        if (e.key !== '.' && !(e.key >= '0' && e.key <= '9')) {
+            e.preventDefault();
+            // Route based on WHICH input is focused. If neither display is focused
+            // (e.g. user clicked elsewhere on the page), default to whichever
+            // advanced panel is currently visible.
+            if (isSciInput) {
+                sciFn(keyMap[e.key]);
+            } else if (isCalcInput) {
+                calcFn(keyMap[e.key]);
+            } else if (document.getElementById('adv-panel-sci').style.display !== 'none') {
+                sciFn(keyMap[e.key]);
+            } else {
+                calcFn(keyMap[e.key]);
+            }
+            return;
         }
+        // Digits and '.' typed directly into the display input are handled fine by
+        // calcHandleInput/sciHandleInput via their oninput attribute — no need to intercept here.
     }
+}
+
 
     // =====================================================================
     // 2. SAFETY CHECK: Ignore if typing in ANY input, textarea, or select dropdown
