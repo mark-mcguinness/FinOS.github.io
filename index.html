@@ -14075,16 +14075,26 @@ function renderSettingsTags() {
 }
 
 function addNewTagFromSettings() {
-  const val = document.getElementById('set-new-tag-input').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
-  if(!val) return;
-  if(!TAG_SUGGESTIONS_LIST.includes(val)) {
-    TAG_SUGGESTIONS_LIST.push(val);
-    customTagsList.push(val);
-    localStorage.setItem('fos_custom_tags', JSON.stringify(customTagsList));
-    renderSettingsTags();
-    document.getElementById('set-new-tag-input').value = '';
-    if (typeof showSettingsToast === 'function') showSettingsToast('toggle', `Tag #${val} added successfully`);
+  const inputEl = document.getElementById('set-new-tag-input');
+  const val = inputEl.value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
+  if(!val) {
+    inputEl.style.outline = '2px solid #ef4444';
+    setTimeout(() => { inputEl.style.outline = ''; }, 1500);
+    return;
   }
+  if(TAG_SUGGESTIONS_LIST.includes(val)) {
+    inputEl.style.outline = '2px solid #f59e0b';
+    setTimeout(() => { inputEl.style.outline = ''; }, 1500);
+    if (typeof showSettingsToast === 'function') showSettingsToast('toggle', `Tag #${val} already exists`);
+    return;
+  }
+  TAG_SUGGESTIONS_LIST.push(val);
+  customTagsList.push(val);
+  localStorage.setItem('fos_custom_tags', JSON.stringify(customTagsList));
+  renderSettingsTags();
+  inputEl.value = '';
+  inputEl.focus();
+  if (typeof showSettingsToast === 'function') showSettingsToast('toggle', `Tag #${val} added successfully`);
 }
 
 function removeTagFromSettings(tag) {
@@ -14166,9 +14176,21 @@ function setTagFilter(tag, el) {
 function updateTagFilterBar() {
   const bar = document.getElementById('tag-filter-bar');
   const chipsEl = document.getElementById('tag-filter-chips');
-  const allTags = getAllTags();
-  if (!allTags.length) { if(bar) bar.style.display='none'; return; }
+  const filteredData = getFilteredData();
+  const tagSet = new Set();
+  filteredData.forEach(r => (r.tags||[]).forEach(t => tagSet.add(t)));
+  const allTags = [...tagSet].sort();
+  if (!allTags.length) {
+    if(bar) bar.style.display='none';
+    if(currentTagFilter) { currentTagFilter = null; }
+    return;
+  }
   if(bar) bar.style.display = 'block';
+  if(currentTagFilter && !tagSet.has(currentTagFilter)) {
+    currentTagFilter = null;
+    const allChip = document.getElementById('tag-filter-all');
+    if(allChip) { document.querySelectorAll('.tag-filter-chip').forEach(c=>c.classList.remove('active')); allChip.classList.add('active'); }
+  }
   if(chipsEl) chipsEl.innerHTML = allTags.map(t =>
     `<span class="tag-filter-chip ${currentTagFilter===t?'active':''}" onclick="setTagFilter('${t}',this)">#${t}</span>`
   ).join('');
@@ -18302,6 +18324,17 @@ document.addEventListener('DOMContentLoaded', () => {
       <i class="fas fa-magic"></i> Generate & Download
     </button>
   </div>
+</div>
+
+<!-- Settings Toast (required by showSettingsToast) -->
+<div id="settings-toast">
+  <i id="settings-toast-icon" class="fas fa-check-circle" style="font-size:1.2rem;color:#a78bfa;flex-shrink:0"></i>
+  <div style="flex:1;min-width:0">
+    <div id="settings-toast-title" style="font-weight:700;font-size:0.85rem;margin-bottom:2px"></div>
+    <div id="settings-toast-desc" style="font-size:0.75rem;opacity:0.7"></div>
+  </div>
+  <button class="settings-undo-btn" onclick="executeSettingsUndo()" style="flex-shrink:0">Undo</button>
+  <div id="settings-toast-progress"></div>
 </div>
 
 </body>
